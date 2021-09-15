@@ -52,3 +52,17 @@ exports.updateCustomer = async (customer) => {
     return { status: code, body: { message } };
   }
 };
+
+exports.logincallback = (customer, callback) => {
+  try {
+    index.connection.query(
+      queries.loginCustomer,
+      [customer.email_id, customer.password],
+      (error, result) => {
+        callback(error, result[0]);
+      }
+    );
+  } catch (err) {
+    callback(err);
+  }
+};

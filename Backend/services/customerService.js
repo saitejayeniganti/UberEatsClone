@@ -19,6 +19,20 @@ exports.signupcallback = (request, callback) => {
   }
 };
 
+exports.logincallback = (request, callback) => {
+  try {
+    customerRepo.logincallback(request.body, (error, result) => {
+      if (error) {
+        callback(error);
+      } else {
+        callback(error, result);
+      }
+    });
+  } catch (err) {
+    callback(err);
+  }
+};
+
 exports.updateCustomer = async (request) => {
   let response = await customerRepo.updateCustomer(request.body);
   return response;

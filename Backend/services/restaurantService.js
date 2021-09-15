@@ -6,19 +6,29 @@ exports.signup = async (request) => {
 };
 
 exports.signupcallback = (request, callback) => {
-  console.log(2);
   try {
     restaurantRepo.signupCallback(request.body, (error, result) => {
       if (error) {
-        //
         callback(error);
       } else {
-        console.log(5);
         callback(error, result.insertId);
       }
     });
   } catch (err) {
-    //
+    callback(err);
+  }
+};
+
+exports.logincallback = (request, callback) => {
+  try {
+    restaurantRepo.logincallback(request.body, (error, result) => {
+      if (error) {
+        callback(error);
+      } else {
+        callback(error, result);
+      }
+    });
+  } catch (err) {
     callback(err);
   }
 };

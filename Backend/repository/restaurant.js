@@ -17,7 +17,6 @@ exports.signup = async (restaurant) => {
 };
 
 exports.signupCallback = (restaurant, callback) => {
-  console.log(3);
   try {
     index.connection.query(
       queries.insertRestaurant,
@@ -28,8 +27,21 @@ exports.signupCallback = (restaurant, callback) => {
         restaurant.location,
       ],
       (error, result) => {
-        console.log(4);
         callback(error, result);
+      }
+    );
+  } catch (err) {
+    callback(err);
+  }
+};
+
+exports.logincallback = (restaurant, callback) => {
+  try {
+    index.connection.query(
+      queries.loginRestaurant,
+      [restaurant.email_id, restaurant.password],
+      (error, result) => {
+        callback(error, result[0]);
       }
     );
   } catch (err) {
