@@ -1,8 +1,10 @@
-const index = require("../index");
+//const index = require("../index");
+const pool = require("../database/dbConnection");
 const queries = require("../queries/restaurant");
+
 exports.signup = async (restaurant) => {
   try {
-    let response = await index.connection.query(queries.insertRestaurant, [
+    let response = await pool.query(queries.insertRestaurant, [
       restaurant.name,
       restaurant.email_id,
       restaurant.password,
@@ -18,7 +20,7 @@ exports.signup = async (restaurant) => {
 
 exports.signupCallback = (restaurant, callback) => {
   try {
-    index.connection.query(
+    pool.query(
       queries.insertRestaurant,
       [
         restaurant.name,
@@ -37,7 +39,7 @@ exports.signupCallback = (restaurant, callback) => {
 
 exports.logincallback = (restaurant, callback) => {
   try {
-    index.connection.query(
+    pool.query(
       queries.loginRestaurant,
       [restaurant.email_id, restaurant.password],
       (error, result) => {
@@ -49,9 +51,31 @@ exports.logincallback = (restaurant, callback) => {
   }
 };
 
+exports.updateRestaurant = async (restaurant) => {
+  try {
+    let response = await pool.query(queries.updateRestaurant, [
+      restaurant.name,
+      restaurant.email_id,
+      restaurant.password,
+      restaurant.location,
+      restaurant.delivery_type,
+      restaurant.contact,
+      restaurant.star_time,
+      restaurant.end_time,
+      restaurant.id,
+    ]);
+    return { status: 200, body: response.values };
+  } catch (error) {
+    console.log(error);
+    const message = error.message ? error.message : "Internal Server Error";
+    const code = error.statusCode ? error.statusCode : 500;
+    return { status: code, body: { message } };
+  }
+};
+
 exports.insertDish = async (dish) => {
   try {
-    let response = await index.connection.query(queries.insertDish, [
+    let response = await pool.query(queries.insertDish, [
       dish.restaurant_id,
       dish.name,
       dish.category,
@@ -70,20 +94,12 @@ exports.insertDish = async (dish) => {
   }
 };
 
-exports.updateRestaurant = async (restaurant) => {
+//*********************GET_DISHES******************** */
+exports.getDishes = async (params) => {
   try {
-    let response = await index.connection.query(queries.updateRestaurant, [
-      restaurant.name,
-      restaurant.email_id,
-      restaurant.password,
-      restaurant.location,
-      restaurant.delivery_type,
-      restaurant.contact,
-      restaurant.star_time,
-      restaurant.end_time,
-      restaurant.id,
-    ]);
-    return { status: 200, body: response.values };
+    let response = await pool.query(queries.getDishes, [params.id]);
+
+    return { status: 200, body: response };
   } catch (error) {
     console.log(error);
     const message = error.message ? error.message : "Internal Server Error";

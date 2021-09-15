@@ -1,8 +1,8 @@
-const index = require("../index");
+const pool = require("../database/dbConnection");
 const queries = require("../queries/customer");
 exports.signup = async (customer) => {
   try {
-    let response = await index.connection.query(queries.insertCustomer, [
+    let response = await pool.query(queries.insertCustomer, [
       customer.name,
       customer.email_id,
       customer.password,
@@ -18,7 +18,7 @@ exports.signup = async (customer) => {
 exports.signupCallback = (customer, callback) => {
   console.log(3);
   try {
-    index.connection.query(
+    pool.query(
       queries.insertCustomer,
       [customer.name, customer.email_id, customer.password],
       (error, result) => {
@@ -32,7 +32,7 @@ exports.signupCallback = (customer, callback) => {
 
 exports.updateCustomer = async (customer) => {
   try {
-    let response = await index.connection.query(queries.updateCustomer, [
+    let response = await pool.query(queries.updateCustomer, [
       customer.name,
       customer.email_id,
       customer.password,
@@ -55,7 +55,7 @@ exports.updateCustomer = async (customer) => {
 
 exports.logincallback = (customer, callback) => {
   try {
-    index.connection.query(
+    pool.query(
       queries.loginCustomer,
       [customer.email_id, customer.password],
       (error, result) => {

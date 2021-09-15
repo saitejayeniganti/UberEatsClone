@@ -7,8 +7,9 @@ app.use(cors({ origin: "*", credentials: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-const dbConnection = require("./database/dbConnection");
-exports.connection = dbConnection.sqlConnection();
+//Without using pool
+// const dbConnection = require("./database/dbConnection");
+// exports.connection = dbConnection.sqlConnection();
 
 app.listen(3000, () => {
   console.log("Server Running in port 3000");

@@ -43,4 +43,10 @@ app.post("/dishes", async (request, response) => {
   response.status(data.status).json(data.body);
 });
 
+//*********************GET_DISHES******************** */
+app.get("/dishes", async (request, response) => {
+  const data = await restaurantService.getDishes(request);
+  response.status(data.status).json(data.body);
+});
+
 module.exports = app;

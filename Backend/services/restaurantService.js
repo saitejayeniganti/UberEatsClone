@@ -33,12 +33,19 @@ exports.logincallback = (request, callback) => {
   }
 };
 
+exports.updateRestaurant = async (request) => {
+  let response = await restaurantRepo.updateRestaurant(request.body);
+  return response;
+};
+
+//*********************INSERT_DISHES******************** */
 exports.insertDish = async (request) => {
   let response = await restaurantRepo.insertDish(request.body);
   return response;
 };
 
-exports.updateRestaurant = async (request) => {
-  let response = await restaurantRepo.updateRestaurant(request.body);
+//*********************GET_DISHES******************** */
+exports.getDishes = async (request) => {
+  let response = await restaurantRepo.getDishes(request.query);
   return response;
 };

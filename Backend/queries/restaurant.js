@@ -9,3 +9,6 @@ exports.updateRestaurant =
 
 exports.loginRestaurant =
   "select Restaurents.id,Restaurents.name from Restaurents where email_id=? and password=?";
+
+exports.getDishes =
+  "select Dishes.restaurent_id,Dishes.name,Dishes.category,Dishes.cuisine,Dishes.price,Dishes.main_ingredients,Dishes.description,Dishes.type from Dishes where restaurent_id=?";
