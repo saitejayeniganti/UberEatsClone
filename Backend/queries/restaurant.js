@@ -12,3 +12,5 @@ exports.loginRestaurant =
 
 exports.getDishes =
   "select Dishes.restaurent_id,Dishes.name,Dishes.category,Dishes.cuisine,Dishes.price,Dishes.main_ingredients,Dishes.description,Dishes.type from Dishes where restaurent_id=?";
+
+exports.getOrdersForRestaurant = "select * from Orders where restaurent_id=?";

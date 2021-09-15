@@ -49,3 +49,9 @@ exports.getDishes = async (request) => {
   let response = await restaurantRepo.getDishes(request.query);
   return response;
 };
+
+//*********************GET_ORDERS******************** */
+exports.getOrdersForRestaurant = async (request) => {
+  let response = await restaurantRepo.getOrdersForRestaurant(request.query);
+  return response;
+};

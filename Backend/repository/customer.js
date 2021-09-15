@@ -107,3 +107,17 @@ exports.updateOrder = async (order) => {
     return { status: code, body: { message } };
   }
 };
+
+//*********************GET_ORDERS******************** */
+exports.getOrdersForCustomer = async (params) => {
+  try {
+    let response = await pool.query(queries.getOrdersForCustomer, [params.id]);
+
+    return { status: 200, body: response };
+  } catch (error) {
+    console.log(error);
+    const message = error.message ? error.message : "Internal Server Error";
+    const code = error.statusCode ? error.statusCode : 500;
+    return { status: code, body: { message } };
+  }
+};

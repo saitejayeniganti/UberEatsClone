@@ -49,4 +49,10 @@ app.get("/dishes", async (request, response) => {
   response.status(data.status).json(data.body);
 });
 
+//*********************GET_ORDERS******************** */
+app.get("/order", async (request, response) => {
+  const data = await restaurantService.getOrdersForRestaurant(request);
+  response.status(data.status).json(data.body);
+});
+
 module.exports = app;
