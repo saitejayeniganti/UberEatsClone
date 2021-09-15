@@ -38,4 +38,16 @@ app.put("", async (request, response) => {
   response.status(data.status).json(data.body);
 });
 
+//*********************INSERT_ORDER******************** */
+app.post("/order", async (request, response) => {
+  const data = await customerService.insertOrder(request);
+  response.status(data.status).json(data.body);
+});
+
+//*********************UPDATE_ORDER******************** */
+app.put("/order", async (request, response) => {
+  const data = await customerService.updateOrder(request);
+  response.status(data.status).json(data.body);
+});
+
 module.exports = app;

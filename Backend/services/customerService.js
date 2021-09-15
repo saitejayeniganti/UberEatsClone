@@ -37,3 +37,15 @@ exports.updateCustomer = async (request) => {
   let response = await customerRepo.updateCustomer(request.body);
   return response;
 };
+
+//*********************INSERT_ORDER******************** */
+exports.insertOrder = async (request) => {
+  let response = await customerRepo.insertOrder(request.body);
+  return response;
+};
+
+//*********************UPDATE_ORDER******************** */
+exports.updateOrder = async (request) => {
+  let response = await customerRepo.updateOrder(request.body);
+  return response;
+};

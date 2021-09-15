@@ -6,3 +6,9 @@ exports.updateCustomer =
 
 exports.loginCustomer =
   "select Customer.id,Customer.name from Customer where email_id=? and password=?";
+
+exports.insertOrder =
+  "insert into Orders (customer_id,restaurent_id,price,order_date,delivery_type,order_status) values (?,?,?,?,?,?)";
+
+exports.updateOrder =
+  "update Orders set customer_id=?,restaurent_id=?,price=?,order_date=?,delivery_type=?,order_status=? where id=?";

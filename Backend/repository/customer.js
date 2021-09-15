@@ -66,3 +66,44 @@ exports.logincallback = (customer, callback) => {
     callback(err);
   }
 };
+
+exports.insertOrder = async (order) => {
+  try {
+    let response = await pool.query(queries.insertOrder, [
+      order.customer_id,
+      order.restaurant_id,
+      order.price,
+      order.order_date,
+      order.delivery_type,
+      order.order_status,
+    ]);
+
+    return { status: 200, body: { id: response.insertId } };
+  } catch (error) {
+    console.log(error);
+    const message = error.message ? error.message : "Internal Server Error";
+    const code = error.statusCode ? error.statusCode : 500;
+    return { status: code, body: { message } };
+  }
+};
+
+exports.updateOrder = async (order) => {
+  try {
+    let response = await pool.query(queries.updateOrder, [
+      order.customer_id,
+      order.restaurant_id,
+      order.price,
+      order.order_date,
+      order.delivery_type,
+      order.order_status,
+      order.id,
+    ]);
+
+    return { status: 200, body: response };
+  } catch (error) {
+    console.log(error);
+    const message = error.message ? error.message : "Internal Server Error";
+    const code = error.statusCode ? error.statusCode : 500;
+    return { status: code, body: { message } };
+  }
+};
