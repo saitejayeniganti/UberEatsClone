@@ -32,6 +32,13 @@ app.post("/login", (request, response) => {
   });
 });
 
+//*********************GET_CUSTOMER_BY_USERNAME******************** */
+app.get("/login", async (request, response) => {
+  const data = await customerService.getCustomerByUsername(request);
+  console.log(data.body);
+  response.status(data.status).json(data.body);
+});
+
 //*********************UPDATE_CUSTOMER******************** */
 app.put("", async (request, response) => {
   const data = await customerService.updateCustomer(request);

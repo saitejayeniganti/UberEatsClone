@@ -33,6 +33,12 @@ exports.logincallback = (request, callback) => {
   }
 };
 
+//*********************GET_CUSTOMER_DETAILS_BY_USERNAME******************** */
+exports.getCustomerByUsername = async (request) => {
+  let response = await customerRepo.getCustomerByUsername(request.query);
+  return response;
+};
+
 exports.updateCustomer = async (request) => {
   let response = await customerRepo.updateCustomer(request.body);
   return response;

@@ -11,8 +11,8 @@ app.use(express.json());
 // const dbConnection = require("./database/dbConnection");
 // exports.connection = dbConnection.sqlConnection();
 
-app.listen(3000, () => {
-  console.log("Server Running in port 3000");
+app.listen(8080, () => {
+  console.log("Server Running in port 8080");
 });
 app.use("/ubereats/customer", customerRoute);
 app.use("/ubereats/restaurant", restaurantRoute);
