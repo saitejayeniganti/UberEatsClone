@@ -1,0 +1,22 @@
+.image_style {
+  width: 65px;
+  height: 65px;
+  padding-bottom: 6px;
+}
+
+.image_div {
+  display: grid;
+  justify-items: center;
+}
+
+.image_div:hover .image_style {
+  background-color: #f0f0f0;
+  border-radius: 50%;
+}
+
+.allstores {
+  font-weight: 700;
+  line-height: 36px;
+  font-size: 28px;
+  font-family: sans-serif;
+}
