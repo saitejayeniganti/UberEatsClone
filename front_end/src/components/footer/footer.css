@@ -1,0 +1,14 @@
+.footer {
+  margin-top: 1rem;
+  padding: 25px;
+  background-color: #262626;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.txt {
+  color: white;
+  font-size: 12px;
+}

@@ -3,6 +3,7 @@ import "./customerLogin.css";
 import ubereatslogo from "../../Images/UberEatsLogo.png";
 import axios from "axios";
 import dotenv from "dotenv";
+import Footer from "../footer/footer";
 dotenv.config();
 
 class CustomerLogin extends React.Component {
@@ -82,6 +83,7 @@ class CustomerLogin extends React.Component {
               onChange={(e) => {
                 this.setState({ loginUserName: e.target.value });
               }}
+              placeholder="Email"
               name="usename"
               className="text-input"
             ></input>
@@ -144,6 +146,7 @@ class CustomerLogin extends React.Component {
         ) : (
           ""
         )}
+        <Footer />
       </>
     );
   }
