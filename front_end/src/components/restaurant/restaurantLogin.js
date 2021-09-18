@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./restaurant.css";
+import "./restaurantLogin.css";
 import ubereatslogo from "../../Images/UberEatsLogo.png";
 import axios from "axios";
 import dotenv from "dotenv";
@@ -55,78 +55,90 @@ class RestaurantLogin extends React.Component {
   render() {
     return (
       <>
-        {this.state.displayUserName ? (
-          <div style={{ marginLeft: "30%", marginRight: "30%" }}>
-            <img className="logo" src={ubereatslogo} />
+        <div className="container">
+          <div className="container mainContainer">
+            {this.state.displayUserName ? (
+              <div style={{ marginLeft: "30%", marginRight: "30%" }}>
+                <div className="img">
+                  <img className="logo" src={ubereatslogo} />
+                </div>
 
-            <h3>Log in</h3>
-            <label className="label">
-              Use your email username and password to log in to Restaurant
-              Manager.
-            </label>
-            <label className="label">Username</label>
-            <input
-              id="useridInput"
-              onChange={(e) => {
-                this.setState({ loginUserName: e.target.value });
-              }}
-              name="usename"
-              className="text-input"
-              placeholder="Enter your email"
-            ></input>
+                <h3 className="welcome">Welcome back</h3>
+                <label className="label">
+                  Sign in with your email address or mobile number
+                </label>
+                <label className="label">Username</label>
+                <input
+                  id="useridInput"
+                  onChange={(e) => {
+                    this.setState({ loginUserName: e.target.value });
+                  }}
+                  placeholder="Email"
+                  name="usename"
+                  className="textinput"
+                ></input>
 
-            <div style={{ fontSize: "12px", color: "red" }}>
-              {this.state.usernameError}
-            </div>
+                <div style={{ fontSize: "12px", color: "red" }}>
+                  {this.state.usernameError}
+                </div>
 
-            <button
-              className="button"
-              onClick={() => this.displayPasswordField()}
-            >
-              Next
-            </button>
+                <button
+                  className="button"
+                  onClick={() => this.displayPasswordField()}
+                >
+                  Next
+                </button>
+                <div style={{ textAlign: "center" }} className="bottomText">
+                  <p className="display--inline" data-reactid="34">
+                    New to Uber?{" "}
+                    <a className="link" href="">
+                      Create an account
+                    </a>
+                  </p>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+
+            {/* For password */}
+            {this.state.displayPassword ? (
+              <div style={{ marginLeft: "30%", marginRight: "30%" }}>
+                <img className="logo" src={ubereatslogo} />
+
+                <h5>Welcome back</h5>
+                <label className="label">
+                  Please enter your password to sign in.
+                </label>
+                <input
+                  id="useridInput"
+                  type="password"
+                  onChange={(e) => {
+                    this.setState({ loginPassword: e.target.value });
+                  }}
+                  name="password"
+                  className="textinput"
+                ></input>
+                <div style={{ fontSize: "12px", color: "red" }}>
+                  {this.state.passwordError}
+                </div>
+                <button className="button" onClick={() => this.login()}>
+                  Next
+                </button>
+                <div className="bottomText">
+                  <p className="display--inline" data-reactid="34">
+                    <a className="link" href="">
+                      Forgot Password?
+                    </a>
+                  </p>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
-        ) : (
-          ""
-        )}
+        </div>
 
-        {/* For password */}
-        {this.state.displayPassword ? (
-          <div style={{ marginLeft: "30%", marginRight: "30%" }}>
-            <img className="logo" src={ubereatslogo} />
-
-            <h3>Log in</h3>
-            <label className="label">
-              Use your email username and password to log in to Restaurant
-              Manager.
-            </label>
-            <label className="label">Password</label>
-            <input
-              id="useridInput"
-              type="password"
-              onChange={(e) => {
-                this.setState({ loginPassword: e.target.value });
-              }}
-              name="password"
-              className="text-input"
-            ></input>
-            <div style={{ fontSize: "12px", color: "red" }}>
-              {this.state.passwordError}
-            </div>
-            <button className="button" onClick={() => this.login()}>
-              Next
-            </button>
-            <div className="bottomText">
-              <p className="display--inline" data-reactid="34">
-                <a className="link" href="">
-                  Forgot Password?
-                </a>
-              </p>
-            </div>
-          </div>
-        ) : (
-          ""
-        )}
         <Footer />
       </>
     );

@@ -1,4 +1,4 @@
-.text-input {
+.txtinput {
   font-family: UberMoveText-Regular !important;
   font-size: 16px !important;
   height: 48px !important;
@@ -6,17 +6,40 @@
   color: #262626 !important;
   border: 1px solid #e0e0e0 !important;
   font-weight: 500;
-
   padding: 8px 18px;
-  width: 60%;
   padding: 8px 18px;
   transition: all 0.4s ease !important;
+  width: 508px !important;
+  user-select: none !important;
 }
 
+.txtinput:focus {
+  outline: none;
+}
+
+.div-row {
+  width: 552 px !important;
+  margin: 0px;
+}
+.div-cc {
+  width: 52 px !important;
+  margin: 0px;
+}
+
+.countrycode {
+  padding-left: 0px !important;
+  left: 0 !important;
+  width: 45px !important;
+}
+
+.welcome {
+  font-size: "40px";
+  padding-bottom: 30px;
+}
 .logo {
   display: block !important;
-  height: 100px;
-  width: 170px;
+  height: 110px !important;
+  width: 194px !important;
 }
 
 .label {
@@ -27,8 +50,17 @@
   display: block;
 }
 
+.mainContainer {
+  padding-top: 60px;
+}
+
+.img {
+  text-align: -webkit-center;
+  padding-bottom: 20px !important;
+}
+
 .button {
-  width: 60%;
+  width: 552px !important;
   margin-top: 20px;
   background-color: #3e9920;
   background-color: #3e9920;

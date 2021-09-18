@@ -20,7 +20,7 @@ exports.signupCallback = (customer, callback) => {
   try {
     pool.query(
       queries.insertCustomer,
-      [customer.name, customer.email_id, customer.password],
+      [customer.mobile, customer.password],
       (error, result) => {
         callback(error, result);
       }

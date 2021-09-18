@@ -10,7 +10,7 @@ class Footer extends React.Component {
               style={{ textAlign: "left", color: "white" }}
               className="col-md-6 txt"
             >
-              &copy; 2020 Uber Technologies, Inc.
+              &copy; 2021 Uber Technologies, Inc.
             </div>
             <div
               style={{ textAlign: "right", color: "white" }}
