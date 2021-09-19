@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import rest from "../../Images/rest.jpeg";
+import "./restaurantCard.css";
 
 class RestaurantCard extends Component {
   constructor(props) {
@@ -9,8 +11,9 @@ class RestaurantCard extends Component {
     return (
       <div className="container-fluid">
         <div className="row col-md-12">
-          <img src="" alt="Restaurant Image"></img>
+          <img className="imgSize" src={rest} alt="Restaurant Image"></img>
         </div>
+
         <div className="row col-md-12">RestaurantName</div>
         <div className="row col-md-12">Delivery fee</div>
       </div>

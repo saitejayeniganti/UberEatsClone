@@ -8,10 +8,10 @@ app.post("/signup", (request, response) => {
   // response.status(data.status).json(data.body);
   restaurantService.signupcallback(request, (error, result) => {
     if (error) {
-      //
       const message = error.message ? error.message : "Internal Server Error";
-      const code = error.statusCode ? error.statusCode : 500;
-      response.status(code).json({ message });
+
+      const code = error.status ? error.statusCode : 500;
+      response.status(code).json({ message: message, code: error.code });
     } else {
       response.status(200).json({ result });
     }

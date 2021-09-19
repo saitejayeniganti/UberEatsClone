@@ -24,16 +24,17 @@ exports.signupCallback = (restaurant, callback) => {
       queries.insertRestaurant,
       [
         restaurant.name,
-        restaurant.email_id,
+        restaurant.email,
         restaurant.password,
-        restaurant.location,
+        restaurant.address,
+        restaurant.suite,
       ],
       (error, result) => {
         callback(error, result);
       }
     );
   } catch (err) {
-    callback(err);
+    console.log(err);
   }
 };
 
