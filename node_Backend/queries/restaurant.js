@@ -2,7 +2,7 @@ exports.insertRestaurant =
   "insert into Restaurents (name,email_id,password,location,suite) values (?,?,?,?,?)";
 
 exports.insertDish =
-  "insert into Dishes (restaurent_id,name,category,cuisine,price,main_ingredients,description,type) values (?,?,?,?,?,?,?,?)";
+  "insert into Dishes (restaurent_id,name,category,cuisine,price,main_ingredients,description,type,image_url) values (?,?,?,?,?,?,?,?,?)";
 
 exports.updateRestaurant =
   "update Restaurents set name=?, email_id=?,password=?,location=?,delivery_type=?,contact=?,star_time=?,end_time=? where id=?";

@@ -85,6 +85,7 @@ exports.insertDish = async (dish) => {
       dish.main_ingredients,
       dish.description,
       dish.type,
+      dish.url,
     ]);
     return { status: 200, body: response.values };
   } catch (error) {
