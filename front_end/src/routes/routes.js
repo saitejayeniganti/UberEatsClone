@@ -9,7 +9,9 @@ import RestaurantLogin from "../components/restaurant/restaurantLogin";
 import RestaurantAddDish from "../components/restaurantAddDish/restaurantAddDish";
 import RestaurantCard from "../components/restaurantCard/restaurantCard";
 import RestaurantSignup from "../components/restaurantSignup/restaurantSignup";
-import Uploadfile from "../components/imageUpload/imageUpload";
+// import Uploadfile from "../components/imageUpload/imageUpload";
+import RestaurantHome from "../components/restaurantHome/restaurantHome";
+import RestaurantDetails from "../components/restaurantDetails/restaurantDetails";
 
 class Routes extends Component {
   render() {
@@ -19,11 +21,12 @@ class Routes extends Component {
         <Route path="/customerlogin" component={CustomerLogin} />
         <Route path="/customerSignup" component={CustomerSignup} />
         <Route path="/customer/home" component={CustomerHome} />
-
-        <Route path="/restaurantlogin" component={RestaurantLogin} />
-        <Route path="/restaurantsignup" component={RestaurantSignup} />
-        <Route path="/cc" component={RestaurantAddDish} />
-        <Route path="/c" component={Uploadfile} />
+        <Route path="/restaurant/login" component={RestaurantLogin} />
+        <Route path="/restaurant/signup" component={RestaurantSignup} />
+        <Route path="/restaurant/addDish" component={RestaurantAddDish} />
+        <Route path="/restaurant/home" component={RestaurantHome} />
+        <Route path="/restaurant/details" component={RestaurantDetails} />
+        <Route path="/cc" component={RestaurantHome} />
       </div>
     );
   }

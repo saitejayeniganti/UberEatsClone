@@ -19,6 +19,7 @@ import grocery from "../../Images/grocery.png";
 import { Radio, Space } from "antd";
 import { Slider } from "antd";
 import "antd/dist/antd.css";
+import "./../../commonCSS.css";
 
 class CustomerHome extends React.Component {
   state = {

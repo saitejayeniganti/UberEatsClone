@@ -12,3 +12,281 @@
   transition: all 0.4s ease !important;
   user-select: none !important;
 }
+
+.figureClass {
+  -webkit-text-size-adjust: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #f6f6f6;
+  margin: 0;
+}
+
+.figureDiv {
+  position: absolute;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  height: 240px;
+  left: 0px;
+}
+
+.imginFig {
+  width: 100%;
+  display: block;
+  border: none;
+  height: 100%;
+  object-fit: cover;
+  opacity: 1;
+  transition: all 400ms ease;
+  min-height: 240px;
+}
+
+.imgBck {
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  background: transparent;
+  min-height: 240px;
+}
+
+.imgBckspace {
+  display: flex;
+  -webkit-box-flex: 1;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 80px;
+}
+
+.imgtxtContainer {
+  display: flex;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0) 100%);
+  flex-basis: 140px;
+}
+
+.imgtxtCo {
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+}
+
+.imgtxtleftspace {
+  -webkit-box-direction: normal;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  -webkit-box-flex: 1;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.imgtxtleftContainer {
+  font-family: UberMoveText, sans-serif;
+  -webkit-box-direction: normal;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  box-sizing: border-box;
+  -webkit-box-flex: 0;
+  flex-grow: 0;
+  color: #ffffff;
+  padding: 0;
+  z-index: 0;
+}
+
+.imgButtons {
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  margin-top: 50px;
+  margin-right: 20px;
+}
+
+.spacer_40 {
+  font-family: UberMoveText, sans-serif;
+  -webkit-box-direction: normal;
+  color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  height: 1px;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  width: 40px;
+}
+
+.priceButton {
+  width: auto !important;
+  margin-left: 20px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  background-color: #eeeeee;
+  border-color: #eeeeee;
+  box-shadow: none;
+
+  box-shadow: 0px 0px 0px transparent;
+  border: 0px solid transparent;
+  text-shadow: 0px 0px 0px transparent;
+}
+
+/* *************************RESTAURENT SIGN UP / RESTAURANT DETAILS*************************** */
+
+.formContainer {
+  font-family: sans-serif;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  background-color: #fff;
+  position: absolute;
+  top: 64px;
+  z-index: 5;
+  width: 486px;
+  right: 128px;
+}
+
+.errtext {
+  font-size: 12px;
+  color: red;
+}
+.txtbox {
+  font-family: UberMoveText-Regular !important;
+  font-size: 16px !important;
+  height: 48px !important;
+  line-height: 24px !important;
+  color: #262626;
+  border: 1px solid #e0e0e0;
+  font-weight: 500;
+  padding: 8px 18px;
+  width: 400px !important;
+  padding: 8px 18px;
+  transition: all 0.4s ease !important;
+  user-select: none !important;
+}
+
+.txtbox:focus {
+  outline-color: #43a422;
+  /* border-top-color: #43a422 !important;
+  border-right-color: #43a422 !important;
+  border-left-color: #43a422 !important;
+  border-bottom-color: #43a422 !important; */
+}
+
+.innerformContainer {
+  font-family: sans-serif;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  background-color: #fff;
+  box-shadow: 0 2px 8px hsla(0, 0%, 0%, 0.16);
+  box-sizing: border-box;
+  padding: 64px 48px 48px 48px;
+  width: 100%;
+}
+
+.btnn {
+  width: 100% !important;
+  margin-top: 20px;
+  background-color: #3e9920;
+  background-color: #3e9920;
+  border-color: #3e9920;
+  font-family: Helvetica, sans-serif;
+  height: 48px;
+  font-size: 16px;
+  line-height: 24px;
+  margin-top: 25px;
+  text-decoration: none;
+  text-transform: none;
+  color: #fff;
+  padding: 11px 20px !important;
+  display: flex;
+  vertical-align: middle;
+  font: inherit;
+  cursor: pointer;
+  overflow: visible;
+  transition: all 0.4s ease !important;
+  justify-content: center;
+  border-radius: 0;
+  border: 2px solid #11939a;
+  outline: 0;
+  position: relative;
+}
+
+.conditionText {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  color: #717171;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  font-family: NarrowBook;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.6;
+  font-weight: 700;
+}
+
+.greenText {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.6;
+  text-decoration: none;
+  font-family: NarrowMedium;
+  color: #43a422;
+}
+
+.marginTop25 {
+  margin-top: 25px;
+}
+
+.marginTop20 {
+  margin-top: 20px;
+}
+
+.detailsFormContainer {
+  font-family: sans-serif;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  background-color: #fff;
+  position: absolute;
+  top: 64px;
+  z-index: 5;
+  width: 50%;
+}
+
+.submitButton {
+  width: 97% !important;
+  margin-top: 20px;
+  background-color: #3e9920;
+  background-color: #3e9920;
+  border-color: #3e9920;
+  font-family: Helvetica, sans-serif;
+  height: 48px;
+  font-size: 16px;
+  line-height: 24px;
+  margin-top: 35px;
+  text-decoration: none;
+  text-transform: none;
+  color: #fff;
+  padding: 11px 20px !important;
+  display: flex;
+  vertical-align: middle;
+  font: inherit;
+  cursor: pointer;
+  overflow: visible;
+  transition: all 0.4s ease !important;
+  justify-content: center;
+  border-radius: 0;
+  border: 2px solid #11939a;
+  outline: 0;
+  position: relative;
+}

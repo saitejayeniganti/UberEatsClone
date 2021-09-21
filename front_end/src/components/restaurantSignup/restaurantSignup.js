@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import "./restaurantSignup.css";
+import "./../../commonCSS.css";
 import bcrypt from "bcryptjs";
 import axios from "axios";
+import { Redirect } from "react-router";
 
 class RestaurantSignup extends React.Component {
   state = {
@@ -15,6 +17,7 @@ class RestaurantSignup extends React.Component {
     suiteError: "",
     emailError: "",
     passwordError: "",
+    redirectToDetails: false,
   };
 
   submit = () => {
@@ -56,6 +59,7 @@ class RestaurantSignup extends React.Component {
         if (response.status === 200) {
           console.log("Restaurant details are inserted");
         }
+        this.setState({ redirectToDetails: true });
       })
       .catch((err) => {
         this.setState({ emailError: "Email address already taken" });
@@ -64,8 +68,12 @@ class RestaurantSignup extends React.Component {
   };
 
   render() {
+    let redirectToDetails = null;
+    if (this.state.redirectToDetails)
+      redirectToDetails = <Redirect to="/restaurant/details" />;
     return (
       <>
+        {redirectToDetails}
         <div className="container">
           <div className="formContainer">
             <div className="innerformContainer">
@@ -120,6 +128,7 @@ class RestaurantSignup extends React.Component {
               )}
               <input
                 className="txtbox"
+                type="password"
                 placeholder="Password"
                 onChange={(e) =>
                   this.setState({ password: e.target.value, passwordError: "" })

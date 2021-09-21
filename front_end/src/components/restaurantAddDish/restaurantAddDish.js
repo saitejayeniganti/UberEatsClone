@@ -4,6 +4,8 @@ import bcrypt from "bcryptjs";
 import axios from "axios";
 import "./../../commonCSS.css";
 import S3 from "react-aws-s3";
+import { v4 as uuidv4 } from "uuid";
+import "./../../commonCSS.css";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -69,7 +71,7 @@ class RestaurantAddDish extends React.Component {
 
     const ReactS3Client = new S3(config);
 
-    ReactS3Client.uploadFile(this.state.selectedFile, "Dishname-1")
+    ReactS3Client.uploadFile(this.state.selectedFile, uuidv4())
       .then((data) => {
         this.setState({ image_url: data.location });
         if (data.status === 204) {
