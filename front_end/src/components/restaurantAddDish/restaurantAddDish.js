@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import "./restaurantAddDish.css";
-import bcrypt from "bcryptjs";
 import axios from "axios";
 import "./../../commonCSS.css";
 import S3 from "react-aws-s3";
 import { v4 as uuidv4 } from "uuid";
-import "./../../commonCSS.css";
 
 import dotenv from "dotenv";
 dotenv.config();

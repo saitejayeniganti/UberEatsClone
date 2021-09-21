@@ -18,6 +18,7 @@ class RestaurantSignup extends React.Component {
     emailError: "",
     passwordError: "",
     redirectToDetails: false,
+    createdId: "",
   };
 
   submit = () => {
@@ -59,7 +60,10 @@ class RestaurantSignup extends React.Component {
         if (response.status === 200) {
           console.log("Restaurant details are inserted");
         }
-        this.setState({ redirectToDetails: true });
+        this.setState({
+          redirectToDetails: true,
+          createdId: response.data.result,
+        });
       })
       .catch((err) => {
         this.setState({ emailError: "Email address already taken" });
@@ -70,7 +74,21 @@ class RestaurantSignup extends React.Component {
   render() {
     let redirectToDetails = null;
     if (this.state.redirectToDetails)
-      redirectToDetails = <Redirect to="/restaurant/details" />;
+      redirectToDetails = (
+        <Redirect
+          to={{
+            pathname: "/restaurant/details",
+            state: {
+              name: this.state.name,
+              address: this.state.address,
+              suite: this.state.suite,
+              email: this.state.email,
+              password: this.state.password,
+              id: this.state.createdId,
+            },
+          }}
+        />
+      );
     return (
       <>
         {redirectToDetails}

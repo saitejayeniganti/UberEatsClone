@@ -56,13 +56,13 @@ exports.updateRestaurant = async (restaurant) => {
   try {
     let response = await pool.query(queries.updateRestaurant, [
       restaurant.name,
-      restaurant.email_id,
-      restaurant.password,
       restaurant.location,
       restaurant.delivery_type,
       restaurant.contact,
       restaurant.star_time,
       restaurant.end_time,
+      restaurant.suite,
+      restaurant.image_url,
       restaurant.id,
     ]);
     return { status: 200, body: response.values };

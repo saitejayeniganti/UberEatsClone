@@ -1,25 +1,36 @@
 import React, { Component } from "react";
-import "./../../commonCSS.css";
+import "./restaurantDetails.css";
 import axios from "axios";
 import { Redirect } from "react-router";
 import bcrypt from "bcryptjs";
 import S3 from "react-aws-s3";
 import { v4 as uuidv4 } from "uuid";
 
+import dotenv from "dotenv";
+dotenv.config();
+
+const config = {
+  bucketName: process.env.REACT_APP_BUCKET_NAME,
+  dirName: "" /* optional */,
+  region: "us-east-2",
+  accessKeyId: process.env.REACT_APP_ACCESS_ID,
+  secretAccessKey: process.env.REACT_APP_ACCESS_KEY,
+};
+
 class RestaurantDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
       redirectToHome: false,
-      name: "",
+      name: this.props.location.state.name,
       nameError: "",
-      address: "",
+      address: this.props.location.state.address,
       addressError: "",
-      suite: "",
+      suite: this.props.location.state.suite,
       suiteError: "",
-      email: "",
+      email: this.props.location.state.email,
       emailError: "",
-      password: "",
+      password: this.props.location.state.password,
       passwordError: "",
       deliveryType: "",
       deliveryTypeError: "",
@@ -31,8 +42,15 @@ class RestaurantDetails extends Component {
       endTimeError: "",
       selectedFile: "",
       selectedFileError: "",
+      id: this.props.location.state.id,
     };
   }
+
+  // componentDidMount = () => {
+  //   this.setState({
+
+  //   });
+  // };
 
   fileSelected = (e) => {
     console.log(e.target.files[0].type);
@@ -68,7 +86,7 @@ class RestaurantDetails extends Component {
     }
     if (
       this.state.contact === "" ||
-      !isNaN(this.state.contact) ||
+      isNaN(this.state.contact) ||
       this.state.contact.length > 10
     ) {
       this.setState({ contactError: "Enter valid contact" });
@@ -88,28 +106,76 @@ class RestaurantDetails extends Component {
       return;
     }
 
-    // let encryptPassword = "";
-    // const salt = bcrypt.genSaltSync(1);
-    // encryptPassword = bcrypt.hashSync(this.state.password, salt);
+    let start = this.state.startTime.split(":");
+    let end = this.state.endTime.split(":");
+
+    if (start[0] > end[0] || (start[0] == end[0] && start[1] > start[1])) {
+      this.setState({
+        startTimeError: "Start time should be before end time",
+      });
+      return;
+    }
+    const ReactS3Client = new S3(config);
+
+    ReactS3Client.uploadFile(this.state.selectedFile, uuidv4())
+      .then((data) => {
+        this.setState({ image_url: data.location });
+        if (data.status === 204) {
+          console.log(" restaurant image to S3 success");
+        } else {
+          console.log(" restaurant image to S3 fail");
+        }
+
+        let details = {
+          name: this.state.name,
+          location: this.state.address,
+          suite: this.state.suite,
+          delivery_type: this.state.deliveryType,
+          contact: this.state.contact,
+          star_time: this.state.startTime,
+          end_time: this.state.endTime,
+          id: this.state.id,
+          image_url: data.location,
+        };
+        console.log(details);
+
+        axios
+          .put(
+            process.env.REACT_APP_UBEREATS_BACKEND_URL + "/restaurant",
+            details
+          )
+          .then((response) => {
+            if (response.status === 200) {
+              console.log("Restaurant details are Updated");
+            }
+            this.setState({ redirectToHome: true });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   detailsForm = () => {
     return (
       <>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <div className="detailsFormContainer">
-            <div className="innerformContainer">
-              <div className="row">
-                {" "}
+        <div className="container">
+          <div className="formC">
+            <div className="innerformC">
+              <div className="row" style={{ textAlign: "center" }}>
                 <label>
                   <h4>Restaurant Details</h4>
                 </label>
               </div>
-              <div className="row">
-                <div className="col-md-6 align-baseline">
+              <div className="row" style={{ marginLeft: "5%" }}>
+                <div className="col-md-6">
                   <input
                     className="txtbox marginTop25"
                     placeholder="Store name"
+                    value={this.state.name}
                     onChange={(e) =>
                       this.setState({ name: e.target.value, nameError: "" })
                     }
@@ -122,6 +188,7 @@ class RestaurantDetails extends Component {
                   <input
                     className="txtbox marginTop20"
                     placeholder="Store address"
+                    value={this.state.address}
                     onChange={(e) =>
                       this.setState({
                         address: e.target.value,
@@ -136,6 +203,7 @@ class RestaurantDetails extends Component {
                   )}
                   <input
                     className="txtbox marginTop20"
+                    value={this.state.suite}
                     placeholder="Floor / Suite (Optional)"
                     onChange={(e) => this.setState({ suite: e.target.value })}
                   ></input>
@@ -147,6 +215,8 @@ class RestaurantDetails extends Component {
                   <input
                     className="txtbox marginTop20"
                     placeholder="Email"
+                    disabled
+                    value={this.state.email}
                     onChange={(e) =>
                       this.setState({ email: e.target.value, emailError: "" })
                     }
@@ -159,7 +229,9 @@ class RestaurantDetails extends Component {
                   <input
                     className="txtbox marginTop20"
                     type="password"
+                    disabled
                     placeholder="Password"
+                    value={this.state.password}
                     onChange={(e) =>
                       this.setState({
                         password: e.target.value,
@@ -224,6 +296,7 @@ class RestaurantDetails extends Component {
                       this.setState({
                         startTime: e.target.value,
                         startTimeError: "",
+                        endTimeError: "",
                       });
                     }}
                   ></input>
@@ -242,6 +315,7 @@ class RestaurantDetails extends Component {
                       this.setState({
                         endTime: e.target.value,
                         endTimeError: "",
+                        startTimeError: "",
                       })
                     }
                   ></input>
@@ -268,11 +342,11 @@ class RestaurantDetails extends Component {
                     ""
                   )}
                 </div>
-              </div>
-              <div>
-                <button className="submitButton" onClick={() => this.submit()}>
-                  Submit
-                </button>
+                <div>
+                  <button className="btnn" onClick={() => this.submit()}>
+                    Add Dish
+                  </button>
+                </div>
               </div>
             </div>
           </div>
