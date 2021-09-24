@@ -73,7 +73,7 @@ class CustomerLogin extends React.Component {
             {this.state.displayUserName ? (
               <div style={{ marginLeft: "30%", marginRight: "30%" }}>
                 <div className="img">
-                  <img className="logo" src={ubereatslogo} />
+                  <img className="logo" alt="logo" src={ubereatslogo} />
                 </div>
 
                 <h3 className="welcome">Welcome back</h3>
@@ -104,7 +104,7 @@ class CustomerLogin extends React.Component {
                 <div style={{ textAlign: "center" }} className="bottomText">
                   <p className="display--inline" data-reactid="34">
                     New to Uber?{" "}
-                    <a className="link" href="/customersignup">
+                    <a className="link" href="/customer/signup">
                       Create an account
                     </a>
                   </p>
@@ -118,7 +118,7 @@ class CustomerLogin extends React.Component {
             {this.state.displayPassword ? (
               <div style={{ marginLeft: "30%", marginRight: "30%" }}>
                 <div className="img">
-                  <img className="logo" src={ubereatslogo} />
+                  <img className="logo" alt="logo" src={ubereatslogo} />
                 </div>
                 <h5 className="welcome">Welcome back</h5>
                 <label className="label">

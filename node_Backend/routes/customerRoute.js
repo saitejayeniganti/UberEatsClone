@@ -6,7 +6,7 @@ const customerService = require("../services/customerService");
 app.post("/signup", (request, response) => {
   // const data = await customerService.signup(request);
   // response.status(data.status).json(data.body);
-  console.log(1);
+
   customerService.signupcallback(request, (error, result) => {
     if (error) {
       //

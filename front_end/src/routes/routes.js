@@ -13,21 +13,26 @@ import RestaurantSignup from "../components/restaurantSignup/restaurantSignup";
 import RestaurantHome from "../components/restaurantHome/restaurantHome";
 import RestaurantDetails from "../components/restaurantDetails/restaurantDetails";
 import RestaurantSideBar from "../components/restaurantDrawer/restaurantDrawer";
+import CustomerSideBar from "../components/customerDrawer/customerDrawer";
+import RestaurantFooter from "../components/footer/restaurantFooter";
+import CustomerFooter from "../components/footer/customerFooter";
 
 class Routes extends Component {
   render() {
     return (
       <div>
         <Route path="/" component={NavBar} />
-        <Route path="/customerlogin" component={CustomerLogin} />
-        <Route path="/customerSignup" component={CustomerSignup} />
+        <Route path="/customer/login" component={CustomerLogin} />
+        <Route path="/customer/signup" component={CustomerSignup} />
         <Route path="/customer/home" component={CustomerHome} />
         <Route path="/restaurant/login" component={RestaurantLogin} />
         <Route path="/restaurant/signup" component={RestaurantSignup} />
         <Route path="/restaurant/addDish" component={RestaurantAddDish} />
         <Route path="/restaurant/home" component={RestaurantHome} />
         <Route path="/restaurant/details" component={RestaurantDetails} />
-        <Route path="/cc" component={RestaurantSideBar} />
+        <Route path="/cc" component={CustomerSideBar} />
+        <Route path="/footer" component={RestaurantFooter} />
+        <Route path="/customerfoot" component={CustomerFooter} />
       </div>
     );
   }

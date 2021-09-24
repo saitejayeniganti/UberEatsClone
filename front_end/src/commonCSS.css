@@ -377,6 +377,13 @@
   color: #05944f;
 }
 
+.greenTag {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  fill: rgb(5, 148, 79);
+}
+
 .menu_icon {
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);

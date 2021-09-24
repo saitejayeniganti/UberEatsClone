@@ -1,4 +1,5 @@
-exports.insertCustomer = "insert into Customer (mobile,password) values (?,?)";
+exports.insertCustomer =
+  "insert into Customer (email_id,mobile,password) values (?,?,?)";
 
 exports.updateCustomer =
   "update Customer set name=?,email_id=?,password=?,city=?,state=?,country=?,nick_name=?,about=?,image_url=? where id=?";
@@ -14,4 +15,5 @@ exports.updateOrder =
 
 exports.getOrdersForCustomer = "select * from Orders where customer_id=?";
 
-exports.getCustomerByUsername = "select * from Customer where email_id=?";
+exports.getCustomerByUsername =
+  "select * from Customer where email_id=? or mobile=?";

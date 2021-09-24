@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import ubereatslogo from "../../Images/UberEatsWhite.png";
 import "./restaurantFooter.css";
 
-class RestaurantFooter extends React.Component {
+class CustomerFooter extends React.Component {
   render() {
     return (
       <>
@@ -11,9 +11,8 @@ class RestaurantFooter extends React.Component {
             <div className="row">
               <div className="col-md-3">
                 <img className="uberlogo" src={ubereatslogo} />
-                <lable className="txt">for Restaurants</lable>
               </div>
-              <div
+              {/* <div
                 className="col-md-9 alignRight"
                 style={{ paddingTop: "10px" }}
               >
@@ -27,44 +26,38 @@ class RestaurantFooter extends React.Component {
                 </lable>
                 <br />
                 <lable className="txt">Statement</lable>
-              </div>
+              </div> */}
             </div>
-            <div>
+            {/* <div>
               <label className="txt16">Visit Help Center</label>
-            </div>
+            </div> */}
             <div className="row">
               <div className="col-md-3">
-                <label className="txt16 margin65">
-                  <b>About Us</b>
+                <br />
+                <label className="txt margin15">Get Help</label>
+                <br />
+                <label className="txt margin15">Buy gift Cards</label>
+                <br />
+                <label className="txt margin15">Add your restaurant</label>
+                <br />
+                <label className="txt margin15">Signup to deliver</label>
+                <br />
+                <label className="txt margin15">
+                  Create a business account
                 </label>
-                <br />
-                <label className="txt margin15">Newsroom</label>
-                <br />
-                <label className="txt margin15">Investor relations</label>
-                <br />
-                <label className="txt margin15">Safety</label>
-                <br />
-                <label className="txt margin15">Blog</label>
-                <br />
-                <label className="txt margin15">Gift cards</label>
                 <br />
               </div>
               <div className="col-md-3">
-                <label className="txt16 margin65">
-                  <b>More options</b>
-                </label>
                 <br />
-                <label className="txt margin15">Order food</label>
-                <br />
-                <label className="txt margin15">Sign up to deliver</label>
+                <label className="txt margin15">Restaurants near me</label>
                 <br />
                 <label className="txt margin15">View all cities</label>
                 <br />
-                <label className="txt margin15">FAQ</label>
+                <label className="txt margin15">View all countries</label>
                 <br />
-                <label className="txt margin15">Freight</label>
+                <label className="txt margin15">Read our blog</label>
                 <br />
-                <label className="txt margin15">Health</label>
+                <label className="txt margin15">About Uber Eats</label>
                 <br />
               </div>
               <div className="col-md-6"></div>
@@ -297,4 +290,4 @@ class RestaurantFooter extends React.Component {
   }
 }
 
-export default RestaurantFooter;
+export default CustomerFooter;

@@ -8,34 +8,91 @@ import bcrypt from "bcryptjs";
 import CountryCode from "./../countryCode";
 
 dotenv.config();
+
 class CustomerSignup extends React.Component {
   state = {
     displayMobile: true,
     displayPassword: false,
+    isEmail: false,
     signupMobile: "",
     signupPassword: "",
     mobileNumberError: "",
     passwordError: "",
+    countryCode: "1",
     customerDetails: {},
   };
-  displayPasswordField = () => {
-    if (this.state.signupMobile.length < 10)
-      this.setState({ mobileNumberError: "This phone number is invalid" });
 
-    if (this.state.signupMobile !== "") {
-      this.setState({ displayMobile: false });
-      this.setState({ displayPassword: true });
+  changeCountryCode = (code) => {
+    // console.log("Changed to - " + code);
+    this.setState({ countryCode: code });
+  };
+
+  displayPasswordField = () => {
+    this.setState({ isEmail: false });
+    if (
+      this.state.signupMobile.includes("@") ||
+      !/^\d+$/.test(this.state.signupMobile) == true
+    ) {
+      this.setState({ isEmail: true });
+      let regex = /\S+@\S+\.\S+/;
+      if (
+        this.state.signupMobile === "" ||
+        !regex.test(this.state.signupMobile)
+      ) {
+        this.setState({ mobileNumberError: "Enter a valid email address" });
+        return;
+      }
+    } else if (this.state.signupMobile.length < 10) {
+      this.setState({ mobileNumberError: "Enter a valid phone number" });
+      return;
+    } else {
+      let str = this.state.countryCode + this.state.signupMobile;
+      console.log(str);
+      this.setState({
+        signupMobile: str,
+      });
     }
+    axios
+      .get(
+        process.env.REACT_APP_UBEREATS_BACKEND_URL +
+          "/customer/login?email_id=" +
+          this.state.signupMobile
+      )
+      .then((response) => {
+        console.log(response.data);
+        if (response.data) {
+          this.setState({
+            mobileNumberError: "Id already exist",
+          });
+          return;
+        }
+
+        if (response.status === 200) {
+          this.setState({ displayMobile: false });
+          this.setState({ displayPassword: true });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   login = () => {
     let encryptPassword = "";
     const salt = bcrypt.genSaltSync(1);
     encryptPassword = bcrypt.hashSync(this.state.signupPassword, salt);
-    let userDetails = {
-      mobile: this.state.signupMobile,
-      password: encryptPassword,
-    };
+
+    let userDetails = this.state.isEmail
+      ? {
+          email_id: this.state.signupMobile,
+          password: encryptPassword,
+          mobile: "",
+        }
+      : {
+          mobile: this.state.signupMobile,
+          password: encryptPassword,
+          email_id: "",
+        };
     axios
       .post(
         process.env.REACT_APP_UBEREATS_BACKEND_URL + "/customer/signup",
@@ -50,9 +107,11 @@ class CustomerSignup extends React.Component {
         console.log(err);
       });
   };
+
   render() {
     return (
       <>
+        {console.log(this.state)}
         <div className="container">
           <div className="container mainContainer">
             {this.state.displayMobile ? (
@@ -68,7 +127,7 @@ class CustomerSignup extends React.Component {
                 <div className="row">
                   <div className="col-md-1">
                     {" "}
-                    <CountryCode />
+                    <CountryCode changeCountryCode={this.changeCountryCode} />
                   </div>
                   <div className="col-md-10">
                     <input
@@ -96,7 +155,7 @@ class CustomerSignup extends React.Component {
                 <div style={{ textAlign: "center" }} className="bottomText">
                   <p className="display--inline" data-reactid="34">
                     Alread use Uber?{" "}
-                    <a className="link" href="/customerlogin">
+                    <a className="link" href="/customer/login">
                       Sign in
                     </a>
                   </p>

@@ -1,10 +1,20 @@
-import React, { Component } from "react";
+import React from "react";
 import "./countryCode.css";
+
 class CountryCode extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
   render() {
     return (
       <>
-        <select aria-hidden="true" className="select4" name="countryCode">
+        <select
+          aria-hidden="true"
+          className="select4"
+          name="countryCode"
+          onChange={(e) => this.props.changeCountryCode(e.target.value)}
+        >
           <option value="1">
             +1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Canada
           </option>

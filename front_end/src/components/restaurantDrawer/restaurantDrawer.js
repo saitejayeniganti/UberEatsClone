@@ -10,7 +10,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ubereatslogo from "../../Images/ubereatsLo.svg";
 import dishIcon from "../../Images/fastfoodsvg.svg";
 import icon from "../../Images/icon.jpeg";
-import RestaurantDetails from "../restaurantDetails/restaurantDetails";
 
 class RestaurantSideBar extends Component {
   constructor(props) {

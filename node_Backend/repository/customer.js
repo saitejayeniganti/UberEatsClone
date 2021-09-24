@@ -16,11 +16,10 @@ exports.signup = async (customer) => {
 };
 
 exports.signupCallback = (customer, callback) => {
-  console.log(3);
   try {
     pool.query(
       queries.insertCustomer,
-      [customer.mobile, customer.password],
+      [customer.email_id, customer.mobile, customer.password],
       (error, result) => {
         callback(error, result);
       }
@@ -112,6 +111,7 @@ exports.updateOrder = async (order) => {
 exports.getCustomerByUsername = async (params) => {
   try {
     let response = await pool.query(queries.getCustomerByUsername, [
+      params.email_id,
       params.email_id,
     ]);
 
