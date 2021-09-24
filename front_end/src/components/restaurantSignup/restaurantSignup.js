@@ -60,6 +60,8 @@ class RestaurantSignup extends React.Component {
         if (response.status === 200) {
           console.log("Restaurant details are inserted");
         }
+        details.id = response.data.result;
+        sessionStorage.setItem("restaurantDetails", JSON.stringify(details));
         this.setState({
           redirectToDetails: true,
           createdId: response.data.result,

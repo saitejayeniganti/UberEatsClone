@@ -14,12 +14,12 @@
 }
 
 .figureClass {
-  -webkit-text-size-adjust: 100%;
+  /* -webkit-text-size-adjust: 100%; */
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
+
   background: #f6f6f6;
   margin: 0;
 }
@@ -261,4 +261,175 @@
   top: 64px;
   z-index: 5;
   width: 50%;
+}
+
+/* *************************RESTAURANT HOME*************************** */
+
+.navtab {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  color: #000000;
+  font-family: UberMoveText, sans-serif;
+  -webkit-box-direction: normal;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+  max-width: 1920px;
+  min-width: 1024px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.navtabContainer {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  color: #000000;
+  font-family: UberMoveText, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  flex-direction: row;
+  width: 100%;
+}
+
+.navtabC {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  color: #000000;
+  font-family: UberMoveText, sans-serif;
+  -webkit-box-direction: normal;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  display: flex;
+  padding-top: 30px;
+}
+
+.navdiv {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  color: #000000;
+  font-family: UberMoveText, sans-serif;
+  -webkit-box-direction: normal;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  /* overflow: hidden; */
+  height: 48px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.tabLink {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  color: #000000;
+  font-family: UberMoveText, sans-serif;
+  -webkit-box-direction: normal;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+}
+
+.tabButton {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-box-direction: normal;
+  -webkit-font-smoothing: antialiased;
+  border-width: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  font: inherit;
+  letter-spacing: inherit;
+  white-space: nowrap;
+  color: #000000;
+  font-family: UberMoveText, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  text-align: center;
+  line-height: 20px;
+  padding-bottom: 30px;
+  border-bottom: 0;
+}
+
+.horizontalRule {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  color: #000000;
+
+  -webkit-box-direction: normal;
+  -webkit-font-smoothing: antialiased;
+  height: 1px;
+  border: none;
+  margin: 0;
+  background-color: #e2e2e2;
+}
+
+/* ******************************RESTAURANT_DRAWER****************************** */
+.txtSmall {
+  font-size: 16px;
+}
+
+.greentxt {
+  font-size: 14px;
+  color: #05944f;
+}
+
+.menu_icon {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-box-direction: normal;
+  font: inherit;
+  color: black;
+  letter-spacing: inherit;
+  cursor: pointer;
+  -webkit-font-smoothing: antialiased;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  fill: currentColor;
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+.navBar_img {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  font-family: UberMoveText, sans-serif;
+  -webkit-box-direction: normal;
+  color: inherit;
+  aspect-ratio: auto 146 / 24;
+  -webkit-font-smoothing: antialiased;
+  height: 24px;
+  width: auto;
+  display: block;
+  margin-left: 32px;
+  margin-top: 20px;
+}
+
+.drawer_icon {
+  width: 20px;
+  height: 20px;
+}
+
+.categoryTxt {
+  font-size: 16px;
+  color: black;
+  font-weight: 500;
+  font-family: UberMoveText, sans-serif;
+}
+
+.addressTxt {
+  font-size: 14px;
+  color: black;
+}
+
+.categorySubtxt {
+  font-size: 24px;
+  font-weight: 700;
+  font-family: UberMoveText, sans-serif;
+  color: black;
+  margin-bottom: 15px;
 }

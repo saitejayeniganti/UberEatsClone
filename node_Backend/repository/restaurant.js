@@ -74,6 +74,34 @@ exports.updateRestaurant = async (restaurant) => {
   }
 };
 
+//*********************GET_RESTAURANT_BY_USERNAME******************** */
+exports.getRestaurantByUsername = async (params) => {
+  try {
+    let response = await pool.query(queries.getRestaurantByUsername, [
+      params.email_id,
+    ]);
+    return { status: 200, body: response[0] };
+  } catch (error) {
+    // console.log(error);
+    const message = error.message ? error.message : "Internal Server Error";
+    const code = error.statusCode ? error.statusCode : 500;
+    return { status: code, body: { message } };
+  }
+};
+
+//*********************GET_RESTAURANT_BY_ID******************** */
+exports.getRestaurantByID = async (params) => {
+  try {
+    let response = await pool.query(queries.getRestaurantByID, [params.id]);
+    return { status: 200, body: response[0] };
+  } catch (error) {
+    // console.log(error);
+    const message = error.message ? error.message : "Internal Server Error";
+    const code = error.statusCode ? error.statusCode : 500;
+    return { status: code, body: { message } };
+  }
+};
+
 exports.insertDish = async (dish) => {
   try {
     let response = await pool.query(queries.insertDish, [

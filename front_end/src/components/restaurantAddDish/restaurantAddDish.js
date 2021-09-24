@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./restaurantAddDish.css";
 import axios from "axios";
 import "./../../commonCSS.css";
+import { Redirect } from "react-router";
 import S3 from "react-aws-s3";
 import { v4 as uuidv4 } from "uuid";
 
@@ -35,6 +36,7 @@ class RestaurantAddDish extends React.Component {
     selectedFile: "",
     selectedFileError: "",
     image_url: "",
+    redirectToHome: false,
   };
 
   submit = () => {
@@ -79,7 +81,8 @@ class RestaurantAddDish extends React.Component {
         }
         // console.log(this.state.selectedFile);
         let details = {
-          restaurant_id: "1",
+          restaurant_id: JSON.parse(sessionStorage.getItem("restaurantDetails"))
+            .id,
           name: this.state.name,
           main_ingredients: this.state.main_ingredients,
           price: this.state.dish_price,
@@ -96,11 +99,11 @@ class RestaurantAddDish extends React.Component {
           )
           .then((response) => {
             if (response.status === 200) {
-              console.log("Restaurant details are inserted");
+              console.log("Dish is inserted");
             }
+            this.setState({ redirectToHome: true });
           })
           .catch((err) => {
-            this.setState({ emailError: "Email address already taken" });
             console.log(err);
           });
       })
@@ -282,7 +285,15 @@ class RestaurantAddDish extends React.Component {
     );
   };
   render() {
-    return <> {this.addDishForm()}</>;
+    let redirectToHome = null;
+    if (this.state.redirectToHome)
+      redirectToHome = <Redirect to="/restaurant/home" />;
+    return (
+      <>
+        {redirectToHome}
+        {this.addDishForm()}
+      </>
+    );
   }
 }
 

@@ -19,6 +19,32 @@ exports.signupcallback = (request, callback) => {
   }
 };
 
+//*********************GET_RESTAURANT_DETAILS_BY_USERNAME******************** */
+exports.getRestaurantByUsername = async (request) => {
+  let response = await restaurantRepo.getRestaurantByUsername(request.query);
+  return response;
+};
+
+exports.logincallback = (request, callback) => {
+  try {
+    restaurantRepo.logincallback(request.body, (error, result) => {
+      if (error) {
+        callback(error);
+      } else {
+        callback(error, result);
+      }
+    });
+  } catch (err) {
+    callback(err);
+  }
+};
+
+//*********************GET_RESTAURANT_DETAILS_BY_ID******************** */
+exports.getRestaurantByID = async (request) => {
+  let response = await restaurantRepo.getRestaurantByID(request.query);
+  return response;
+};
+
 exports.logincallback = (request, callback) => {
   try {
     restaurantRepo.logincallback(request.body, (error, result) => {

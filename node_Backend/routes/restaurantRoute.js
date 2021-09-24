@@ -31,6 +31,20 @@ app.post("/login", (request, response) => {
   });
 });
 
+//*********************GET_RESTAURANT_BY_USERNAME******************** */
+app.get("/login", async (request, response) => {
+  const data = await restaurantService.getRestaurantByUsername(request);
+  // console.log(data.body);
+  response.status(data.status).json(data.body);
+});
+
+//*********************GET_RESTAURANT_BY_ID******************** */
+app.get("", async (request, response) => {
+  const data = await restaurantService.getRestaurantByID(request);
+  // console.log(data.body);
+  response.status(data.status).json(data.body);
+});
+
 //*********************UPDATE_RESTAURANT******************** */
 app.put("", async (request, response) => {
   const data = await restaurantService.updateRestaurant(request);

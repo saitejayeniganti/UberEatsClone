@@ -12,6 +12,7 @@ import RestaurantSignup from "../components/restaurantSignup/restaurantSignup";
 // import Uploadfile from "../components/imageUpload/imageUpload";
 import RestaurantHome from "../components/restaurantHome/restaurantHome";
 import RestaurantDetails from "../components/restaurantDetails/restaurantDetails";
+import RestaurantSideBar from "../components/restaurantDrawer/restaurantDrawer";
 
 class Routes extends Component {
   render() {
@@ -26,7 +27,7 @@ class Routes extends Component {
         <Route path="/restaurant/addDish" component={RestaurantAddDish} />
         <Route path="/restaurant/home" component={RestaurantHome} />
         <Route path="/restaurant/details" component={RestaurantDetails} />
-        <Route path="/cc" component={RestaurantHome} />
+        <Route path="/cc" component={RestaurantSideBar} />
       </div>
     );
   }

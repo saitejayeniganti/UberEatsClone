@@ -22,15 +22,15 @@ class RestaurantDetails extends Component {
     super(props);
     this.state = {
       redirectToHome: false,
-      name: this.props.location.state.name,
+      name: "",
       nameError: "",
-      address: this.props.location.state.address,
+      address: "",
       addressError: "",
-      suite: this.props.location.state.suite,
+      suite: "",
       suiteError: "",
-      email: this.props.location.state.email,
+      email: "",
       emailError: "",
-      password: this.props.location.state.password,
+      password: "",
       passwordError: "",
       deliveryType: "",
       deliveryTypeError: "",
@@ -42,15 +42,37 @@ class RestaurantDetails extends Component {
       endTimeError: "",
       selectedFile: "",
       selectedFileError: "",
-      id: this.props.location.state.id,
+      id: "",
     };
   }
 
-  // componentDidMount = () => {
-  //   this.setState({
-
-  //   });
-  // };
+  componentDidMount() {
+    axios
+      .get(
+        process.env.REACT_APP_UBEREATS_BACKEND_URL +
+          "/restaurant?id=" +
+          JSON.parse(sessionStorage.getItem("restaurantDetails")).id
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("Restaurant details are retrieved");
+        }
+        // console.log(response.data);
+        this.setState({
+          name: response.data.name,
+          address: response.data.location,
+          suite: response.data.suite,
+          email: response.data.email_id,
+          password: "password",
+          id: response.data.id,
+          startTime: response.data.star_time,
+          endTime: response.data.end_time,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   fileSelected = (e) => {
     console.log(e.target.files[0].type);
@@ -148,6 +170,10 @@ class RestaurantDetails extends Component {
             if (response.status === 200) {
               console.log("Restaurant details are Updated");
             }
+            sessionStorage.setItem(
+              "restaurantDetails",
+              JSON.stringify(details)
+            );
             this.setState({ redirectToHome: true });
           })
           .catch((err) => {
@@ -344,7 +370,7 @@ class RestaurantDetails extends Component {
                 </div>
                 <div>
                   <button className="btnn" onClick={() => this.submit()}>
-                    Add Dish
+                    Submit Details
                   </button>
                 </div>
               </div>

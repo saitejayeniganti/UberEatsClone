@@ -1,63 +1,225 @@
 import React, { Component } from "react";
 import "./../../commonCSS.css";
-import rest from "./../../Images/rest.jpeg";
 import { Redirect } from "react-router";
+import axios from "axios";
+import { Link } from "react-scroll";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import dishIcon from "../../Images/bowl.svg";
 
 class RestaurantHome extends React.Component {
   state = {
-    img: "",
+    restaurantDetails: JSON.parse(sessionStorage.getItem("restaurantDetails")),
     redirectToAddDish: false,
+    dishes: {},
   };
+
+  componentDidMount() {
+    axios
+      .get(
+        process.env.REACT_APP_UBEREATS_BACKEND_URL +
+          "/restaurant/dishes?id=" +
+          this.state.restaurantDetails.id
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          console.log(response.data);
+          console.log("Restaurant dishes are retrieved");
+        }
+        let dishesSubCat = {};
+        for (let dish of response.data) {
+          // console.log(dish.category);
+          if (!dishesSubCat[dish.category]) dishesSubCat[dish.category] = [];
+          dishesSubCat[dish.category].push(dish);
+        }
+        this.setState({
+          dishes: dishesSubCat,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  renderDishes = () => {
+    let headers = Object.keys(this.state.dishes);
+    return (
+      <>
+        <div
+          className="row"
+          style={{
+            // zIndex: "3",
+            // position: "fixed",
+            // top: "25px",
+            // left: "0px",
+            // width: "100%",
+            // paddingLeft: "30px",
+            top: 0,
+            position: "-webkit-sticky",
+            position: "sticky",
+          }}
+        >
+          <ul
+            style={{
+              display: "flex",
+              listStyle: "none",
+              justifyContent: "left",
+              marginTop: "20px",
+            }}
+          >
+            {headers.map((header) => {
+              return (
+                <>
+                  <li className="categoryTxt" style={{ paddingRight: "50px" }}>
+                    <Link to={header} spy={true} smooth={false} duration={1000}>
+                      <label>{header}</label>
+                    </Link>
+                  </li>
+                </>
+              );
+            })}
+          </ul>
+          <hr className="horizontalRule"></hr>
+        </div>
+
+        <div style={{ position: "relative" }}>
+          {headers.map((header) => {
+            return (
+              <>
+                <div class="row" id={header} style={{ marginTop: "30px" }}>
+                  <label className="categorySubtxt">{header}</label>
+
+                  {this.state.dishes[header].map((dish) => {
+                    return (
+                      <>
+                        <div
+                          class="col-md-4"
+                          style={{ padding: "10px", paddingBottom: "20px" }}
+                        >
+                          <Card
+                            sx={{
+                              display: "flex",
+                              height: "160px",
+                              width: "560px",
+                              marginRight: "20px",
+                              maxWidth: "100%",
+                            }}
+                          >
+                            <CardContent sx={{ flex: "1 0 auto" }}>
+                              <div
+                                className="row categoryTxt"
+                                style={{ paddingLeft: "15px" }}
+                              >
+                                {dish.name}
+                              </div>
+                              <div
+                                className="row addressTxt"
+                                style={{ paddingLeft: "15px" }}
+                              >
+                                {dish.description}
+                              </div>
+                              <div
+                                className="row"
+                                style={{ height: "60px" }}
+                              ></div>
+                              <div
+                                className="row"
+                                style={{ paddingLeft: "15px" }}
+                              >
+                                ${dish.price}
+                              </div>
+                            </CardContent>
+                            <CardMedia
+                              component="img"
+                              sx={{ width: 151 }}
+                              image={dish.image_url}
+                            />
+                          </Card>
+                        </div>
+                      </>
+                    );
+                  })}
+                </div>
+              </>
+            );
+          })}
+        </div>
+      </>
+    );
+  };
+
   render() {
     let redirectToAddDish = null;
     if (this.state.redirectToAddDish)
       redirectToAddDish = <Redirect to="/restaurant/adddish" />;
     return (
-      <div>
+      <>
         {redirectToAddDish}
-        <figure className="figureClass">
-          <div className="figureDiv">
-            <img className="imginFig" src={rest} />
-          </div>
-        </figure>
-        <div className="imgBck">
-          <div className="imgBckspace"></div>
-          <div className="imgtxtContainer">
-            <div className="imgtxtCo">
-              {" "}
-              <div className="imgtxtleftspace"></div>
-              <div className="imgtxtleftContainer">
-                <div className="spacer_40"></div>
-                <div>
-                  {" "}
-                  <h2 style={{ color: "white", marginBottom: "50px" }}>
-                    Teriyaki Madness (2020 Wyatt Dr)
-                  </h2>
+        <div>
+          <figure className="figureClass">
+            <div className="figureDiv">
+              <img
+                className="imginFig"
+                src={this.state.restaurantDetails.image_url}
+              />
+            </div>
+          </figure>
+          <div className="imgBck">
+            <div className="imgBckspace"></div>
+            <div className="imgtxtContainer">
+              <div className="imgtxtCo">
+                {" "}
+                <div className="imgtxtleftspace"></div>
+                <div className="imgtxtleftContainer">
+                  <div className="spacer_40"></div>
+                  <div>
+                    <h2 style={{ color: "white", marginBottom: "50px" }}>
+                      {this.state.restaurantDetails.name +
+                        " (" +
+                        this.state.restaurantDetails.location.split(",")[0] +
+                        ")"}
+                    </h2>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="imgButtons">
-              <button
-                className="priceButton"
-                onClick={() => this.setState({ redirectToAddDish: true })}
-              >
-                <div
-                  className="row"
-                  style={{ padding: "7px", paddingRight: "0px" }}
+              <div className="imgButtons">
+                <button
+                  className="priceButton"
+                  onClick={() => this.setState({ redirectToAddDish: true })}
                 >
-                  <div className="col-md-2">
-                    <svg height="20px" width="20px" viewBox="0 0 24 24">
-                      <path d="M9.917 12.417l1.666-1.667c1.25-1.25 1.584-3.167.75-4.833L10.75 2.75 9.083 4.417c-1.25 1.25-1.583 3.166-.75 4.833l1.584 3.167zM13.25 12.417l-1.667 1.666 3.167 1.584c1.583.833 3.5.5 4.833-.75l1.667-1.667-3.167-1.583c-1.666-.834-3.583-.5-4.833.75zM7.333 11L5.75 7.833 4.083 9.5c-1.25 1.25-1.583 3.167-.75 4.833L4.917 17.5l1.666-1.667c1.25-1.333 1.584-3.25.75-4.833zM8.25 17.417l-1.667 1.666 3.167 1.584c1.583.833 3.5.5 4.833-.75l1.667-1.667-3.167-1.583c-1.666-.834-3.583-.5-4.833.75zM19.5 2.833c-2.75 0-5 2.25-5 5V9.5h1.667c2.75 0 5-2.25 5-5V2.833H19.5z"></path>
-                    </svg>
-                  </div>
+                  <div
+                    className="row"
+                    style={{ padding: "7px", paddingRight: "0px" }}
+                  >
+                    <div className="col-md-2">
+                      <img
+                        style={{
+                          height: "20px",
+                          width: "20px",
+                        }}
+                        src={dishIcon}
+                      />
+                    </div>
 
-                  <div className="col-md-9">Add Dish</div>
-                </div>
-              </button>
+                    <div className="col-md-9">Add Dish</div>
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+        <div style={{ marginLeft: "2%", marginRight: "2%" }}>
+          <div style={{ padding: "10px" }}>
+            <div className="row">
+              <label className="addressTxt">
+                {this.state.restaurantDetails.location}
+              </label>
+            </div>
+            {this.renderDishes()}
+          </div>
+        </div>
+      </>
     );
   }
 }

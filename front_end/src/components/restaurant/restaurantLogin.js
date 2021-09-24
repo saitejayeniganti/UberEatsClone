@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import "./restaurantLogin.css";
 import ubereatslogo from "../../Images/UberEatsLogo.png";
+import { Redirect } from "react-router";
 import axios from "axios";
 import dotenv from "dotenv";
 import Footer from "../footer/footer";
+import bcrypt from "bcryptjs";
 dotenv.config();
 
 class RestaurantLogin extends React.Component {
@@ -14,7 +16,20 @@ class RestaurantLogin extends React.Component {
     loginPassword: "",
     usernameError: "",
     passwordError: "",
-    restaurantDetails: {},
+
+    restaurantDetails: {
+      name: "",
+      location: "",
+      suite: "",
+      delivery_type: "",
+      contact: "",
+      star_time: "",
+      end_time: "",
+      id: "",
+      image_url: "",
+      password: "",
+    },
+    redirectToHome: false,
   };
   displayPasswordField = () => {
     axios
@@ -43,18 +58,29 @@ class RestaurantLogin extends React.Component {
 
   login = () => {
     if (
-      (this.state.restaurantDetails.password == this.state.loginPassword) ==
-      false
+      !bcrypt.compareSync(
+        this.state.loginPassword,
+        this.state.restaurantDetails.password
+      )
     ) {
       this.setState({
         passwordError: "The password you’ve entered is incorrect.",
       });
-      return;
+    } else {
+      sessionStorage.setItem(
+        "restaurantDetails",
+        JSON.stringify(this.state.restaurantDetails)
+      );
+      this.setState({ redirectToHome: true });
     }
   };
   render() {
+    let redirectToHome = null;
+    if (this.state.redirectToHome)
+      redirectToHome = <Redirect to="/restaurant/home" />;
     return (
       <>
+        {redirectToHome}
         <div className="container">
           <div className="container mainContainer">
             {this.state.displayUserName ? (
