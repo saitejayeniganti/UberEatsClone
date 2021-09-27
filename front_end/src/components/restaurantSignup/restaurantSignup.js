@@ -4,6 +4,11 @@ import "./../../commonCSS.css";
 import bcrypt from "bcryptjs";
 import axios from "axios";
 import { Redirect } from "react-router";
+import LocationSearchInput from "../locationAutoComplete/locationAuto";
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from "react-places-autocomplete";
 
 class RestaurantSignup extends React.Component {
   state = {
@@ -19,6 +24,25 @@ class RestaurantSignup extends React.Component {
     passwordError: "",
     redirectToDetails: false,
     createdId: "",
+    address: "",
+    latitude: "",
+    longitude: "",
+  };
+
+  handleChange = (address) => {
+    this.setState({ address });
+  };
+
+  handleSelect = (address) => {
+    geocodeByAddress(address).then((results) => {
+      this.setState({ address: address });
+      getLatLng(results[0])
+        .then((latLng) => {
+          console.log("Success", latLng);
+          this.setState({ latitude: latLng.lat, longitude: latLng.lng });
+        })
+        .catch((error) => console.error("Error", error));
+    });
   };
 
   submit = () => {
@@ -50,6 +74,8 @@ class RestaurantSignup extends React.Component {
       password: encryptPassword,
       address: this.state.address,
       suite: this.state.suite,
+      latitude: this.state.latitude,
+      longitude: this.state.longitude,
     };
     axios
       .post(
@@ -112,13 +138,18 @@ class RestaurantSignup extends React.Component {
               ) : (
                 ""
               )}
-              <input
+              {/* <input
                 className="txtbox"
                 placeholder="Store address"
                 onChange={(e) =>
                   this.setState({ address: e.target.value, addressError: "" })
                 }
-              ></input>
+              ></input> */}
+              <LocationSearchInput
+                handleChange={this.handleChange}
+                handleSelect={this.handleSelect}
+                address={this.state.address}
+              />
               {this.state.addressError ? (
                 <label className="errtext">{this.state.addressError}</label>
               ) : (

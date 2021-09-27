@@ -1,5 +1,5 @@
 exports.insertRestaurant =
-  "insert into Restaurents (name,email_id,password,location,suite) values (?,?,?,?,?)";
+  "insert into Restaurents (name,email_id,password,location,suite,latitude,longitude) values (?,?,?,?,?,?,?)";
 
 exports.insertDish =
   "insert into Dishes (restaurent_id,name,category,cuisine,price,main_ingredients,description,type,image_url) values (?,?,?,?,?,?,?,?,?)";
@@ -20,3 +20,6 @@ exports.getRestaurantByUsername =
 
 exports.getRestaurantByID =
   "select Restaurents.id,Restaurents.name,location,suite,email_id,password,image_url,star_time,end_time,password from Restaurents where id=?";
+
+exports.getRestaurantsByLocation =
+  "SELECT * from Restaurents order by  (6371 * acos( cos( radians(?) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) * sin( radians( latitude ) )) ) asc";

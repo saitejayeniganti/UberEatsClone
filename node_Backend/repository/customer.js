@@ -34,13 +34,16 @@ exports.updateCustomer = async (customer) => {
     let response = await pool.query(queries.updateCustomer, [
       customer.name,
       customer.email_id,
-      customer.password,
+      customer.mobile,
       customer.city,
       customer.state,
       customer.country,
       customer.nick_name,
       customer.about,
       customer.image_url,
+      customer.address,
+      customer.latitude,
+      customer.longitude,
       customer.id,
     ]);
     return { status: 200, body: response.values };
@@ -114,6 +117,20 @@ exports.getCustomerByUsername = async (params) => {
       params.email_id,
       params.email_id,
     ]);
+
+    return { status: 200, body: response[0] };
+  } catch (error) {
+    console.log(error);
+    const message = error.message ? error.message : "Internal Server Error";
+    const code = error.statusCode ? error.statusCode : 500;
+    return { status: code, body: { message } };
+  }
+};
+
+//*********************GET_CUSTOMER_BY_ID******************** */
+exports.getCustomerByID = async (params) => {
+  try {
+    let response = await pool.query(queries.getCustomerByID, [params.id]);
 
     return { status: 200, body: response[0] };
   } catch (error) {

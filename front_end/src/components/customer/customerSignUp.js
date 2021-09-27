@@ -5,6 +5,7 @@ import axios from "axios";
 import dotenv from "dotenv";
 import Footer from "../footer/footer";
 import bcrypt from "bcryptjs";
+import { Redirect } from "react-router";
 import CountryCode from "./../countryCode";
 
 dotenv.config();
@@ -20,6 +21,7 @@ class CustomerSignup extends React.Component {
     passwordError: "",
     countryCode: "1",
     customerDetails: {},
+    redirectToHome: false,
   };
 
   changeCountryCode = (code) => {
@@ -29,10 +31,12 @@ class CustomerSignup extends React.Component {
 
   displayPasswordField = () => {
     this.setState({ isEmail: false });
+    let str;
     if (
       this.state.signupMobile.includes("@") ||
       !/^\d+$/.test(this.state.signupMobile) == true
     ) {
+      str = this.state.signupMobile;
       this.setState({ isEmail: true });
       let regex = /\S+@\S+\.\S+/;
       if (
@@ -46,7 +50,7 @@ class CustomerSignup extends React.Component {
       this.setState({ mobileNumberError: "Enter a valid phone number" });
       return;
     } else {
-      let str = this.state.countryCode + this.state.signupMobile;
+      str = this.state.countryCode + this.state.signupMobile;
       console.log(str);
       this.setState({
         signupMobile: str,
@@ -56,18 +60,16 @@ class CustomerSignup extends React.Component {
       .get(
         process.env.REACT_APP_UBEREATS_BACKEND_URL +
           "/customer/login?email_id=" +
-          this.state.signupMobile
+          str
       )
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         if (response.data) {
           this.setState({
             mobileNumberError: "Id already exist",
           });
           return;
-        }
-
-        if (response.status === 200) {
+        } else {
           this.setState({ displayMobile: false });
           this.setState({ displayPassword: true });
         }
@@ -100,8 +102,19 @@ class CustomerSignup extends React.Component {
       )
       .then((response) => {
         if (response.status === 200) {
-          console.log("User details are inserted");
+          console.log("Customer details are inserted");
         }
+        let customerDetails = {
+          id: response.data.result,
+        };
+        sessionStorage.setItem(
+          "customerDetails",
+          JSON.stringify(customerDetails)
+        );
+        this.setState({
+          redirectToHome: true,
+        });
+        // console.log(response.data);
       })
       .catch((err) => {
         console.log(err);
@@ -109,9 +122,12 @@ class CustomerSignup extends React.Component {
   };
 
   render() {
+    let redirectToHome = null;
+    if (this.state.redirectToHome)
+      redirectToHome = <Redirect to="/customer/details" />;
     return (
       <>
-        {console.log(this.state)}
+        {redirectToHome}
         <div className="container">
           <div className="container mainContainer">
             {this.state.displayMobile ? (
@@ -135,7 +151,7 @@ class CustomerSignup extends React.Component {
                       onChange={(e) => {
                         this.setState({ signupMobile: e.target.value });
                       }}
-                      placeholder="Email or mobile number"
+                      // placeholder="Email or mobile number"
                       name="usename"
                       className="txtinput"
                     ></input>
@@ -180,7 +196,7 @@ class CustomerSignup extends React.Component {
                     this.setState({ signupPassword: e.target.value });
                   }}
                   name="password"
-                  className="txtinput"
+                  className="pswdinput"
                 ></input>
                 <div style={{ fontSize: "12px", color: "red" }}>
                   {this.state.passwordError}

@@ -23,10 +23,10 @@ class RestaurantAddDish extends React.Component {
     main_ingredients: "",
     dish_price: 0,
     description: "",
-    dish_category: "",
+    dish_category: "-1",
     cuisine: "",
     cuisineError: "",
-    dish_type: "",
+    dish_type: "-1",
     dish_typeError: "",
     nameError: "",
     main_ingredientsError: "",
@@ -44,7 +44,7 @@ class RestaurantAddDish extends React.Component {
       this.setState({ nameError: "Enter a dish name" });
       return;
     }
-    if (this.state.dish_category == "-1") {
+    if (this.state.dish_category === "-1") {
       this.setState({ dish_categoryError: "Select a category" });
       return;
     }
@@ -56,12 +56,12 @@ class RestaurantAddDish extends React.Component {
       this.setState({ main_ingredientsError: "Enter dish ingredients" });
       return;
     }
-    if (this.state.dish_price === "" || this.state.dish_price <= 0) {
+    if (this.state.dish_price === "" || parseInt(this.state.dish_price) <= 0) {
       this.setState({ dish_priceError: "Enter a valid price value" });
       return;
     }
-    if (this.state.dish_type === "" || this.state.dish_type <= 0) {
-      this.setState({ dish_typeError: "Enter dish type" });
+    if (this.state.dish_type === "-1" || this.state.dish_type <= 0) {
+      this.setState({ dish_typeError: "Select dish type" });
       return;
     }
     if (this.state.description === "") {
@@ -218,11 +218,13 @@ class RestaurantAddDish extends React.Component {
                   }
                 ></input>
                 {this.state.dish_priceError ? (
-                  <label className="errtext">{this.state.dish_price}</label>
+                  <label className="errtext">
+                    {this.state.dish_priceError}
+                  </label>
                 ) : (
                   ""
                 )}
-                <input
+                {/* <input
                   className="txtbox marginTop25"
                   placeholder="Type   Ex:Vegan"
                   type="text"
@@ -232,7 +234,24 @@ class RestaurantAddDish extends React.Component {
                       dish_typeError: "",
                     })
                   }
-                ></input>
+                ></input> */}
+                <select
+                  className="txtbox marginTop25"
+                  onChange={(e) =>
+                    this.setState({
+                      dish_type: e.target.value,
+                      dish_typeError: "",
+                    })
+                  }
+                >
+                  <option value="-1">Select Dish Type</option>
+                  <option value="Vegetarian">Vegetarian</option>
+                  <option value="Vegan">Vegan</option>
+                  <option value="Gluten-free">Gluten-free</option>
+                  <option value="Halal">Halal</option>
+                  <option value="Allergy-Friendly">Allergy Friendly</option>
+                </select>
+
                 {this.state.dish_typeError ? (
                   <label className="errtext">{this.state.dish_typeError}</label>
                 ) : (

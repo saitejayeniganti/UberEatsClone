@@ -127,3 +127,19 @@
 .marginTop20 {
   margin-top: 20px;
 }
+
+.txtareas {
+  font-family: UberMoveText-Regular !important;
+  font-size: 16px;
+  height: 100px;
+  line-height: 24px;
+  min-height: 48px;
+  color: #262626;
+  border: 1px solid #e0e0e0;
+  font-weight: 500;
+  padding: 8px 18px;
+  width: 400px;
+  padding: 8px 18px;
+  transition: all 0.4s ease !important;
+  user-select: none !important;
+}

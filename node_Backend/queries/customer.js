@@ -2,7 +2,7 @@ exports.insertCustomer =
   "insert into Customer (email_id,mobile,password) values (?,?,?)";
 
 exports.updateCustomer =
-  "update Customer set name=?,email_id=?,password=?,city=?,state=?,country=?,nick_name=?,about=?,image_url=? where id=?";
+  "update Customer set name=?,email_id=?,mobile=?,city=?,state=?,country=?,nick_name=?,about=?,image_url=?, address=?,latitude=?,longitude=? where id=?";
 
 exports.loginCustomer =
   "select Customer.id,Customer.name from Customer where email_id=? and password=?";
@@ -17,3 +17,5 @@ exports.getOrdersForCustomer = "select * from Orders where customer_id=?";
 
 exports.getCustomerByUsername =
   "select * from Customer where email_id=? or mobile=?";
+
+exports.getCustomerByID = "select * from Customer where id=?";

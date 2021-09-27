@@ -47,31 +47,34 @@ class RestaurantDetails extends Component {
   }
 
   componentDidMount() {
-    axios
-      .get(
-        process.env.REACT_APP_UBEREATS_BACKEND_URL +
-          "/restaurant?id=" +
-          JSON.parse(sessionStorage.getItem("restaurantDetails")).id
-      )
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("Restaurant details are retrieved");
-        }
-        // console.log(response.data);
-        this.setState({
-          name: response.data.name,
-          address: response.data.location,
-          suite: response.data.suite,
-          email: response.data.email_id,
-          password: "password",
-          id: response.data.id,
-          startTime: response.data.star_time,
-          endTime: response.data.end_time,
+    if (JSON.parse(sessionStorage.getItem("restaurantDetails")) === null) {
+    } else {
+      axios
+        .get(
+          process.env.REACT_APP_UBEREATS_BACKEND_URL +
+            "/restaurant?id=" +
+            JSON.parse(sessionStorage.getItem("restaurantDetails")).id
+        )
+        .then((response) => {
+          if (response.status === 200) {
+            console.log("Restaurant details are retrieved");
+          }
+          // console.log(response.data);
+          this.setState({
+            name: response.data.name,
+            address: response.data.location,
+            suite: response.data.suite,
+            email: response.data.email_id,
+            password: "password",
+            id: response.data.id,
+            startTime: response.data.star_time,
+            endTime: response.data.end_time,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
         });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    }
   }
 
   fileSelected = (e) => {
@@ -215,6 +218,7 @@ class RestaurantDetails extends Component {
                     className="txtbox marginTop20"
                     placeholder="Store address"
                     value={this.state.address}
+                    disabled
                     onChange={(e) =>
                       this.setState({
                         address: e.target.value,

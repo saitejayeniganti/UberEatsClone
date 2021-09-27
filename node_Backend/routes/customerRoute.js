@@ -34,8 +34,17 @@ app.post("/login", (request, response) => {
 
 //*********************GET_CUSTOMER_BY_USERNAME******************** */
 app.get("/login", async (request, response) => {
+  // console.log(request.query);
   const data = await customerService.getCustomerByUsername(request);
-  console.log(data.body);
+  // console.log(data.body);
+  response.status(data.status).json(data.body);
+});
+
+//*********************GET_CUSTOMER_BY_ID******************** */
+app.get("", async (request, response) => {
+  // console.log(request.query);
+  const data = await customerService.getCustomerByID(request);
+  // console.log(data.body);
   response.status(data.status).json(data.body);
 });
 

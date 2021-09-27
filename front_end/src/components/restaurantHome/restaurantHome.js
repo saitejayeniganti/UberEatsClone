@@ -7,6 +7,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import dishIcon from "../../Images/bowl.svg";
+import zIndex from "@mui/material/styles/zIndex";
 
 class RestaurantHome extends React.Component {
   state = {
@@ -58,6 +59,8 @@ class RestaurantHome extends React.Component {
             top: 0,
             position: "-webkit-sticky",
             position: "sticky",
+            zIndex: "100",
+            backgroundColor: "white",
           }}
         >
           <ul

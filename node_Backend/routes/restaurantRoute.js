@@ -69,4 +69,10 @@ app.get("/order", async (request, response) => {
   response.status(data.status).json(data.body);
 });
 
+//**********************GET_RESTAURANTS_BY_LOCATION */
+app.get("/location", async (request, response) => {
+  const data = await restaurantService.getRestaurantsByLocation(request);
+  response.status(data.status).json(data.body);
+});
+
 module.exports = app;

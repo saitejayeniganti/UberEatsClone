@@ -39,8 +39,15 @@ exports.getCustomerByUsername = async (request) => {
   return response;
 };
 
+//*********************UPDATE_CUSTOMER******************** */
 exports.updateCustomer = async (request) => {
   let response = await customerRepo.updateCustomer(request.body);
+  return response;
+};
+
+//*********************GET_CUSTOMER_DETAILS_BY_ID******************** */
+exports.getCustomerByID = async (request) => {
+  let response = await customerRepo.getCustomerByID(request.query);
   return response;
 };
 

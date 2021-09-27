@@ -16,6 +16,9 @@ import RestaurantSideBar from "../components/restaurantDrawer/restaurantDrawer";
 import CustomerSideBar from "../components/customerDrawer/customerDrawer";
 import RestaurantFooter from "../components/footer/restaurantFooter";
 import CustomerFooter from "../components/footer/customerFooter";
+import CustomerDetails from "../components/customerDetails/customerDetails";
+import CountryName from "../components/countryName/countryName";
+import LocationSearchInput from "../components/locationAutoComplete/locationAuto";
 
 class Routes extends Component {
   render() {
@@ -30,9 +33,10 @@ class Routes extends Component {
         <Route path="/restaurant/addDish" component={RestaurantAddDish} />
         <Route path="/restaurant/home" component={RestaurantHome} />
         <Route path="/restaurant/details" component={RestaurantDetails} />
-        <Route path="/cc" component={CustomerSideBar} />
+        <Route path="/customer/details" component={CustomerDetails} />
         <Route path="/footer" component={RestaurantFooter} />
         <Route path="/customerfoot" component={CustomerFooter} />
+        <Route path="/cc" component={LocationSearchInput} />
       </div>
     );
   }

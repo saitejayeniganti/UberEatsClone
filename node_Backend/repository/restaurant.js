@@ -28,6 +28,8 @@ exports.signupCallback = (restaurant, callback) => {
         restaurant.password,
         restaurant.address,
         restaurant.suite,
+        restaurant.latitude,
+        restaurant.longitude,
       ],
       (error, result) => {
         callback(error, result);
@@ -143,6 +145,24 @@ exports.getOrdersForRestaurant = async (params) => {
   try {
     let response = await pool.query(queries.getOrdersForRestaurant, [
       params.id,
+    ]);
+
+    return { status: 200, body: response };
+  } catch (error) {
+    console.log(error);
+    const message = error.message ? error.message : "Internal Server Error";
+    const code = error.statusCode ? error.statusCode : 500;
+    return { status: code, body: { message } };
+  }
+};
+
+//**********************GET_RESTAURANTS_BY_LOCATION *************/
+exports.getRestaurantsByLocation = async (latlng) => {
+  try {
+    let response = await pool.query(queries.getRestaurantsByLocation, [
+      latlng.latitude,
+      latlng.longitude,
+      latlng.latitude,
     ]);
 
     return { status: 200, body: response };
