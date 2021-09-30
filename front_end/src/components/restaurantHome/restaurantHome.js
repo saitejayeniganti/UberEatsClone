@@ -109,28 +109,45 @@ class RestaurantHome extends React.Component {
                               maxWidth: "100%",
                             }}
                           >
-                            <CardContent sx={{ flex: "1 0 auto" }}>
-                              <div
-                                className="row categoryTxt"
-                                style={{ paddingLeft: "15px" }}
-                              >
-                                {dish.name}
+                            <CardContent
+                              sx={{ flex: "1 0 auto", width: "360px" }}
+                            >
+                              <div className="row" style={{ height: "100px" }}>
+                                <div
+                                  className="row categoryTxt"
+                                  style={{
+                                    paddingLeft: "25px",
+                                    height: "auto",
+                                  }}
+                                >
+                                  {dish.name}
+                                </div>
+                                <div
+                                  className="row addressTxt"
+                                  style={{
+                                    paddingLeft: "25px",
+                                    color: "#545454",
+                                    fontSize: "14px",
+                                  }}
+                                >
+                                  {dish.description}..
+                                </div>
                               </div>
-                              <div
-                                className="row addressTxt"
-                                style={{ paddingLeft: "15px" }}
-                              >
-                                {dish.description}
-                              </div>
-                              <div
+
+                              {/* <div
                                 className="row"
                                 style={{ height: "60px" }}
-                              ></div>
+                              ></div> */}
                               <div
                                 className="row"
-                                style={{ paddingLeft: "15px" }}
+                                style={{ height: "30px", padding: "10px" }}
                               >
-                                ${dish.price}
+                                <div
+                                  className="row"
+                                  style={{ paddingLeft: "15px" }}
+                                >
+                                  ${dish.price}
+                                </div>
                               </div>
                             </CardContent>
                             <CardMedia
@@ -212,7 +229,12 @@ class RestaurantHome extends React.Component {
             </div>
           </div>
         </div>
-        <div style={{ marginLeft: "2%", marginRight: "2%" }}>
+        <div
+          style={{
+            marginLeft: "2%",
+            marginRight: "2%",
+          }}
+        >
           <div style={{ padding: "10px" }}>
             <div className="row">
               <label className="addressTxt">

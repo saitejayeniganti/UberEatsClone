@@ -16,11 +16,21 @@ import sandwich from "../../Images/sandwich.png";
 import sushi from "../../Images/sushi.png";
 import top_eats from "../../Images/top_eats.png";
 import grocery from "../../Images/grocery.png";
+import italian from "../../Images/italian.png";
+import american from "../../Images/american.png";
+import dessert from "../../Images/dessert.png";
+import japanese from "../../Images/japanese.png";
+import asian from "../../Images/asian.png";
 import axios from "axios";
 import { Radio, Space } from "antd";
 import { Slider } from "antd";
 import "antd/dist/antd.css";
 import "./../../commonCSS.css";
+import { Container } from "react-bootstrap";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteFillIcon from "@mui/icons-material/Favorite";
+import tagIcon from "../../Images/tag.png";
+import { Redirect } from "react-router";
 
 class CustomerHome extends React.Component {
   state = {
@@ -32,15 +42,20 @@ class CustomerHome extends React.Component {
     showDeliveryFee: true,
     showDietary: true,
     priceCount: "",
+    restaurants: [],
+    redirectToRestaurant: false,
+    selectedRestaurant: "",
   };
 
   componentDidMount() {
     let details = {
-      latitude: this.state.latitude,
-      longitude: this.state.longitude,
+      // latitude: this.state.latitude,
+      // longitude: this.state.longitude,
+      latitude: "37.3352",
+      longitude: "-121.8811",
     };
     axios
-      .get(
+      .post(
         process.env.REACT_APP_UBEREATS_BACKEND_URL + "/restaurant/location",
         details
       )
@@ -48,6 +63,7 @@ class CustomerHome extends React.Component {
         if (response.status === 200) {
           console.log(response.data);
           console.log("Restaurants are retrieved");
+          this.setState({ restaurants: response.data });
         }
       })
       .catch((err) => {
@@ -59,76 +75,98 @@ class CustomerHome extends React.Component {
     const style = { background: "#0092ff", padding: "8px 0" };
     return (
       <div className="container-fluid">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-1 image_div">
-              <div>
-                <img className="image_style" src={deals}></img>
-              </div>
-              <label>Deals</label>
-            </div>
-            <div className="col-md-1 image_div">
-              <img className="image_style" src={grocery}></img>
-              <label>Grocery</label>
-            </div>
-            {/* <div className="col-md-1 image_div">
-              <img className="image_style" src={convenience}></img>
-              <label>Convenience</label>
-            </div> */}
-            <div className="col-md-1 image_div">
-              <img className="image_style" src={alcohol}></img>
-              <label>Alcohol</label>
-            </div>
-            {/* <div className="col-md-1 image_div">
-              <img className="image_style" src={pharmacy}></img>
-              <label>Pharmacy</label>
-            </div> */}
-            <div className="col-md-1 image_div">
-              <img className="image_style" src={top_eats}></img>
-              <label>Top Eats</label>
-            </div>
-            <div className="col-md-1 image_div">
-              <img className="image_style" src={fastfood}></img>
-              <label>Fast Food</label>
-            </div>
-            <div className="col-md-1 image_div">
-              <img className="image_style" src={burger}></img>
-              <label>Burgers</label>
-            </div>
-            <div className="col-md-1 image_div">
-              <img className="image_style" src={sushi}></img>
-              <label>Sushi</label>
-            </div>
-            <div className="col-md-1 image_div">
-              <img className="image_style" src={pizza}></img>
-              <label>Pizza</label>
-            </div>
-            <div className="col-md-1 image_div">
-              <img className="image_style" src={chinese}></img>
-              <label>Chinese</label>
-            </div>
-            <div className="col-md-1 image_div">
-              <img className="image_style" src={mexican}></img>
-              <label>Mexican</label>
-            </div>
-            <div className="col-md-1 image_div">
-              <img className="image_style" src={indian}></img>
-              <label>Indian</label>
-            </div>
-            <div className="col-md-1 image_div">
-              <img className="image_style" src={sandwich}></img>
-              <label>Sandwich</label>
-            </div>
+        <div
+          className="row"
+          style={{ display: "flex", justifyContent: "center" }}
+        >
+          <div className=" image_div">
+            <img className="image_style" src={deals}></img>
+            <label>Deals</label>
           </div>
-          <Divider></Divider>
+          <div className=" image_div">
+            <img className="image_style" src={grocery}></img>
+            <label>Grocery</label>
+          </div>
+          <div className=" image_div">
+            <img className="image_style" src={convenience}></img>
+            <label>Convenience</label>
+          </div>
+          <div className=" image_div">
+            <img className="image_style" src={alcohol}></img>
+            <label>Alcohol</label>
+          </div>
+          <div className=" image_div">
+            <img className="image_style" src={pharmacy}></img>
+            <label>Pharmacy</label>
+          </div>
+          <div className=" image_div">
+            <img className="image_style" src={top_eats}></img>
+            <label>Top Eats</label>
+          </div>
+          <div className=" image_div">
+            <img className="image_style" src={asian}></img>
+            <label>Asian</label>
+          </div>
+          <div className=" image_div">
+            <img className="image_style" src={japanese}></img>
+            <label>Japanese</label>
+          </div>
+          <div className=" image_div">
+            <img className="image_style" src={fastfood}></img>
+            <label>FastFood</label>
+          </div>
+          <div className=" image_div">
+            <img className="image_style" src={burger}></img>
+            <label>Burgers</label>
+          </div>
+          <div className=" image_div">
+            <img className="image_style" src={sushi}></img>
+            <label>Sushi</label>
+          </div>
+          <div className=" image_div">
+            <img className="image_style" src={pizza}></img>
+            <label>Pizza</label>
+          </div>
+          <div className=" image_div">
+            <img className="image_style" src={chinese}></img>
+            <label>Chinese</label>
+          </div>
+          <div className=" image_div">
+            <img className="image_style" src={mexican}></img>
+            <label>Mexican</label>
+          </div>
+          <div className=" image_div">
+            <img className="image_style" src={indian}></img>
+            <label>Indian</label>
+          </div>
+          <div className=" image_div">
+            <img className="image_style" src={sandwich}></img>
+            <label>Sandwich</label>
+          </div>
+          <div className=" image_div">
+            <img className="image_style" src={american}></img>
+            <label>American</label>
+          </div>
+          <div className=" image_div">
+            <img className="image_style" src={italian}></img>
+            <label>Italian</label>
+          </div>
+          <div className=" image_div">
+            <img className="image_style" src={dessert}></img>
+            <label>Desserts</label>
+          </div>
         </div>
+        <Divider></Divider>
       </div>
     );
   };
 
   filters = () => {
     return (
-      <div className="col-md-8">
+      <div
+        className="col-md-12"
+        style={{ top: 0, position: "-webkit-sticky", position: "sticky" }}
+      >
         <h1 className="allstores">{this.state.filterValue}</h1>
         <div
           className="row  "
@@ -154,10 +192,10 @@ class CustomerHome extends React.Component {
         {this.state.showSort ? (
           <Radio.Group>
             <Space direction="vertical">
-              <Radio value={1}>Picked for you (default)</Radio>
-              <Radio value={2}>Most Popular</Radio>
-              <Radio value={3}>Rating</Radio>
-              <Radio value={4}>Delivery Time</Radio>
+              <Radio value="default">Picked for you (default)</Radio>
+              <Radio value="count of orders">Most Popular</Radio>
+              <Radio value="rating">Rating</Radio>
+              <Radio value="delivery time">Delivery Time</Radio>
             </Space>
           </Radio.Group>
         ) : (
@@ -409,18 +447,125 @@ class CustomerHome extends React.Component {
       </div>
     );
   };
+
+  redirectToRestaurants = (restaurant) => {
+    // console.log(restaurant);
+    this.setState({
+      selectedRestaurant: restaurant,
+      redirectToRestaurant: true,
+    });
+  };
+
+  restaurants = () => {
+    return (
+      <>
+        <div className="row" style={{ marginLeft: "50px" }}>
+          {this.state.restaurants.map((restaurant) => {
+            return (
+              <>
+                <div
+                  className="col-md-3"
+                  onClick={() => this.redirectToRestaurants(restaurant)}
+                  style={{
+                    padding: "0px",
+                    marginRight: "60px",
+                    marginLeft: "20px",
+                    marginBottom: "20px",
+                    cursor: "pointer",
+                  }}
+                >
+                  <Container>
+                    <figure
+                      className="position-relative"
+                      style={{ marginBottom: "0px" }}
+                    >
+                      <img
+                        className="restaurantimgSize"
+                        src={restaurant.image_url}
+                        alt="Restaurant Image"
+                      ></img>
+                      <figcaption>
+                        {false ? (
+                          <FavoriteBorderIcon className="fav_icon" />
+                        ) : (
+                          <FavoriteFillIcon className="fav_icon" />
+                        )}
+                      </figcaption>
+                    </figure>
+                    <div className="restaurantName">{restaurant.name}</div>
+                    <div
+                      style={{
+                        fontSize: "14px",
+                        fontWeight: "400",
+                      }}
+                    >
+                      <img
+                        src={tagIcon}
+                        style={{ width: "14px", height: "14px" }}
+                      />
+                      &nbsp;•&nbsp;
+                      {Math.floor(restaurant.distance) < 32 ? (
+                        <>
+                          ${Math.floor(restaurant.distance)}
+                          &nbsp;Delivery fee&nbsp;•&nbsp;
+                          <label
+                            style={{
+                              fontSize: "14px",
+                              color: "rgb(117, 117, 117)",
+                            }}
+                          >
+                            {Math.ceil(
+                              Math.ceil((0.621 * restaurant.distance) / 0.666) /
+                                5
+                            ) * 5}
+                            -
+                            {Math.ceil(
+                              Math.ceil((0.621 * restaurant.distance) / 0.666) /
+                                5
+                            ) *
+                              5 +
+                              10}
+                            Min
+                          </label>
+                        </>
+                      ) : (
+                        "Cannot be delivered to your location"
+                      )}
+                    </div>
+                  </Container>
+                </div>
+              </>
+            );
+          })}
+        </div>
+      </>
+    );
+  };
+
   render() {
+    let redirectToRestaurant = null;
+    if (this.state.redirectToRestaurant) {
+      redirectToRestaurant = (
+        <Redirect
+          to={{
+            pathname: "/customer/restaurant",
+            state: { restaurant: this.state.selectedRestaurant },
+          }}
+        />
+      );
+    }
     return (
       <div>
         {/* {this.dishes()} */}
+        {redirectToRestaurant}
         <div
           className="container-fluid"
-          style={{ marginLeft: "1%", marginRight: "1%" }}
+          style={{ marginLeft: "1%", marginRight: "1%", marginTop: "25px" }}
         >
           <div className="row">
-            <div className="col-md-3">{this.filters()}</div>
+            <div className="col-md-2">{this.filters()}</div>
 
-            <div className="col-md-9"></div>
+            <div className="col-md-10"> {this.restaurants()}</div>
           </div>
         </div>
       </div>

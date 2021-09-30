@@ -70,7 +70,8 @@ app.get("/order", async (request, response) => {
 });
 
 //**********************GET_RESTAURANTS_BY_LOCATION */
-app.get("/location", async (request, response) => {
+app.post("/location", async (request, response) => {
+  // console.log(request.body);
   const data = await restaurantService.getRestaurantsByLocation(request);
   response.status(data.status).json(data.body);
 });

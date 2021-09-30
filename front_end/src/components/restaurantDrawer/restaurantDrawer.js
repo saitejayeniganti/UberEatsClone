@@ -10,6 +10,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ubereatslogo from "../../Images/ubereatsLo.svg";
 import dishIcon from "../../Images/fastfoodsvg.svg";
 import icon from "../../Images/icon.jpeg";
+import "./restaurantDrawer.css";
 
 class RestaurantSideBar extends Component {
   constructor(props) {
@@ -40,10 +41,9 @@ class RestaurantSideBar extends Component {
     );
   };
 
-  render() {
+  sidebar = () => {
     return (
       <>
-        {" "}
         <Box sx={{ flexGrow: 1 }}>
           <AppBar
             position="static"
@@ -128,9 +128,25 @@ class RestaurantSideBar extends Component {
               <h6>Orders</h6>
             </div>
           </div>
-          <div style={{ marginTop: "20px" }}>Sign out</div>
+          <div
+            className="iconDiv"
+            style={{ marginTop: "20px", fontSize: "16px", color: "#757575" }}
+          >
+            Sign out
+          </div>
+          <hr></hr>
         </Drawer>
         {/* )} */}
+      </>
+    );
+  };
+
+  render() {
+    return (
+      <>
+        {JSON.parse(sessionStorage.getItem("restaurantDetails")) === null
+          ? ""
+          : this.sidebar()}
       </>
     );
   }

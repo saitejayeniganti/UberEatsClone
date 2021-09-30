@@ -8,7 +8,7 @@ exports.loginCustomer =
   "select Customer.id,Customer.name from Customer where email_id=? and password=?";
 
 exports.insertOrder =
-  "insert into Orders (customer_id,restaurent_id,price,order_date,delivery_type,order_status) values (?,?,?,?,?,?)";
+  "insert into Orders (customer_id,restaurent_id,price,order_date,delivery_type,order_status) values (?,?,?,NOW(),?,?)";
 
 exports.updateOrder =
   "update Orders set customer_id=?,restaurent_id=?,price=?,order_date=?,delivery_type=?,order_status=? where id=?";

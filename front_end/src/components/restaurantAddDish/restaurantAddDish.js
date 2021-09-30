@@ -48,22 +48,25 @@ class RestaurantAddDish extends React.Component {
       this.setState({ dish_categoryError: "Select a category" });
       return;
     }
-    if (this.state.cuisine === "") {
-      this.setState({ cuisineError: "Enter dish cuisine" });
-      return;
-    }
+    // if (this.state.cuisine === "") {
+    //   this.setState({ cuisineError: "Enter dish cuisine" });
+    //   return;
+    // }
     if (this.state.main_ingredients === "") {
       this.setState({ main_ingredientsError: "Enter dish ingredients" });
       return;
     }
-    if (this.state.dish_price === "" || parseInt(this.state.dish_price) <= 0) {
+    if (
+      this.state.dish_price === "" ||
+      parseFloat(this.state.dish_price) <= 0
+    ) {
       this.setState({ dish_priceError: "Enter a valid price value" });
       return;
     }
-    if (this.state.dish_type === "-1" || this.state.dish_type <= 0) {
-      this.setState({ dish_typeError: "Select dish type" });
-      return;
-    }
+    // if (this.state.dish_type === "-1" || this.state.dish_type <= 0) {
+    //   this.setState({ dish_typeError: "Select dish type" });
+    //   return;
+    // }
     if (this.state.description === "") {
       this.setState({ descriptionError: "Enter description" });
       return;

@@ -118,6 +118,8 @@ class CustomerLogin extends React.Component {
     } else {
       let customerDetails = {
         id: this.state.customerDetails.id,
+        name: this.state.customerDetails.name,
+        image_url: this.state.customerDetails.image_url,
       };
       sessionStorage.setItem(
         "customerDetails",

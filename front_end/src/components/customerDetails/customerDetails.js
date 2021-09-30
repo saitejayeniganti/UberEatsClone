@@ -48,6 +48,7 @@ class CustomerDetails extends Component {
       fileError: "",
       imageUrl: "",
       address: "",
+      addressError: "",
       latitude: "",
       longitude: "",
     };
@@ -55,6 +56,7 @@ class CustomerDetails extends Component {
 
   handleChange = (address) => {
     this.setState({ address });
+    this.setState({ addressError: "" });
   };
 
   handleSelect = (address) => {
@@ -156,30 +158,38 @@ class CustomerDetails extends Component {
       return;
     }
 
-    if (this.state.password === "") {
+    if (this.state.password === "" || this.state.password === null) {
       this.setState({ passwordError: "Enter a password" });
       return;
     }
 
-    if (this.state.country === "-1") {
+    if (this.state.country === "-1" || this.state.country === null) {
       this.setState({
         countryError: "Select a country",
       });
       return;
     }
 
-    if (this.state.state === "") {
+    if (this.state.state === "" || this.state.state === null) {
       this.setState({ stateError: "Enter a state" });
       return;
     }
 
-    if (this.state.city === "") {
+    if (this.state.city === "" || this.state.city === null) {
       this.setState({ cityError: "Enter a city" });
       return;
     }
 
-    if (this.state.address === "") {
-      this.setState({ cityError: "Enter address" });
+    if (this.state.address === "" || this.state.address === null) {
+      this.setState({ addressError: "Enter address" });
+      return;
+    }
+
+    if (
+      (this.state.imageUrl === null || this.state.imageUrl === "") &&
+      this.state.file === ""
+    ) {
+      this.setState({ fileError: "Select an image" });
       return;
     }
 
@@ -415,7 +425,6 @@ class CustomerDetails extends Component {
                     placeholder="City"
                     value={this.state.city}
                     onChange={(e) => {
-                      console.log(e.target.value);
                       this.setState({
                         city: e.target.value,
                         cityError: "",
@@ -445,7 +454,7 @@ class CustomerDetails extends Component {
                       address={this.state.address}
                     />
                   </div>
-                  {this.state.address ? (
+                  {this.state.addressError ? (
                     <label className="errtext">{this.state.addressError}</label>
                   ) : (
                     ""

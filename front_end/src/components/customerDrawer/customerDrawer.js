@@ -8,8 +8,10 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 // import ubereatslogo from "../../Images/UberEatsLogo.png";
 import ubereatslogo from "../../Images/ubereatsLo.svg";
-
+import "./customerDrawer.css";
 import icon from "../../Images/icon.jpeg";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 class CustomerSideBar extends Component {
   constructor(props) {
@@ -29,21 +31,24 @@ class CustomerSideBar extends Component {
     });
   };
 
+  removeSession = () => {
+    sessionStorage.removeItem("customerDetails");
+  };
+
   iconInDrawer = () => {
     return (
       <>
         <div>
-          <h1>this is aheader</h1>
+          {/* <h1>this is aheader</h1> */}
           <img src={icon} />
         </div>
       </>
     );
   };
 
-  render() {
+  sidebar = () => {
     return (
       <>
-        {" "}
         <Box sx={{ flexGrow: 1 }}>
           <AppBar
             position="static"
@@ -202,7 +207,7 @@ class CustomerSideBar extends Component {
               className="col-md-5"
               style={{ marginTop: "3px", marginLeft: "3px" }}
             >
-              <h6>Orders</h6>
+              <h6>Promotions</h6>
             </div>
           </div>
           {/* ******end of Promotions******* */}
@@ -250,12 +255,26 @@ class CustomerSideBar extends Component {
             </div>
           </div>
           {/* ******end of invite******* */}
-          <div style={{ marginTop: "40px", marginBottom: "20px" }}>
+          <div
+            className="iconDiv"
+            style={{ marginTop: "20px", fontSize: "16px", color: "#757575" }}
+            onClick={this.removeSession}
+          >
             Sign out
           </div>
           <hr></hr>
         </Drawer>
         {/* )} */}
+      </>
+    );
+  };
+
+  render() {
+    return (
+      <>
+        {JSON.parse(sessionStorage.getItem("customerDetails")) === null
+          ? ""
+          : this.sidebar()}
       </>
     );
   }

@@ -75,7 +75,7 @@ exports.insertOrder = async (order) => {
       order.customer_id,
       order.restaurant_id,
       order.price,
-      order.order_date,
+      // order.order_date,
       order.delivery_type,
       order.order_status,
     ]);

@@ -22,4 +22,4 @@ exports.getRestaurantByID =
   "select Restaurents.id,Restaurents.name,location,suite,email_id,password,image_url,star_time,end_time,password from Restaurents where id=?";
 
 exports.getRestaurantsByLocation =
-  "SELECT * from Restaurents order by  (6371 * acos( cos( radians(?) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) * sin( radians( latitude ) )) ) asc";
+  "SELECT id,name,email_id,password,location,suite,delivery_type,contact,star_time,end_time,image_url,latitude,longitude, (6371 * acos( cos( radians(?) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) * sin( radians( latitude ) )) ) as distance from Restaurents order by distance asc";

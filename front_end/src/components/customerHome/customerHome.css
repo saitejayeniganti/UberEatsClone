@@ -7,6 +7,8 @@
 .image_div {
   display: grid;
   justify-items: center;
+  width: 80px !important;
+  margin-left: 20px;
 }
 
 .image_div:hover .image_style {
@@ -86,4 +88,36 @@
 
 .ant-radio-inner::after {
   background-color: white !important;
+}
+
+.restaurantimgSize {
+  height: 130px;
+  width: 382px;
+}
+
+.fav_icon {
+  position: absolute;
+  bottom: 6rem;
+  left: 21.5rem;
+  border-color: white;
+  color: white;
+}
+
+.fav_icon:hover {
+  fill: white;
+  cursor: pointer;
+}
+
+.restaurantName {
+  color: #000000;
+  pointer-events: none;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  font-family: UberMoveText, sans-serif;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  line-height: 24px;
+  font-size: 17px;
+  margin-top: 10px;
 }
