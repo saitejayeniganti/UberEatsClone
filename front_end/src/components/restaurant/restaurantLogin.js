@@ -29,6 +29,7 @@ class RestaurantLogin extends React.Component {
       image_url: "",
       password: "",
     },
+    redirectToSignup: false,
     redirectToHome: false,
   };
   displayPasswordField = () => {
@@ -78,9 +79,14 @@ class RestaurantLogin extends React.Component {
     let redirectToHome = null;
     if (this.state.redirectToHome)
       redirectToHome = <Redirect to="/restaurant/home" />;
+
+    let redirectToSignup = null;
+    if (this.state.redirectToSignup)
+      redirectToSignup = <Redirect to="/restaurant/signup" />;
     return (
       <>
         {redirectToHome}
+        {redirectToSignup}
         <div className="container">
           <div className="container mainContainer">
             {this.state.displayUserName ? (
@@ -115,7 +121,13 @@ class RestaurantLogin extends React.Component {
                   Next
                 </button>
                 <div style={{ textAlign: "center" }} className="bottomText">
-                  <p className="display--inline" data-reactid="34">
+                  <p
+                    className="display--inline"
+                    data-reactid="34"
+                    onClick={() => {
+                      this.setState({ redirectToSignup: true });
+                    }}
+                  >
                     New to Uber?{" "}
                     <a className="link" href="">
                       Create an account
