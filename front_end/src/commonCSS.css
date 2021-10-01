@@ -1,5 +1,5 @@
 .uploadbtn {
-  font-family: UberMoveText-Regular !important;
+  font-family: math !important;
   font-size: 16px !important;
   height: 48px;
   line-height: 24px !important;
@@ -14,7 +14,7 @@
 }
 
 .uploadbtnDetails {
-  font-family: UberMoveText-Regular !important;
+  font-family: math !important;
   font-size: 16px !important;
   height: 100px;
   line-height: 24px !important;
@@ -177,7 +177,7 @@
   color: red;
 }
 .txtbox {
-  font-family: UberMoveText-Regular !important;
+  font-family: math !important;
   font-size: 16px !important;
   height: 48px !important;
   line-height: 24px !important;
@@ -480,4 +480,47 @@
   background-color: white;
   border: 2px solid #000;
   box-shadow: 24;
+}
+
+.orderModal {
+  font-size: 38px !important;
+  font-weight: 400 !important;
+  font-family: math !important;
+  margin-bottom: 15px !important;
+}
+
+.orderModalDish {
+  font-size: 17px !important;
+  font-weight: 300 !important;
+  font-family: math !important;
+  margin-bottom: 10px !important;
+  margin-top: 20px;
+}
+.orderModalHeading {
+  font-size: 23px !important;
+  font-weight: 300 !important;
+  font-family: math !important;
+  margin-bottom: 10px !important;
+}
+
+.changeStatusBtn {
+  border-width: 0;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 56px;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  padding: 12px 16px;
+  color: #ffffff;
+  background: #000000;
+  width: 100%;
+  margin-top: 40px;
+  border-radius: 5px;
+}
+.changeStatusBtn:hover {
+  background: #000000;
 }

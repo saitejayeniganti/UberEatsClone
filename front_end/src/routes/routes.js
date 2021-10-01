@@ -17,6 +17,7 @@ import CustomerDetails from "../components/customerDetails/customerDetails";
 import CountryName from "../components/countryName/countryName";
 import LocationSearchInput from "../components/locationAutoComplete/locationAuto";
 import RestaurantView from "../components/customerRestaurant/customerRestaurant";
+import RestaurantOrders from "../components/restaurantOrders/restaurantOrders";
 
 class Routes extends Component {
   render() {
@@ -28,6 +29,7 @@ class Routes extends Component {
         <Route path="/restaurant/home" component={RestaurantHome} />
         <Route path="/restaurant/details" component={RestaurantDetails} />
         <Route path="/restaurant/login" component={RestaurantLogin} />
+        <Route path="/restaurant/orders" component={RestaurantOrders} />
         <Route path="/footer" component={RestaurantFooter} />
 
         <Route path="/customer" component={CustomerSideBar} />
