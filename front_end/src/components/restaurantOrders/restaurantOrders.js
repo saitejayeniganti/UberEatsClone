@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { Redirect } from "react-router";
 import axios from "axios";
 import { Link } from "react-scroll";
@@ -34,7 +34,7 @@ class RestaurantOrders extends React.Component {
       )
       .then((response) => {
         if (response.status === 200) {
-          //   console.log(response.data);
+          // console.log(response.data);
           console.log("Restaurant Orders are retrieved");
         }
         let ordersSubCat = {};
@@ -43,6 +43,15 @@ class RestaurantOrders extends React.Component {
           if (!ordersSubCat[order.order_status]) {
             ordersSubCat[order.order_status] = [];
             ordersSubCat[order.order_status].push(order);
+          } else {
+            let found = false;
+            for (let dupOrder of ordersSubCat[order.order_status]) {
+              console.log(dupOrder);
+              if (!parseInt(dupOrder.id) === parseInt(order.id)) {
+                found = true;
+              }
+            }
+            if (!found) ordersSubCat[order.order_status].push(order);
           }
           if (!dishMapping[order.id]) {
             dishMapping[order.id] = [];
@@ -52,6 +61,8 @@ class RestaurantOrders extends React.Component {
         this.setState({
           orders: ordersSubCat,
         });
+        console.log(ordersSubCat);
+        console.log(dishMapping);
         this.setState({
           dishMapping: dishMapping,
         });
@@ -61,8 +72,44 @@ class RestaurantOrders extends React.Component {
       });
   }
 
+  changeOrderStatus = (status, order) => {
+    let details = {
+      order_status: status,
+      id: order.id,
+    };
+    axios
+      .put(
+        process.env.REACT_APP_UBEREATS_BACKEND_URL + "/customer/updateorder",
+        details
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          //   console.log(response.data);
+          console.log("Order Updated");
+        }
+        // console.log(this.state.orders);
+        // console.log(this.state.dishMapping);
+        let orders = this.state.orders;
+
+        for (let singleOrder in orders[status]) {
+          console.log(singleOrder);
+          if (orders[status][singleOrder].id === order.id) {
+            orders[status][singleOrder].order_status = status;
+            console.log("updated");
+            break;
+          }
+        }
+        this.setState({ orders: orders });
+        this.setState({ openModel: false });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   orderModal = (id) => {
     let currentOrder = this.state.dishMapping[id];
+
     return (
       <>
         <Modal open={this.state.openModel} onClose={this.handleClose}>
@@ -112,15 +159,57 @@ class RestaurantOrders extends React.Component {
                     </>
                   );
                 })}
-            <div style={{ display: "flex" }}>
-              <div className="col-md-5">
-                <button className="changeStatusBtn"> Confirm</button>
+            {currentOrder === undefined ? (
+              ""
+            ) : (
+              <div style={{ display: "flex" }}>
+                {currentOrder[0].order_status == "Placed" ? (
+                  <div
+                    className="col-md-5"
+                    onClick={() =>
+                      this.changeOrderStatus("Confirmed", currentOrder[0])
+                    }
+                  >
+                    <button className="changeStatusBtn">Confirm</button>
+                  </div>
+                ) : (
+                  ""
+                )}
+                {currentOrder[0].order_status == "Confirmed" ? (
+                  <div
+                    className="col-md-5"
+                    onClick={() =>
+                      this.changeOrderStatus("ReadyToBePicked", currentOrder[0])
+                    }
+                  >
+                    <button className="changeStatusBtn">Ready</button>
+                  </div>
+                ) : (
+                  ""
+                )}
+                {currentOrder[0].order_status == "ReadyToBePicked" ? (
+                  <div
+                    className="col-md-5"
+                    onClick={() =>
+                      this.changeOrderStatus("Delivered", currentOrder[0])
+                    }
+                  >
+                    <button className="changeStatusBtn">Delivered</button>
+                  </div>
+                ) : (
+                  ""
+                )}
+
+                <div className="col-md-2"></div>
+                {currentOrder[0].order_status == "Placed" ? (
+                  <div className="col-md-5">
+                    <button className="changeStatusBtn">Cancel</button>
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
-              <div className="col-md-2"></div>
-              <div className="col-md-5">
-                <button className="changeStatusBtn"> Cancel</button>
-              </div>
-            </div>
+            )}
           </Box>
         </Modal>
       </>

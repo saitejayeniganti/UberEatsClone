@@ -110,6 +110,22 @@ exports.updateOrder = async (order) => {
   }
 };
 
+exports.updateOrderStatus = async (order) => {
+  try {
+    let response = await pool.query(queries.updateOrderStatus, [
+      order.order_status,
+      order.id,
+    ]);
+
+    return { status: 200, body: response };
+  } catch (error) {
+    console.log(error);
+    const message = error.message ? error.message : "Internal Server Error";
+    const code = error.statusCode ? error.statusCode : 500;
+    return { status: code, body: { message } };
+  }
+};
+
 //*********************GET_CUSTOMER_BY_USERNAME******************** */
 exports.getCustomerByUsername = async (params) => {
   try {

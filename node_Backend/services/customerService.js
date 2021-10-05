@@ -63,6 +63,12 @@ exports.updateOrder = async (request) => {
   return response;
 };
 
+//*********************UPDATE_ORDER_STATUS******************** */
+exports.updateOrderStatus = async (request) => {
+  let response = await customerRepo.updateOrderStatus(request.body);
+  return response;
+};
+
 //*********************GET_ORDERS******************** */
 exports.getOrdersForCustomer = async (request) => {
   let response = await customerRepo.getOrdersForCustomer(request.query);

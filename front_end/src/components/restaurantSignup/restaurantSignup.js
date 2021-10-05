@@ -183,7 +183,7 @@ class RestaurantSignup extends React.Component {
         <div>
           <div
             style={{
-              marginLeft: "19%",
+              marginLeft: "15%",
               marginRight: "20%",
               position: "absolute",
             }}

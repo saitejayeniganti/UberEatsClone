@@ -108,7 +108,6 @@ class RestaurantView extends React.Component {
               className="row"
               style={{
                 height: "400px",
-
                 justifyContent: "center",
                 display: "flex",
               }}

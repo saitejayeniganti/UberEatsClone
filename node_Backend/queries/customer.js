@@ -13,6 +13,8 @@ exports.insertOrder =
 exports.updateOrder =
   "update Orders set customer_id=?,restaurent_id=?,price=?,order_date=?,delivery_type=?,order_status=? where id=?";
 
+exports.updateOrderStatus = "update Orders set order_status=? where id=?";
+
 exports.getOrdersForCustomer = "select * from Orders where customer_id=?";
 
 exports.getCustomerByUsername =
