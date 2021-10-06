@@ -15,7 +15,8 @@ exports.updateOrder =
 
 exports.updateOrderStatus = "update Orders set order_status=? where id=?";
 
-exports.getOrdersForCustomer = "select * from Orders where customer_id=?";
+exports.getOrdersForCustomer =
+  "select Orders.id, Orders.customer_id,Orders.restaurent_id,Orders.price,Orders.order_date,Orders.delivery_type,Orders.order_status,Restaurents.name as restaurant_name,Restaurents.location,Order_items.dish_id,Order_items.quantity,Dishes.name from Orders inner join Restaurents on Orders.restaurent_id=Restaurents.id inner join Order_items on Orders.id=Order_items.order_id inner join Dishes on Order_items.dish_id=Dishes.id where Orders.customer_id=?";
 
 exports.getCustomerByUsername =
   "select * from Customer where email_id=? or mobile=?";

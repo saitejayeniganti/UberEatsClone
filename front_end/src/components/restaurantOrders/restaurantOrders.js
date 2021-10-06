@@ -46,9 +46,10 @@ class RestaurantOrders extends React.Component {
           } else {
             let found = false;
             for (let dupOrder of ordersSubCat[order.order_status]) {
-              console.log(dupOrder);
-              if (!parseInt(dupOrder.id) === parseInt(order.id)) {
+              if (parseInt(dupOrder.id) == parseInt(order.id)) {
                 found = true;
+                console.log("found");
+                break;
               }
             }
             if (!found) ordersSubCat[order.order_status].push(order);
@@ -61,8 +62,8 @@ class RestaurantOrders extends React.Component {
         this.setState({
           orders: ordersSubCat,
         });
-        console.log(ordersSubCat);
-        console.log(dishMapping);
+        // console.log(ordersSubCat);
+        // console.log(dishMapping);
         this.setState({
           dishMapping: dishMapping,
         });
@@ -87,20 +88,55 @@ class RestaurantOrders extends React.Component {
           //   console.log(response.data);
           console.log("Order Updated");
         }
-        // console.log(this.state.orders);
-        // console.log(this.state.dishMapping);
-        let orders = this.state.orders;
+        // ********************Component_did_Mount_Code********************
+        this.setState({
+          openModel: false,
+        });
+        axios
+          .get(
+            process.env.REACT_APP_UBEREATS_BACKEND_URL +
+              "/restaurant/order?id=" +
+              this.state.restaurantDetails.id
+          )
+          .then((response) => {
+            if (response.status === 200) {
+              console.log(response.data);
+              console.log("Restaurant Orders are retrieved");
+            }
+            let ordersSubCat = {};
+            let dishMapping = {};
+            for (let order of response.data) {
+              if (!ordersSubCat[order.order_status]) {
+                ordersSubCat[order.order_status] = [];
+                ordersSubCat[order.order_status].push(order);
+              } else {
+                let found = false;
+                for (let dupOrder of ordersSubCat[order.order_status]) {
+                  if (parseInt(dupOrder.id) == parseInt(order.id)) {
+                    found = true;
+                    console.log("found");
+                    break;
+                  }
+                }
+                if (!found) ordersSubCat[order.order_status].push(order);
+              }
+              if (!dishMapping[order.id]) {
+                dishMapping[order.id] = [];
+              }
+              dishMapping[order.id].push(order);
+            }
+            this.setState({
+              orders: ordersSubCat,
+            });
+            this.setState({
+              dishMapping: dishMapping,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
 
-        for (let singleOrder in orders[status]) {
-          console.log(singleOrder);
-          if (orders[status][singleOrder].id === order.id) {
-            orders[status][singleOrder].order_status = status;
-            console.log("updated");
-            break;
-          }
-        }
-        this.setState({ orders: orders });
-        this.setState({ openModel: false });
+        // ******************END*****************
       })
       .catch((err) => {
         console.log(err);
@@ -200,7 +236,7 @@ class RestaurantOrders extends React.Component {
                   ""
                 )}
 
-                <div className="col-md-2"></div>
+                {/* <div className="col-md-2"></div> */}
                 {currentOrder[0].order_status == "Placed" ? (
                   <div className="col-md-5">
                     <button className="changeStatusBtn">Cancel</button>
@@ -271,6 +307,10 @@ class RestaurantOrders extends React.Component {
                     <label className="categorySubtxt">{header}</label>
 
                     {this.state.orders[header].map((order) => {
+                      let date = new Date(order.order_date)
+                        .toISOString()
+                        .slice(0, 19)
+                        .replace("T", " ");
                       return (
                         <>
                           <div
@@ -298,8 +338,26 @@ class RestaurantOrders extends React.Component {
                                     height: "auto",
                                   }}
                                 >
-                                  {order.name} <br />
-                                  {order.date}
+                                  {order.name}
+                                </div>
+                                <div
+                                  className="row"
+                                  style={{
+                                    paddingLeft: "15px",
+                                    height: "auto",
+                                    marginTop: "10px",
+                                  }}
+                                >
+                                  {date}
+                                </div>
+                                <div
+                                  className="row"
+                                  style={{
+                                    paddingLeft: "15px",
+                                    height: "auto",
+                                    marginTop: "10px",
+                                  }}
+                                >
                                   {order.address}
                                 </div>
                               </CardContent>

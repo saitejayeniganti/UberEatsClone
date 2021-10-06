@@ -1,0 +1,11 @@
+.coRestaurantName {
+  font-family: math;
+  font-size: 18px;
+  color: black;
+  font-weight: 600;
+}
+.coAddress {
+  font-family: math;
+  font-size: 14px;
+  color: #545454;
+}
