@@ -9,3 +9,23 @@
   font-size: 14px;
   color: #545454;
 }
+
+.closeSVG {
+  cursor: "pointer";
+  margin-top: "10px";
+}
+
+.orderStatusselect {
+  font-family: UberMoveText-Regular !important;
+  font-size: 16px !important;
+  height: 48px;
+  line-height: 24px !important;
+  color: #262626;
+  border: 1px solid #e0e0e0;
+  font-weight: 500;
+  padding: 8px 18px;
+  width: 200px !important;
+  padding: 8px 18px;
+  transition: all 0.4s ease !important;
+  user-select: none !important;
+}

@@ -8,6 +8,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import UpdateIcon from "@mui/icons-material/Update";
 
 class RestaurantOrders extends React.Component {
   state = {
@@ -15,6 +16,8 @@ class RestaurantOrders extends React.Component {
     orders: {},
     dishMapping: {},
     openModel: false,
+    openProfileModel: false,
+    selectedCustomer: {},
     selectedOrderId: "",
   };
 
@@ -23,6 +26,46 @@ class RestaurantOrders extends React.Component {
   };
   handleClose = () => {
     this.setState({ openModel: false, selectedOrderId: "" });
+  };
+
+  handleProfileOpen = (order) => {
+    let details = {};
+    axios
+      .get(
+        process.env.REACT_APP_UBEREATS_BACKEND_URL +
+          "/customer?id=" +
+          order.customer_id
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          // console.log("Customer details are retrieved");
+        }
+        // console.log(response.data);
+        details = {
+          name: response.data.name,
+          nickName: response.data.nick_name,
+          mobile: response.data.mobile,
+          email: response.data.email_id,
+          password: "password",
+          country: response.data.country,
+          state: response.data.state,
+          city: response.data.city,
+          about: response.data.about,
+          imageUrl: response.data.image_url,
+          address: response.data.address,
+        };
+        this.setState({
+          selectedCustomer: details,
+          openProfileModel: true,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  handleProfileClose = () => {
+    this.setState({ openProfileModel: false, selectedCustomerId: "" });
   };
 
   componentDidMount() {
@@ -158,13 +201,35 @@ class RestaurantOrders extends React.Component {
               bgcolor: "white",
               width: "400px",
               boxShadow: "24",
-              padding: "40px",
+              padding: "25px",
               borderRadius: "10px",
             }}
           >
-            <div className="col-md-12" style={{ textAlign: "center" }}>
-              <label className="orderModal">Order Details</label>
+            <div className="col-md-12" style={{ display: "flex" }}>
+              <div
+                className="col-md-2 closeSVG"
+                style={{ textAlign: "left", paddingTop: "15px" }}
+                onClick={this.handleClose}
+              >
+                <svg
+                  width="25px"
+                  height="25px"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  focusable="false"
+                  cursor="pointer"
+                >
+                  <path
+                    d="m19.5831 6.24931-1.8333-1.83329-5.75 5.83328-5.75-5.83328-1.8333 1.83329 5.8333 5.74999-5.8333 5.75 1.8333 1.8333 5.75-5.8333 5.75 5.8333 1.8333-1.8333-5.8333-5.75z"
+                    fill="#000000"
+                  ></path>
+                </svg>
+              </div>
+
+              <label className="orderModal col-md-9">Order Details</label>
             </div>
+            <hr style={{ backgroundColor: "#9a9999", height: "1px" }}></hr>
             <div className="orderModalHeading" style={{ display: "flex" }}>
               <div className="col-md-9">Item</div>
               <div
@@ -252,6 +317,78 @@ class RestaurantOrders extends React.Component {
     );
   };
 
+  customerProfileModal = (customer) => {
+    console.log(customer);
+    return (
+      <>
+        <Modal
+          open={this.state.openProfileModel}
+          onClose={this.handleProfileClose}
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: "40%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              bgcolor: "white",
+              width: "500px",
+              boxShadow: "24",
+              padding: "20px",
+              borderRadius: "10px",
+            }}
+          >
+            <div className="col-md-12" style={{ display: "flex" }}>
+              <div
+                className="col-md-2 closeSVG"
+                style={{ textAlign: "left", paddingTop: "15px" }}
+                onClick={this.handleProfileClose}
+              >
+                <svg
+                  width="25px"
+                  height="25px"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  focusable="false"
+                  cursor="pointer"
+                >
+                  <path
+                    d="m19.5831 6.24931-1.8333-1.83329-5.75 5.83328-5.75-5.83328-1.8333 1.83329 5.8333 5.74999-5.8333 5.75 1.8333 1.8333 5.75-5.8333 5.75 5.8333 1.8333-1.8333-5.8333-5.75z"
+                    fill="#000000"
+                  ></path>
+                </svg>
+              </div>
+
+              <label className="orderModal col-md-9">
+                {customer.name}'s profile
+              </label>
+            </div>
+            <hr style={{ backgroundColor: "#9a9999", height: "1px" }}></hr>
+            <div style={{ textAlign: "center" }}>
+              <img
+                src={customer.imageUrl}
+                width="200"
+                height="200"
+                style={{ borderRadius: "50%" }}
+              ></img>
+            </div>
+            <div
+              className="col-md-12"
+              style={{ color: "black", padding: "20px" }}
+            >
+              <div className="row orderModalDish">{customer.name}</div>
+              <div className="row orderModalDish">{customer.email}</div>
+              <div className="row orderModalDish">{customer.mobile}</div>
+              <div className="row orderModalDish">{customer.about}</div>
+              <div className="row orderModalDish">{customer.address}</div>
+            </div>
+          </Box>
+        </Modal>
+      </>
+    );
+  };
+
   renderOrders = () => {
     {
       let headers = Object.keys(this.state.orders);
@@ -316,7 +453,6 @@ class RestaurantOrders extends React.Component {
                           <div
                             class="col-md-3"
                             style={{ padding: "10px", paddingBottom: "20px" }}
-                            onClick={() => this.handleOpen(order)}
                           >
                             <Card
                               sx={{
@@ -325,7 +461,7 @@ class RestaurantOrders extends React.Component {
                                 width: "360px",
                                 marginRight: "20px",
                                 maxWidth: "100%",
-                                cursor: "pointer",
+                                // cursor: "pointer",
                               }}
                             >
                               <CardContent
@@ -334,11 +470,25 @@ class RestaurantOrders extends React.Component {
                                 <div
                                   className="row"
                                   style={{
-                                    paddingLeft: "15px",
+                                    paddingLeft: "1px",
                                     height: "auto",
                                   }}
                                 >
-                                  {order.name}
+                                  <div
+                                    className="col-md-6"
+                                    onClick={() =>
+                                      this.handleProfileOpen(order)
+                                    }
+                                  >
+                                    <h4> {order.name}</h4>
+                                  </div>
+                                  <div
+                                    className="col-md-6"
+                                    style={{ textAlign: "right" }}
+                                    onClick={() => this.handleOpen(order)}
+                                  >
+                                    <UpdateIcon />
+                                  </div>
                                 </div>
                                 <div
                                   className="row"
@@ -380,6 +530,8 @@ class RestaurantOrders extends React.Component {
     return (
       <>
         {this.orderModal(this.state.selectedOrderId)}
+        {this.customerProfileModal(this.state.selectedCustomer)}
+
         <div>
           <figure className="figureClass">
             <div className="figureDiv">

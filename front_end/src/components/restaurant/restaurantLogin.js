@@ -31,6 +31,7 @@ class RestaurantLogin extends React.Component {
     },
     redirectToSignup: false,
     redirectToHome: false,
+    redirectToDetails: false,
   };
   displayPasswordField = () => {
     axios
@@ -72,7 +73,9 @@ class RestaurantLogin extends React.Component {
         "restaurantDetails",
         JSON.stringify(this.state.restaurantDetails)
       );
-      this.setState({ redirectToHome: true });
+      if (this.state.restaurantDetails.image_url == null)
+        this.setState({ redirectToDetails: true });
+      else this.setState({ redirectToHome: true });
     }
   };
   render() {
@@ -83,10 +86,15 @@ class RestaurantLogin extends React.Component {
     let redirectToSignup = null;
     if (this.state.redirectToSignup)
       redirectToSignup = <Redirect to="/restaurant/signup" />;
+
+    let redirectToDetails = null;
+    if (this.state.redirectToDetails)
+      redirectToDetails = <Redirect to="/restaurant/details" />;
     return (
       <>
         {redirectToHome}
         {redirectToSignup}
+        {redirectToDetails}
         <div className="container">
           <div className="container mainContainer">
             {this.state.displayUserName ? (

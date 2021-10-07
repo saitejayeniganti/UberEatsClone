@@ -58,6 +58,7 @@ class RestaurantAddDish extends React.Component {
     }
     if (
       this.state.dish_price === "" ||
+      isNaN(this.state.dish_price) ||
       parseFloat(this.state.dish_price) <= 0
     ) {
       this.setState({ dish_priceError: "Enter a valid price value" });
@@ -211,7 +212,6 @@ class RestaurantAddDish extends React.Component {
                 <input
                   className="txtbox marginTop25"
                   placeholder="Price"
-                  type="number"
                   min="1"
                   onChange={(e) =>
                     this.setState({

@@ -70,6 +70,7 @@ class RestaurantView extends React.Component {
       )
       .then((response) => {
         console.log(response.data);
+        this.setState({ openModel: false });
       })
       .catch((err) => {
         console.log(err);
