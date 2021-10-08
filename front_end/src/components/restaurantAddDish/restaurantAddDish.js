@@ -252,6 +252,7 @@ class RestaurantAddDish extends React.Component {
                   <option value="Vegan">Vegan</option>
                   <option value="Gluten-free">Gluten-free</option>
                   <option value="Halal">Halal</option>
+                  <option value="Nonveg">Non-Vegetarian</option>
                   <option value="Allergy-Friendly">Allergy Friendly</option>
                 </select>
 

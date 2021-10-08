@@ -164,6 +164,10 @@ exports.getRestaurantsByLocation = async (latlng) => {
       latlng.longitude,
       latlng.latitude,
       latlng.id,
+      latlng.type,
+      latlng.type,
+      latlng.dType,
+      latlng.dType,
     ]);
 
     return { status: 200, body: response };

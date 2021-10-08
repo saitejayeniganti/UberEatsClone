@@ -44,6 +44,7 @@ class RestaurantView extends React.Component {
       });
     }
   };
+
   handleAddItem = () => {
     this.setState({
       items: parseInt(this.state.items) + 1,
@@ -60,7 +61,7 @@ class RestaurantView extends React.Component {
       price: 0,
       order_date: "",
       delivery_type: "Order",
-      order_status: "InCart",
+      order_status: "In cart",
     };
 
     axios

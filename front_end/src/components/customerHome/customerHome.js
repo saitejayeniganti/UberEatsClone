@@ -7,7 +7,6 @@ import chinese from "../../Images/chinese.png";
 import deals from "../../Images/deals.png";
 import fastfood from "../../Images/fastfood.png";
 import convenience from "../../Images/convenience.png";
-import healthy from "../../Images/healthy.png";
 import indian from "../../Images/indian.png";
 import mexican from "../../Images/mexican.png";
 import pharmacy from "../../Images/Pharmacy.png";
@@ -36,7 +35,7 @@ class CustomerHome extends React.Component {
   state = {
     latitude: "",
     longitude: "",
-    filterValue: "All Stores",
+    // filterValue: "All Stores",
     showSort: true,
     showPrice: true,
     showDeliveryFee: true,
@@ -45,6 +44,8 @@ class CustomerHome extends React.Component {
     restaurants: [],
     redirectToRestaurant: false,
     selectedRestaurant: "",
+    deliveryType: "",
+    dietary: "",
   };
 
   componentDidMount() {
@@ -54,6 +55,8 @@ class CustomerHome extends React.Component {
       latitude: "37.3352",
       longitude: "-121.8811",
       id: JSON.parse(sessionStorage.getItem("customerDetails")).id,
+      type: "",
+      dType: "",
     };
 
     axios
@@ -72,6 +75,31 @@ class CustomerHome extends React.Component {
         console.log(err);
       });
   }
+
+  search = (deliveryType, dietary, location) => {
+    let details = {
+      latitude: "37.3352",
+      longitude: "-121.8811",
+      id: JSON.parse(sessionStorage.getItem("customerDetails")).id,
+      type: dietary,
+      dType: deliveryType,
+    };
+    axios
+      .post(
+        process.env.REACT_APP_UBEREATS_BACKEND_URL + "/restaurant/location",
+        details
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          // console.log("Restaurants are retrieved");
+          this.setState({ restaurants: response.data });
+        }
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   dishes = () => {
     const style = { background: "#0092ff", padding: "8px 0" };
@@ -169,7 +197,7 @@ class CustomerHome extends React.Component {
         className="col-md-12"
         style={{ top: 0, position: "-webkit-sticky", position: "sticky" }}
       >
-        <h1 className="allstores">{this.state.filterValue}</h1>
+        <h1 className="allstores">All Stores</h1>
         <div
           className="row  "
           onClick={(e) => {
@@ -177,7 +205,7 @@ class CustomerHome extends React.Component {
             else this.setState({ showSort: true });
           }}
         >
-          <div className="col-md-9 filterHeading ">Sort</div>
+          <div className="col-md-9 filterHeading ">Delivery Type</div>
           <div className="col-md-3">
             <svg height="24px" width="24px" id="arrow">
               {this.state.showSort ? (
@@ -192,12 +220,19 @@ class CustomerHome extends React.Component {
           </div>
         </div>
         {this.state.showSort ? (
-          <Radio.Group>
+          <Radio.Group
+            onChange={(e) => {
+              this.setState({ deliveryType: e.target.value });
+              this.search(e.target.value, this.state.dietary, "");
+            }}
+            defaultValue=""
+          >
             <Space direction="vertical">
-              <Radio value="default">Picked for you (default)</Radio>
-              <Radio value="count of orders">Most Popular</Radio>
-              <Radio value="rating">Rating</Radio>
-              <Radio value="delivery time">Delivery Time</Radio>
+              {/* <Radio value="default">Picked for you (default)</Radio>
+              <Radio value="count of orders">Most Popular</Radio> */}
+              <Radio value="">All</Radio>
+              <Radio value="Delivery">Delivery</Radio>
+              <Radio value="Pickup">Pickup</Radio>
             </Space>
           </Radio.Group>
         ) : (
@@ -205,7 +240,7 @@ class CustomerHome extends React.Component {
         )}
         <div style={{ height: "25px" }}></div>
         {/* Price Range Filter */}
-        <div
+        {/* <div
           className="row"
           onClick={(e) => {
             if (this.state.showPrice == true)
@@ -264,9 +299,9 @@ class CustomerHome extends React.Component {
         ) : (
           ""
         )}
-        <div style={{ height: "25px" }}></div>
+        <div style={{ height: "25px" }}></div> */}
         {/* Max Delivery Fee */}
-        <div
+        {/* <div
           className="row"
           onClick={(e) => {
             if (this.state.showDeliveryFee == true)
@@ -306,7 +341,7 @@ class CustomerHome extends React.Component {
         ) : (
           ""
         )}
-        <div style={{ height: "25px" }}></div>
+        <div style={{ height: "25px" }}></div> */}
         {/* Dietary */}
         <div
           className="row"
@@ -331,6 +366,30 @@ class CustomerHome extends React.Component {
           </div>
         </div>
         {this.state.showDietary ? (
+          <Radio.Group
+            onChange={(e) => {
+              console.log(e.target.value);
+              this.setState({ dietary: e.target.value });
+              this.search(this.state.deliveryType, e.target.value, "");
+            }}
+            defaultValue=""
+          >
+            <Space direction="vertical">
+              {/* <Radio value="default">Picked for you (default)</Radio>
+              <Radio value="count of orders">Most Popular</Radio> */}
+              <Radio value="">All</Radio>
+              <Radio value="Vegetarian">Vegetarian</Radio>
+              <Radio value="Vegan">Vegan</Radio>
+              <Radio value="Gluten-fre">Gluten-free</Radio>
+              <Radio value="Halal">Halal</Radio>
+              <Radio value="AllergyFriendly">Allergy Friendly</Radio>
+              <Radio value="Nonveg">Non-Vegetarian</Radio>
+            </Space>
+          </Radio.Group>
+        ) : (
+          ""
+        )}
+        {/* {this.state.showDietary ? (
           <>
             <div className="margin10">
               <button
@@ -441,11 +500,37 @@ class CustomerHome extends React.Component {
                   </div>
                 </div>
               </button>
+
+              <button
+                className="priceButtonHome"
+                style={{ marginBottom: "8px", marginLeft: "0px" }}
+              >
+                <div
+                  className="row"
+                  style={{ padding: "3px", paddingRight: "0px" }}
+                >
+                  <div className="col-md-1">
+                    <svg height="20px" width="20px" viewBox="0 0 24 24">
+                      <path d="M11.167 4.592V2.834h-2.5v1.758c-4.759.65-5.834 4.909-5.834 4.909H17s-1.075-4.259-5.833-4.909z"></path>
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M13.75 11.168H3.257s-.416 7.275 6.667 10c1.424-.548 2.545-1.28 3.427-2.1A5.81 5.81 0 0112 15.333c0-1.631.67-3.106 1.75-4.165z"
+                      ></path>
+                      <path d="M22 13.667L20.333 12l-2.083 2.083L16.167 12 14.5 13.667l2.083 2.083-2.083 2.083 1.667 1.667 2.083-2.083 2.083 2.083L22 17.833l-2.083-2.083L22 13.667z"></path>
+                    </svg>
+                  </div>
+
+                  <div className="col-md-9" style={{ fontSize: "14px" }}>
+                    Non-Vegetarian
+                  </div>
+                </div>
+              </button>
             </div>
           </>
         ) : (
           ""
-        )}
+        )} */}
       </div>
     );
   };

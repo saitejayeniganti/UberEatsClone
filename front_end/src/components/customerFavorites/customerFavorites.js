@@ -10,7 +10,7 @@ import CustomerFooter from "../footer/customerFooter";
 
 class CustomerFavorites extends React.Component {
   state = {
-    restaurantId: JSON.parse(sessionStorage.getItem("restaurantDetails")).id,
+    // restaurantId: JSON.parse(sessionStorage.getItem("restaurantDetails")).id,
     restaurants: [],
     redirectToRestaurant: false,
     selectedRestaurant: "",

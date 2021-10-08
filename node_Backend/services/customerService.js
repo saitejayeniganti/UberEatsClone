@@ -92,3 +92,9 @@ exports.makeUnFavoriteCustomer = async (request) => {
   let response = await customerRepo.makeUnFavoriteCustomer(request.body);
   return response;
 };
+
+//*********************GetCart******************** */
+exports.getCart = async (request) => {
+  let response = await customerRepo.getCart(request.query);
+  return response;
+};

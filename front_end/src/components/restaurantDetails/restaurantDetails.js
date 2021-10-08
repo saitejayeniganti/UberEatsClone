@@ -290,7 +290,7 @@ class RestaurantDetails extends Component {
                     <option value="-1">Select Delivery Type</option>
                     <option value="Delivery">Delivery</option>
                     <option value="Pickup">Pickup</option>
-                    <option value="Both">Delivery and Pickup</option>
+                    <option value="">Delivery and Pickup</option>
                   </select>
                   {this.state.deliveryTypeError ? (
                     <label className="errtext">

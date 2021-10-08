@@ -97,4 +97,10 @@ app.put("/makeunfavorite", async (request, response) => {
   response.status(data.status).json(data.body);
 });
 
+//***************************************** */
+app.get("/cart", async (request, response) => {
+  const data = await customerService.getCart(request);
+  response.status(data.status).json(data.body);
+});
+
 module.exports = app;

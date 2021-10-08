@@ -35,3 +35,9 @@ exports.makeFavoriteCustomer =
 
 exports.makeUnFavoriteCustomer =
   "delete from  Favorites  where customer_id=? and restaurent_id=?";
+
+exports.getCart = `select Orders.id as orderId,Orders.price as orderPrice,Dishes.price as dishPrice,Order_items.quantity,Dishes.name as dishName from Orders 
+  inner join Order_items on Orders.id=Order_items.order_id
+  inner join Dishes on Dishes.id=Order_items.dish_id 
+  where Orders.order_status="Incart" and Orders.customer_id=44
+  `;

@@ -20,6 +20,7 @@ import RestaurantView from "../components/customerRestaurant/customerRestaurant"
 import RestaurantOrders from "../components/restaurantOrders/restaurantOrders";
 import CustomerOrders from "../components/CustomerOrders/customerOrders";
 import CustomerFavorites from "../components/customerFavorites/customerFavorites";
+import CustomerCheckout from "../components/customerCheckout/customerCheckout";
 
 class Routes extends Component {
   render() {
@@ -42,6 +43,7 @@ class Routes extends Component {
         <Route path="/cc" component={CustomerOrders} />
         <Route path="/customer/restaurant" component={RestaurantView} />
         <Route path="/customer/favorites" component={CustomerFavorites} />
+        <Route path="/customer/checkout" component={CustomerCheckout} />
 
         {/* <Route path="/customer" component={CustomerFooter} /> */}
       </div>
