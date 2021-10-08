@@ -170,3 +170,56 @@ exports.getOrdersForCustomer = async (params) => {
     return { status: code, body: { message } };
   }
 };
+
+//*********************GET_FAVORITES******************** */
+exports.getFavoritesForCustomer = async (body) => {
+  try {
+    let response = await pool.query(queries.getFavoritesForCustomer, [
+      body.latitude,
+      body.longitude,
+      body.latitude,
+      body.id,
+    ]);
+
+    return { status: 200, body: response };
+  } catch (error) {
+    console.log(error);
+    const message = error.message ? error.message : "Internal Server Error";
+    const code = error.statusCode ? error.statusCode : 500;
+    return { status: code, body: { message } };
+  }
+};
+
+//*********************MAKE_FAVORITE******************** */
+exports.makeFavoriteCustomer = async (body) => {
+  try {
+    let response = await pool.query(queries.makeFavoriteCustomer, [
+      body.customer_id,
+      body.restaurant_id,
+    ]);
+
+    return { status: 200, body: response };
+  } catch (error) {
+    console.log(error);
+    const message = error.message ? error.message : "Internal Server Error";
+    const code = error.statusCode ? error.statusCode : 500;
+    return { status: code, body: { message } };
+  }
+};
+
+//*********************MAKE_UN_FAVORITE******************** */
+exports.makeUnFavoriteCustomer = async (body) => {
+  try {
+    let response = await pool.query(queries.makeUnFavoriteCustomer, [
+      body.customer_id,
+      body.restaurant_id,
+    ]);
+
+    return { status: 200, body: response };
+  } catch (error) {
+    console.log(error);
+    const message = error.message ? error.message : "Internal Server Error";
+    const code = error.statusCode ? error.statusCode : 500;
+    return { status: code, body: { message } };
+  }
+};

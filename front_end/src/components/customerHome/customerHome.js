@@ -53,7 +53,9 @@ class CustomerHome extends React.Component {
       // longitude: this.state.longitude,
       latitude: "37.3352",
       longitude: "-121.8811",
+      id: JSON.parse(sessionStorage.getItem("customerDetails")).id,
     };
+
     axios
       .post(
         process.env.REACT_APP_UBEREATS_BACKEND_URL + "/restaurant/location",
@@ -61,8 +63,8 @@ class CustomerHome extends React.Component {
       )
       .then((response) => {
         if (response.status === 200) {
-          console.log(response.data);
-          console.log("Restaurants are retrieved");
+          // console.log(response.data);
+          // console.log("Restaurants are retrieved");
           this.setState({ restaurants: response.data });
         }
       })
@@ -456,6 +458,69 @@ class CustomerHome extends React.Component {
     });
   };
 
+  makeFavorite = (restaurant) => {
+    // console.log(this.state.restaurants);
+    let restaurant_id = restaurant.id;
+    let rts = this.state.restaurants;
+    for (let r in rts) {
+      console.log(rts[r].id);
+      console.log(restaurant_id);
+      if (rts[r].id == restaurant_id) {
+        console.log("making favo");
+        rts[r].favourite = 1;
+        break;
+      }
+    }
+    this.setState({ restaurants: rts });
+    let details = {
+      customer_id: JSON.parse(sessionStorage.getItem("customerDetails")).id,
+      restaurant_id: restaurant_id,
+    };
+    axios
+      .put(
+        process.env.REACT_APP_UBEREATS_BACKEND_URL + "/customer/makefavorite",
+        details
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          // console.log(response.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  makeUnFavorite = (restaurant) => {
+    let restaurant_id = restaurant.id;
+    let rts = this.state.restaurants;
+    for (let r in rts) {
+      console.log(rts[r].id);
+      console.log(restaurant_id);
+      if (rts[r].id == restaurant_id) {
+        rts[r].favourite = null;
+        break;
+      }
+    }
+    this.setState({ restaurants: rts });
+    let details = {
+      customer_id: JSON.parse(sessionStorage.getItem("customerDetails")).id,
+      restaurant_id: restaurant_id,
+    };
+    axios
+      .put(
+        process.env.REACT_APP_UBEREATS_BACKEND_URL + "/customer/makeunfavorite",
+        details
+      )
+      .then((response) => {
+        if (response.status === 200) {
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   restaurants = () => {
     return (
       <>
@@ -465,13 +530,11 @@ class CustomerHome extends React.Component {
               <>
                 <div
                   className="col-md-3"
-                  onClick={() => this.redirectToRestaurants(restaurant)}
                   style={{
                     padding: "0px",
                     marginRight: "60px",
                     marginLeft: "20px",
                     marginBottom: "20px",
-                    cursor: "pointer",
                   }}
                 >
                   <Container>
@@ -485,52 +548,65 @@ class CustomerHome extends React.Component {
                         alt="Restaurant Image"
                       ></img>
                       <figcaption>
-                        {false ? (
-                          <FavoriteBorderIcon className="fav_icon" />
+                        {!restaurant.favorite ? (
+                          <FavoriteBorderIcon
+                            className="fav_icon"
+                            onClick={() => this.makeFavorite(restaurant)}
+                          />
                         ) : (
-                          <FavoriteFillIcon className="fav_icon" />
+                          <FavoriteFillIcon
+                            className="fav_icon_red"
+                            onClick={() => this.makeUnFavorite(restaurant)}
+                          />
                         )}
                       </figcaption>
                     </figure>
-                    <div className="restaurantName">{restaurant.name}</div>
                     <div
-                      style={{
-                        fontSize: "14px",
-                        fontWeight: "400",
-                      }}
+                      onClick={() => this.redirectToRestaurants(restaurant)}
+                      style={{ cursor: "pointer" }}
                     >
-                      <img
-                        src={tagIcon}
-                        style={{ width: "14px", height: "14px" }}
-                      />
-                      &nbsp;•&nbsp;
-                      {Math.floor(restaurant.distance) < 32 ? (
-                        <>
-                          ${Math.floor(restaurant.distance)}
-                          &nbsp;Delivery fee&nbsp;•&nbsp;
-                          <label
-                            style={{
-                              fontSize: "14px",
-                              color: "rgb(117, 117, 117)",
-                            }}
-                          >
-                            {Math.ceil(
-                              Math.ceil((0.621 * restaurant.distance) / 0.666) /
-                                5
-                            ) * 5}
-                            -
-                            {Math.ceil(
-                              Math.ceil((0.621 * restaurant.distance) / 0.666) /
-                                5
-                            ) *
-                              5 +
-                              10}
-                            Min
-                          </label>
-                        </>
-                      ) : (
-                        "Cannot be delivered to your location"
-                      )}
+                      <div className="restaurantName">{restaurant.name}</div>
+                      <div
+                        style={{
+                          fontSize: "14px",
+                          fontWeight: "400",
+                        }}
+                      >
+                        <img
+                          src={tagIcon}
+                          style={{ width: "14px", height: "14px" }}
+                        />
+                        &nbsp;•&nbsp;
+                        {Math.floor(restaurant.distance) < 32 ? (
+                          <>
+                            ${Math.floor(restaurant.distance)}
+                            &nbsp;Delivery fee&nbsp;•&nbsp;
+                            <label
+                              style={{
+                                fontSize: "14px",
+                                color: "rgb(117, 117, 117)",
+                              }}
+                            >
+                              {Math.ceil(
+                                Math.ceil(
+                                  (0.621 * restaurant.distance) / 0.666
+                                ) / 5
+                              ) * 5}
+                              -
+                              {Math.ceil(
+                                Math.ceil(
+                                  (0.621 * restaurant.distance) / 0.666
+                                ) / 5
+                              ) *
+                                5 +
+                                10}
+                              Min
+                            </label>
+                          </>
+                        ) : (
+                          "Cannot be delivered to your location"
+                        )}
+                      </div>
                     </div>
                   </Container>
                 </div>

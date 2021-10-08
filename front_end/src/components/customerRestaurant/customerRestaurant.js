@@ -316,7 +316,7 @@ class RestaurantView extends React.Component {
                             >
                               <div className="row" style={{ height: "100px" }}>
                                 <div
-                                  className="row categoryTxt"
+                                  className="row categoryTxt2"
                                   style={{
                                     paddingLeft: "25px",
                                     height: "auto",

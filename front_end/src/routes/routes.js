@@ -19,6 +19,7 @@ import LocationSearchInput from "../components/locationAutoComplete/locationAuto
 import RestaurantView from "../components/customerRestaurant/customerRestaurant";
 import RestaurantOrders from "../components/restaurantOrders/restaurantOrders";
 import CustomerOrders from "../components/CustomerOrders/customerOrders";
+import CustomerFavorites from "../components/customerFavorites/customerFavorites";
 
 class Routes extends Component {
   render() {
@@ -38,9 +39,11 @@ class Routes extends Component {
         <Route path="/customer/signup" component={CustomerSignup} />
         <Route path="/customer/details" component={CustomerDetails} />
         <Route path="/customer/home" component={CustomerHome} />
-        <Route path="/customerfoot" component={CustomerFooter} />
         <Route path="/cc" component={CustomerOrders} />
         <Route path="/customer/restaurant" component={RestaurantView} />
+        <Route path="/customer/favorites" component={CustomerFavorites} />
+
+        {/* <Route path="/customer" component={CustomerFooter} /> */}
       </div>
     );
   }

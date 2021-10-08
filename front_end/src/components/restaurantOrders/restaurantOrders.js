@@ -377,11 +377,29 @@ class RestaurantOrders extends React.Component {
               className="col-md-12"
               style={{ color: "black", padding: "20px" }}
             >
-              <div className="row orderModalDish">{customer.name}</div>
-              <div className="row orderModalDish">{customer.email}</div>
-              <div className="row orderModalDish">{customer.mobile}</div>
-              <div className="row orderModalDish">{customer.about}</div>
-              <div className="row orderModalDish">{customer.address}</div>
+              {/* <div className="row orderModalDish">{customer.name}</div> */}
+              <div className="row" style={{ display: "flex" }}>
+                <div className="col-md-3 orderModalHeading">Email</div>
+                <div className="col-md-6 orderModalDish">{customer.email}</div>
+              </div>
+
+              <div className="row" style={{ display: "flex" }}>
+                <div className="col-md-3 orderModalHeading">Mobile</div>
+                <div className="col-md-6 orderModalDish">{customer.mobile}</div>
+              </div>
+
+              <div className="row" style={{ display: "flex" }}>
+                <div className="col-md-3 orderModalHeading">About</div>
+                <div className="col-md-6 orderModalDish">{customer.about}</div>
+              </div>
+
+              <div className="row" style={{ display: "flex" }}>
+                <div className="col-md-3 orderModalHeading">Address</div>
+                <div className="col-md-6 orderModalDish">
+                  {customer.address}
+                </div>
+              </div>
+              <hr style={{ backgroundColor: "#9a9999", height: "1px" }}></hr>
             </div>
           </Box>
         </Modal>
@@ -444,10 +462,12 @@ class RestaurantOrders extends React.Component {
                     <label className="categorySubtxt">{header}</label>
 
                     {this.state.orders[header].map((order) => {
-                      let date = new Date(order.order_date)
+                      let date = new Date(order.order_date).toDateString();
+                      let time = new Date(order.order_date)
                         .toISOString()
-                        .slice(0, 19)
+                        .slice(10, 19)
                         .replace("T", " ");
+
                       return (
                         <>
                           <div
@@ -498,7 +518,7 @@ class RestaurantOrders extends React.Component {
                                     marginTop: "10px",
                                   }}
                                 >
-                                  {date}
+                                  {date}&nbsp;&nbsp;{time}
                                 </div>
                                 <div
                                   className="row"

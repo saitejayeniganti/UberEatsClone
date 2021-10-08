@@ -22,3 +22,16 @@ exports.getCustomerByUsername =
   "select * from Customer where email_id=? or mobile=?";
 
 exports.getCustomerByID = "select * from Customer where id=?";
+
+exports.getFavoritesForCustomer = `SELECT Restaurents.id,name,email_id,password,location,suite,delivery_type,contact, 
+star_time,end_time,image_url,latitude,longitude,Favorites.id as favorite, (6371 * acos( cos( radians(?) ) * 
+cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) * sin( radians( latitude ) )) ) 
+as distance from Restaurents left join Favorites on Restaurents.id=Favorites.restaurent_id 
+where   Favorites.customer_id=?
+order by distance asc`;
+
+exports.makeFavoriteCustomer =
+  "insert into Favorites (customer_id,restaurent_id) values (?,?)";
+
+exports.makeUnFavoriteCustomer =
+  "delete from  Favorites  where customer_id=? and restaurent_id=?";

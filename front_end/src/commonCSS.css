@@ -446,6 +446,20 @@
   font-family: UberMoveText, sans-serif;
 }
 
+/* .categoryTxt:active {
+  font-size: 18px;
+  font-weight: 600;
+  font-family: UberMoveText, sans-serif;
+  color: #43a422;
+} */
+
+.categoryTxt2 {
+  font-size: 16px;
+  color: black;
+  font-weight: 500;
+  font-family: UberMoveText, sans-serif;
+}
+
 .addressTxt {
   font-size: 14px;
   color: #545454;
@@ -500,7 +514,7 @@
   font-size: 23px !important;
   font-weight: 300 !important;
   font-family: math !important;
-  margin-bottom: 10px !important;
+  /* margin-bottom: 10px !important; */
 }
 
 .changeStatusBtn {

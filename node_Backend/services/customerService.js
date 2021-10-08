@@ -74,3 +74,21 @@ exports.getOrdersForCustomer = async (request) => {
   let response = await customerRepo.getOrdersForCustomer(request.query);
   return response;
 };
+
+//*********************GET_FAVORITES******************** */
+exports.getFavoritesForCustomer = async (request) => {
+  let response = await customerRepo.getFavoritesForCustomer(request.body);
+  return response;
+};
+
+//*********************MAKE_FAVORITE******************** */
+exports.makeFavoriteCustomer = async (request) => {
+  let response = await customerRepo.makeFavoriteCustomer(request.body);
+  return response;
+};
+
+//*********************MAKE_UN_FAVORITE******************** */
+exports.makeUnFavoriteCustomer = async (request) => {
+  let response = await customerRepo.makeUnFavoriteCustomer(request.body);
+  return response;
+};

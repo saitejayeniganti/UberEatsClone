@@ -79,4 +79,22 @@ app.get("/order", async (request, response) => {
   response.status(data.status).json(data.body);
 });
 
+//*********************GET_FAVORITES******************** */
+app.post("/favorite", async (request, response) => {
+  const data = await customerService.getFavoritesForCustomer(request);
+  response.status(data.status).json(data.body);
+});
+
+//*********************MAKE_FAVORITE******************** */
+app.put("/makefavorite", async (request, response) => {
+  const data = await customerService.makeFavoriteCustomer(request);
+  response.status(data.status).json(data.body);
+});
+
+//*********************MAKE_UN_FAVORITE******************** */
+app.put("/makeunfavorite", async (request, response) => {
+  const data = await customerService.makeUnFavoriteCustomer(request);
+  response.status(data.status).json(data.body);
+});
+
 module.exports = app;
