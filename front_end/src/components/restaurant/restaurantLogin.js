@@ -150,9 +150,10 @@ class RestaurantLogin extends React.Component {
             {/* For password */}
             {this.state.displayPassword ? (
               <div style={{ marginLeft: "30%", marginRight: "30%" }}>
-                <img className="logo" src={ubereatslogo} />
-
-                <h5>Welcome back</h5>
+                <div className="img">
+                  <img className="logo" src={ubereatslogo} />
+                </div>
+                <h3 className="welcome">Welcome back</h3>
                 <label className="label">
                   Please enter your password to sign in.
                 </label>

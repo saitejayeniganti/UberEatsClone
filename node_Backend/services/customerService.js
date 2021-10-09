@@ -98,3 +98,9 @@ exports.getCart = async (request) => {
   let response = await customerRepo.getCart(request.query);
   return response;
 };
+
+//*********************getCheckoutCart******************** */
+exports.getCheckoutCart = async (request) => {
+  let response = await customerRepo.getCheckoutCart(request.query);
+  return response;
+};

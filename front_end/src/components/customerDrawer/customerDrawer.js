@@ -4,20 +4,151 @@ import { Drawer } from "antd";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-// import ubereatslogo from "../../Images/UberEatsLogo.png";
+import axios from "axios";
 import ubereatslogo from "../../Images/ubereatsLo.svg";
 import "./customerDrawer.css";
 import icon from "../../Images/icon.jpeg";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { connect } from "react-redux";
+import { addCartFromDB } from "../../redux/actions/index";
+import Modal from "@mui/material/Modal";
 
 class CustomerSideBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { visible: false, name: "" };
+    this.state = {
+      visible: false,
+      name: "",
+      openModel: false,
+      redirectToCheckout: false,
+    };
   }
+
+  componentDidMount() {
+    if (JSON.parse(sessionStorage.getItem("customerDetails")) === null) {
+    } else {
+      axios
+        .get(
+          process.env.REACT_APP_UBEREATS_BACKEND_URL +
+            "/customer/cart?id=" +
+            JSON.parse(sessionStorage.getItem("customerDetails")).id
+        )
+        .then((response) => {
+          // console.log(response.data);
+          this.props.addCartFromDB(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
+
+  handleOpen = () => {
+    this.setState({ openModel: true });
+  };
+  handleClose = () => this.setState({ openModel: false });
+
+  renderModel = () => {
+    return (
+      <>
+        <Modal open={this.state.openModel} onClose={this.handleClose}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "30%",
+              left: "85%",
+              transform: "translate(-50%, -50%)",
+              bgcolor: "white",
+              width: "400px",
+              boxShadow: "24",
+              borderRadius: "10px",
+            }}
+          >
+            {this.props.cart == undefined ? (
+              ""
+            ) : (
+              <>
+                <div
+                  style={{
+                    textAlign: "center",
+
+                    padding: "15px",
+                  }}
+                >
+                  <div className="col-md-6" style={{ textAlign: "left" }}>
+                    <svg
+                      width="24px"
+                      height="24px"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                      focusable="false"
+                      cursor="pointer"
+                      onClick={this.handleClose}
+                    >
+                      <path
+                        d="m19.5831 6.24931-1.8333-1.83329-5.75 5.83328-5.75-5.83328-1.8333 1.83329 5.8333 5.74999-5.8333 5.75 1.8333 1.8333 5.75-5.8333 5.75 5.8333 1.8333-1.8333-5.8333-5.75z"
+                        fill="#000000"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div
+                    className="row"
+                    style={{ margin: "5px", fontWeight: 500, fontSize: "30px" }}
+                  >
+                    {this.props.cart[0] == undefined
+                      ? ""
+                      : this.props.cart[0].restaurantName}
+                  </div>
+                  <hr
+                    style={{ backgroundColor: "#9a9999", height: "1px" }}
+                  ></hr>
+                  <div className="row">
+                    {" "}
+                    {this.props.cart.map((item) => {
+                      return (
+                        <>
+                          <div
+                            style={{
+                              display: "flex",
+                              textAlign: "left",
+                              marginBottom: "20px",
+                              fontSize: "20px",
+                              fontWeight: "500",
+                              marginLeft: "10px",
+                            }}
+                          >
+                            <div className="col-md-8">{item.dishName}</div>
+                            <div className="col-md-4">{item.quantity}</div>
+                          </div>
+                        </>
+                      );
+                    })}
+                  </div>
+                  <hr
+                    style={{ backgroundColor: "#9a9999", height: "1px" }}
+                  ></hr>
+                  <div>
+                    {" "}
+                    <button
+                      className="checkoutButton"
+                      onClick={() => {
+                        this.setState({
+                          openModel: false,
+                          redirectToCheckout: true,
+                        });
+                      }}
+                    >
+                      Checkout
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </Box>
+        </Modal>
+      </>
+    );
+  };
 
   showDrawer = () => {
     this.setState({
@@ -54,29 +185,64 @@ class CustomerSideBar extends Component {
             position="static"
             sx={{ minHeight: "88px", background: "white" }}
           >
-            <Toolbar>
-              <svg
-                aria-hidden="true"
-                focusable="false"
-                viewBox="0 0 20 20"
-                className="menu_icon"
-                onClick={this.showDrawer}
-              >
-                <path d="M19.167 3.333H.833v2.5h18.334v-2.5zm0 5.834H.833v2.5h18.334v-2.5zM.833 15h18.334v2.5H.833V15z" />
-              </svg>
-              {/* <img
+            <div style={{ display: "flex" }}>
+              <div className="col-md-5">
+                <Toolbar>
+                  <svg
+                    aria-hidden="true"
+                    focusable="false"
+                    viewBox="0 0 20 20"
+                    className="menu_icon"
+                    onClick={this.showDrawer}
+                  >
+                    <path d="M19.167 3.333H.833v2.5h18.334v-2.5zm0 5.834H.833v2.5h18.334v-2.5zM.833 15h18.334v2.5H.833V15z" />
+                  </svg>
+                  {/* <img
                 style={{ height: "81px", width: "152px" }}
                 src={ubereatslogo}
               /> */}
-              <img
-                alt="Uber Eats Home"
-                role="img"
-                src={ubereatslogo}
-                width="146"
-                height="24"
-                className="navBar_img"
-              ></img>
-            </Toolbar>
+                  <img
+                    alt="Uber Eats Home"
+                    role="img"
+                    src={ubereatslogo}
+                    width="146"
+                    height="24"
+                    className="navBar_img"
+                  ></img>
+                </Toolbar>
+              </div>
+
+              <div
+                className="col-md-7"
+                style={{
+                  display: "flex",
+                  justifyContent: "right",
+                }}
+              >
+                <div
+                  className="cartspace"
+                  style={{ width: "120px", marginRight: "30px" }}
+                  onClick={this.handleOpen}
+                >
+                  <svg
+                    aria-hidden="true"
+                    focusable="false"
+                    viewBox="0 0 16 16"
+                    className="cartIcon"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M3.666 11.333h10.333l1.334-8h-11l-.267-2h-3.4v2h1.667l1.333 8zm1.333 3.334A1.333 1.333 0 105 12a1.333 1.333 0 000 2.667zm9.334-1.334a1.333 1.333 0 11-2.667 0 1.333 1.333 0 012.667 0z"
+                    ></path>
+                  </svg>
+                  <label style={{}}>
+                    &nbsp;&nbsp;&nbsp;Cart&nbsp;•&nbsp;&nbsp;
+                    {this.props.cart == undefined ? "" : this.props.cart.length}
+                  </label>
+                </div>
+              </div>
+            </div>
           </AppBar>
         </Box>
         {/* {sessionStorage.getItem("restaurantDetails") == null ? (
@@ -270,8 +436,20 @@ class CustomerSideBar extends Component {
   };
 
   render() {
+    let redirectToCheckout = null;
+    if (this.state.redirectToCheckout) {
+      redirectToCheckout = (
+        <Redirect
+          to={{
+            pathname: "/customer/checkout",
+          }}
+        />
+      );
+    }
     return (
       <>
+        {redirectToCheckout}
+        {this.renderModel()}
         {JSON.parse(sessionStorage.getItem("customerDetails")) === null
           ? ""
           : this.sidebar()}
@@ -280,4 +458,16 @@ class CustomerSideBar extends Component {
   }
 }
 
-export default CustomerSideBar;
+const mapStateToProps = (state) => {
+  return {
+    cart: state.cart,
+  };
+};
+
+function mapDispatchToprops(dispatch) {
+  return {
+    addCartFromDB: (cart) => dispatch(addCartFromDB(cart)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToprops)(CustomerSideBar);

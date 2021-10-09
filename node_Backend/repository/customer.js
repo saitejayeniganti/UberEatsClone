@@ -71,16 +71,79 @@ exports.logincallback = (customer, callback) => {
 
 exports.insertOrder = async (order) => {
   try {
-    let response = await pool.query(queries.insertOrder, [
+    let order_idResponse = await pool.query(queries.findOrder, [
       order.customer_id,
-      order.restaurant_id,
-      order.price,
-      // order.order_date,
-      order.delivery_type,
-      order.order_status,
     ]);
+    let OrderItemresponse = [];
+    let OrderId;
+    let OrderItemsId;
 
-    return { status: 200, body: { id: response.insertId } };
+    if (order_idResponse.length == 0) {
+      let Orderresponse = await pool.query(queries.insertOrder, [
+        order.customer_id,
+        order.restaurant_id,
+        order.price,
+        order.delivery_type,
+        order.order_status,
+      ]);
+      OrderId = Orderresponse.insertId;
+
+      let checkOrderPresent = await pool.query(queries.checkOrderPresent, [
+        order.orderItemsId,
+
+        order.dishId,
+      ]);
+
+      if (checkOrderPresent.length === 0) {
+        OrderItemresponse = await pool.query(queries.insertOrderItem, [
+          Orderresponse.insertId,
+          order.customer_id,
+          order.restaurant_id,
+          order.dishId,
+          order.quantity,
+        ]);
+      } else {
+        OrderItemresponse = await pool.query(queries.updateOrderItem, [
+          order.quantity,
+          Orderresponse.insertId,
+          order.dishId,
+        ]);
+      }
+      // OrderItemsId = OrderItemresponse.insertId;
+
+      let priceResponse = await pool.query(queries.calculatePrice, [
+        Orderresponse.insertId,
+      ]);
+    } else {
+      let checkOrderPresent = await pool.query(queries.checkOrderPresent, [
+        order_idResponse[0].id,
+        order.dishId,
+      ]);
+
+      if (checkOrderPresent.length === 0) {
+        OrderItemresponse = await pool.query(queries.insertOrderItem, [
+          order_idResponse[0].id,
+          order.customer_id,
+          order.restaurant_id,
+          order.dishId,
+          order.quantity,
+        ]);
+      } else {
+        OrderItemresponse = await pool.query(queries.updateOrderItem, [
+          order.quantity,
+          order_idResponse[0].id,
+          order.dishId,
+        ]);
+      }
+      OrderId = order_idResponse[0].id;
+
+      // OrderItemsId = OrderItemresponse.insertId;
+      let priceResponse = await pool.query(queries.calculatePrice, [
+        order_idResponse[0].id,
+      ]);
+    }
+
+    return { status: 200, body: { id: OrderId } };
   } catch (error) {
     console.log(error);
     const message = error.message ? error.message : "Internal Server Error";
@@ -245,6 +308,20 @@ exports.makeUnFavoriteCustomer = async (body) => {
 exports.getCart = async (query) => {
   try {
     let response = await pool.query(queries.getCart, [query.id]);
+
+    return { status: 200, body: response };
+  } catch (error) {
+    console.log(error);
+    const message = error.message ? error.message : "Internal Server Error";
+    const code = error.statusCode ? error.statusCode : 500;
+    return { status: code, body: { message } };
+  }
+};
+
+//*********************GetCheckoutCart******************** */
+exports.getCheckoutCart = async (query) => {
+  try {
+    let response = await pool.query(queries.getCheckoutCart, [query.id]);
 
     return { status: 200, body: response };
   } catch (error) {

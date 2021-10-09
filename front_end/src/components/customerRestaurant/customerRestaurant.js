@@ -10,6 +10,8 @@ import tagIcon from "../../Images/tag.png";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import "./customerRestaurant.css";
+import { connect } from "react-redux";
+import { addCart } from "../../redux/actions/index";
 
 class RestaurantView extends React.Component {
   state = {
@@ -20,12 +22,26 @@ class RestaurantView extends React.Component {
     items: "1",
     singleDishPrice: "",
     totalDishPrice: "",
-    cart: {},
+    cart: this.props.cart,
   };
 
   handleOpen = (dish) => {
-    this.setState({ singleDishPrice: dish.price });
-    this.setState({ totalDishPrice: dish.price, items: 1 });
+    let sDishPrice = dish.price;
+    let tDishPrice = dish.price;
+    let totalItems = 1;
+    if (this.props.cart !== []) {
+      for (let item of this.props.cart) {
+        if (dish.id == item.id) {
+          sDishPrice = dish.price;
+          tDishPrice = parseFloat(dish.price) * parseFloat(item.quantity);
+          totalItems = item.quantity;
+          break;
+        }
+      }
+    }
+
+    this.setState({ singleDishPrice: sDishPrice });
+    this.setState({ totalDishPrice: tDishPrice, items: totalItems });
     this.setState({ selectedDish: dish });
     this.setState({ openModel: true });
   };
@@ -54,7 +70,7 @@ class RestaurantView extends React.Component {
     });
   };
 
-  addToCart = () => {
+  addToCart = (selectedDish, quantity) => {
     let orderDetails = {
       customer_id: JSON.parse(sessionStorage.getItem("customerDetails")).id,
       restaurant_id: this.state.restaurantDetails.id,
@@ -62,7 +78,10 @@ class RestaurantView extends React.Component {
       order_date: "",
       delivery_type: "Order",
       order_status: "In cart",
+      dishId: selectedDish.id,
+      quantity: quantity,
     };
+    console.log(orderDetails);
 
     axios
       .post(
@@ -71,23 +90,20 @@ class RestaurantView extends React.Component {
       )
       .then((response) => {
         console.log(response.data);
+        this.props.addCart({
+          order_id: response.data.id,
+          dishId: selectedDish.id,
+          dishName: selectedDish.name,
+          quantity: quantity,
+          restaurantId: this.state.restaurantDetails.id,
+          restaurantName: this.state.restaurantDetails.name,
+        });
+
         this.setState({ openModel: false });
       })
       .catch((err) => {
         console.log(err);
       });
-
-    // let dishDetails={
-    //     order_id:
-    //     customer_id:
-    //     restaurent_id;
-    //     dish_id:
-    //     quantity:
-    // }
-    // let cartDetails = {
-    //   customer_id: JSON.parse(sessionStorage.getItem("customerDetails")).id,
-    //   restaurant_id: this.state.restaurantDetails.id,
-    // };
   };
 
   renderModel = (selectedDish) => {
@@ -204,7 +220,10 @@ class RestaurantView extends React.Component {
                 </svg>
               </button>
 
-              <button className="blkButton" onClick={this.addToCart}>
+              <button
+                className="blkButton"
+                onClick={() => this.addToCart(selectedDish, this.state.items)}
+              >
                 <div className="row">
                   <div className="col-md-4"></div>
                   <div className="col-md-5">
@@ -232,8 +251,8 @@ class RestaurantView extends React.Component {
       )
       .then((response) => {
         if (response.status === 200) {
-          console.log(response.data);
-          console.log("Restaurant dishes are retrieved");
+          // console.log(response.data);
+          // console.log("Restaurant dishes are retrieved");
         }
         console.log(1);
         console.log(this.state.restaurantDetails);
@@ -474,4 +493,20 @@ class RestaurantView extends React.Component {
   }
 }
 
-export default RestaurantView;
+function mapDispatchToprops(dispatch) {
+  return {
+    addCart: (cart) => dispatch(addCart(cart)),
+  };
+}
+
+const mapStateToProps = (state) => {
+  return {
+    cart: state.cart,
+  };
+};
+
+const RestaurantsView = connect(
+  mapStateToProps,
+  mapDispatchToprops
+)(RestaurantView);
+export default RestaurantsView;

@@ -97,9 +97,15 @@ app.put("/makeunfavorite", async (request, response) => {
   response.status(data.status).json(data.body);
 });
 
-//***************************************** */
+//******************CART*********************** */
 app.get("/cart", async (request, response) => {
   const data = await customerService.getCart(request);
+  response.status(data.status).json(data.body);
+});
+
+//******************CHECKOUTCART*********************** */
+app.get("/checkoutcart", async (request, response) => {
+  const data = await customerService.getCheckoutCart(request);
   response.status(data.status).json(data.body);
 });
 

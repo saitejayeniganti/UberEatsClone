@@ -36,8 +36,25 @@ exports.makeFavoriteCustomer =
 exports.makeUnFavoriteCustomer =
   "delete from  Favorites  where customer_id=? and restaurent_id=?";
 
-exports.getCart = `select Orders.id as orderId,Orders.price as orderPrice,Dishes.price as dishPrice,Order_items.quantity,Dishes.name as dishName from Orders 
+exports.getCart = `
+select Orders.id as order_Id,Order_items.quantity as quantity,
+Dishes.name as dishName,Order_items.restaurent_id as restaurantId,Dishes.id as dishId,Restaurents.name as restaurantName  from Orders 
   inner join Order_items on Orders.id=Order_items.order_id
   inner join Dishes on Dishes.id=Order_items.dish_id 
-  where Orders.order_status="Incart" and Orders.customer_id=44
+  inner join Restaurents on Restaurents.id=Dishes.restaurent_id
+  where Orders.order_status="In cart" and Orders.customer_id=?
   `;
+
+exports.findOrder = `
+  select id from Orders where customer_id=44 and order_status="In cart"`;
+
+exports.insertOrderItem = `insert into Order_items (order_id,customer_id,restaurent_id,dish_id,quantity) values (?,?,?,?,?) `;
+
+exports.calculatePrice = `update Orders set price=( select sum(Dishes.price*quantity) from Order_items 
+inner join Dishes on Order_items.dish_id=Dishes.id ) where Orders.id=?`;
+
+exports.getCheckoutCart = `select Orders.id as order_Id,Order_items.quantity as quantity,Dishes.name as dishName,Order_items.restaurent_id as restaurantId,Dishes.id as dishId,Dishes.price as dishPrice,Orders.price as orderPrice,Restaurents.name as restaurantName from Orders inner join Order_items on Orders.id=Order_items.order_id inner join Dishes on Dishes.id=Order_items.dish_id inner join Restaurents on Restaurents.id=Dishes.restaurent_id where Orders.order_status="In cart" and Orders.customer_id=?`;
+
+exports.checkOrderPresent = `select id from Order_items where order_id=? and dish_id=? `;
+
+exports.updateOrderItem = `update Order_items set quantity=? where order_id=? and dish_id=?`;
