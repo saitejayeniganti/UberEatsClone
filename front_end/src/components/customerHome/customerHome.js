@@ -727,7 +727,7 @@ class CustomerHome extends React.Component {
                           style={{ width: "14px", height: "14px" }}
                         />
                         &nbsp;•&nbsp;
-                        {Math.floor(restaurant.distance) < 32 ? (
+                        {Math.floor(restaurant.distance) < 3200 ? (
                           <>
                             ${Math.floor(restaurant.distance)}
                             &nbsp;Delivery fee&nbsp;•&nbsp;
