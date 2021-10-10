@@ -94,7 +94,7 @@ class RestaurantSideBar extends Component {
                   />
                 </div>
                 <div className="col-sm-8" style={{ marginTop: "5px" }}>
-                  <div className="row txtSmall">Sai teja</div>
+                  {/* <div className="row txtSmall">Sai teja</div> */}
                   <div className="row greentxt">
                     {" "}
                     <Link className="greentxt" to="/restaurant/details">

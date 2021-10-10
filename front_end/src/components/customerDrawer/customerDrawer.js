@@ -265,7 +265,7 @@ class CustomerSideBar extends Component {
                   />
                 </div>
                 <div className="col-sm-8" style={{ marginTop: "5px" }}>
-                  <div className="row txtSmall">Sai teja</div>
+                  <div className="row txtSmall">User</div>
                   <div className="row greentxt" style={{ cursor: "pointer" }}>
                     <Link className="greentxt" to="/customer/details">
                       {" "}
