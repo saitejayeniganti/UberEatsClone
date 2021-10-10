@@ -28,7 +28,7 @@ cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( rad
 as distance from Restaurents left join Favorites on Restaurents.id=Favorites.restaurent_id 
 where (  Favorites.customer_id=? ||  Favorites.customer_id is null ) 
 and Restaurents.id in (select restaurent_id from Dishes where ""=? or Dishes.type=?   ) 
-and ( ""=? or (Restaurents.delivery_type =? || Restaurents.delivery_type=""))
+and ( ""=? or Restaurents.delivery_type =? )
 order by distance asc`;
 
 exports.getDishDetails = "select * from Dishes where id=?";
