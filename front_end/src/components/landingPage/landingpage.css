@@ -1,0 +1,90 @@
+.c1 {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  color: #000000;
+  font-family: UberMoveText, sans-serif;
+  -webkit-box-direction: normal;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+.c2 {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  color: #000000;
+  font-family: UberMoveText, sans-serif;
+  -webkit-box-direction: normal;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  overflow: hidden;
+  background-color: #ffc043;
+  height: 100vh;
+}
+
+.c3 {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  color: #000000;
+  font-family: UberMoveText, sans-serif;
+  -webkit-box-direction: normal;
+  -webkit-font-smoothing: antialiased;
+  flex: 1 0 300px;
+}
+
+.imgl1 {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  color: #000000;
+  font-family: UberMoveText, sans-serif;
+  -webkit-box-direction: normal;
+  -webkit-font-smoothing: antialiased;
+  flex: none;
+  height: 100%;
+  object-fit: cover;
+}
+
+.c4 {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  font-family: UberMoveText, sans-serif;
+  -webkit-box-direction: normal;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #000000;
+  -webkit-box-align: center;
+  align-items: center;
+  right: 0;
+  bottom: 0;
+}
+.c5 {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  font-family: UberMoveText, sans-serif;
+  -webkit-box-direction: normal;
+  color: #000000;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+  max-width: 1920px;
+  min-width: 1024px;
+  margin: 0 auto;
+  padding: 0 40px;
+  width: 100%;
+}
+
+.c6 {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-box-direction: normal;
+  color: #000000;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  font-size: 52px;
+  line-height: 64px;
+  font-weight: 700;
+  font-family: UberMove, sans-serif;
+  margin-bottom: 40px;
+  max-width: 75%;
+}

@@ -13,6 +13,10 @@
   transition: all 0.4s ease !important;
 }
 
+.textinput:focus {
+  outline-color: #43a422;
+}
+
 .welcome {
   font-size: "40px";
   padding-bottom: 30px;

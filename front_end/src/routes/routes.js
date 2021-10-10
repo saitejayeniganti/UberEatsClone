@@ -21,11 +21,13 @@ import RestaurantOrders from "../components/restaurantOrders/restaurantOrders";
 import CustomerOrders from "../components/CustomerOrders/customerOrders";
 import CustomerFavorites from "../components/customerFavorites/customerFavorites";
 import CustomerCheckout from "../components/customerCheckout/customerCheckout";
+import LandingPage from "../components/landingPage/landingpage";
 
 class Routes extends Component {
   render() {
     return (
       <div>
+        <Route path="/landing" component={LandingPage} />
         <Route path="/restaurant" component={RestaurantSideBar} />
         <Route path="/restaurant/signup" component={RestaurantSignup} />
         <Route path="/restaurant/addDish" component={RestaurantAddDish} />
