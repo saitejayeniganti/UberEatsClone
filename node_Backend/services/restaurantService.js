@@ -87,3 +87,15 @@ exports.getRestaurantsByLocation = async (request) => {
   let response = await restaurantRepo.getRestaurantsByLocation(request.body);
   return response;
 };
+
+//**********************GET_DISH_DETAILS ************/
+exports.getDishDetails = async (request) => {
+  let response = await restaurantRepo.getDishDetails(request.query);
+  return response;
+};
+
+//**********************Update_DISH************/
+exports.updateDish = async (request) => {
+  let response = await restaurantRepo.updateDish(request.body);
+  return response;
+};

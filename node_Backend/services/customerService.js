@@ -110,3 +110,9 @@ exports.addAddress = async (request) => {
   let response = await customerRepo.addAddress(request.body);
   return response;
 };
+
+//*********************Delete Cart******************** */
+exports.deleteCart = async (request) => {
+  let response = await customerRepo.deleteCart(request.query);
+  return response;
+};

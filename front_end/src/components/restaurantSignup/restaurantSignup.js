@@ -223,11 +223,14 @@ class RestaurantSignup extends React.Component {
                   this.setState({ address: e.target.value, addressError: "" })
                 }
               ></input> */}
-                <LocationSearchInput
-                  handleChange={this.handleChange}
-                  handleSelect={this.handleSelect}
-                  address={this.state.address}
-                />
+                <div style={{ width: "400px" }}>
+                  <LocationSearchInput
+                    handleChange={this.handleChange}
+                    handleSelect={this.handleSelect}
+                    address={this.state.address}
+                  />
+                </div>
+
                 {this.state.addressError ? (
                   <label className="errtext">{this.state.addressError}</label>
                 ) : (
@@ -294,7 +297,11 @@ class RestaurantSignup extends React.Component {
                     .
                   </p>
                 </div>
-                <button className="btnn" onClick={() => this.submit()}>
+                <button
+                  className="btnnSub"
+                  style={{ width: "100% !important" }}
+                  onClick={() => this.submit()}
+                >
                   Submit
                 </button>
               </div>

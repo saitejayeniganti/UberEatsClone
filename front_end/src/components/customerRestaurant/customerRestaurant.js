@@ -11,7 +11,7 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import "./customerRestaurant.css";
 import { connect } from "react-redux";
-import { addCart } from "../../redux/actions/index";
+import { addCart, emptyCart } from "../../redux/actions/index";
 
 class RestaurantView extends React.Component {
   state = {
@@ -23,6 +23,9 @@ class RestaurantView extends React.Component {
     singleDishPrice: "",
     totalDishPrice: "",
     cart: this.props.cart,
+    openCartCheckModal: false,
+    newCartDish: "",
+    newCartQty: "",
   };
 
   handleOpen = (dish) => {
@@ -82,27 +85,140 @@ class RestaurantView extends React.Component {
       quantity: quantity,
     };
 
+    if (
+      this.props.cart.length === 0 ||
+      this.props.cart[0].restaurantId == this.state.restaurantDetails.id
+    ) {
+      axios
+        .post(
+          process.env.REACT_APP_UBEREATS_BACKEND_URL + "/customer/order",
+          orderDetails
+        )
+        .then((response) => {
+          // console.log(response.data);
+          this.props.addCart({
+            order_id: response.data.id,
+            dishId: selectedDish.id,
+            dishName: selectedDish.name,
+            quantity: quantity,
+            restaurantId: this.state.restaurantDetails.id,
+            restaurantName: this.state.restaurantDetails.name,
+          });
+
+          this.setState({ openModel: false });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      this.setState({
+        newCartDish: selectedDish,
+        newCartQty: quantity,
+        openCartCheckModal: true,
+      });
+    }
+  };
+
+  handleCartCheckClose = () => {
+    this.setState({ openCartCheckModal: false });
+  };
+
+  renderCartCheckModel = () => {
+    return (
+      <>
+        <Modal
+          open={this.state.openCartCheckModal}
+          onClose={this.handleCartCheckClose}
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              bgcolor: "white",
+              width: "400px",
+              borderRadius: "5px",
+              boxShadow: "24",
+            }}
+          >
+            <>
+              <div style={{ padding: "15px" }}>
+                <div className="col-md-2" style={{ textAlign: "left" }}>
+                  <svg
+                    width="24px"
+                    height="24px"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    focusable="false"
+                    cursor="pointer"
+                    onClick={this.handleCartCheckClose}
+                  >
+                    <path
+                      d="m19.5831 6.24931-1.8333-1.83329-5.75 5.83328-5.75-5.83328-1.8333 1.83329 5.8333 5.74999-5.8333 5.75 1.8333 1.8333 5.75-5.8333 5.75 5.8333 1.8333-1.8333-5.8333-5.75z"
+                      fill="#000000"
+                    ></path>
+                  </svg>
+                </div>
+                <div
+                  className="row"
+                  style={{
+                    fontSize: "28px",
+                    fontWeight: "500",
+                    justifyContent: "center",
+                  }}
+                >
+                  Create new order?
+                </div>
+                <div style={{ marginTop: "10px" }}>
+                  Your order contains items from{" "}
+                  {this.props.cart.length === 0 ? (
+                    ""
+                  ) : (
+                    <b>{this.props.cart[0].restaurantName}</b>
+                  )}
+                  . Create a <br></br>new order to add items from{" "}
+                  <b>{this.state.restaurantDetails.name}</b>
+                </div>
+                <div style={{ display: "flex", marginTop: "20px" }}>
+                  <button className="blkconfirmbtn" onClick={this.newOrder}>
+                    Create New
+                  </button>
+                  <button className="blkconfirmbtn" onClick={this.onCancel}>
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </>
+          </Box>
+        </Modal>
+      </>
+    );
+  };
+
+  newOrder = () => {
+    this.props.emptyCart({});
     axios
-      .post(
-        process.env.REACT_APP_UBEREATS_BACKEND_URL + "/customer/order",
-        orderDetails
+      .put(
+        process.env.REACT_APP_UBEREATS_BACKEND_URL +
+          "/customer/deletecart?id=" +
+          this.props.cart[0].order_id
       )
       .then((response) => {
-        // console.log(response.data);
-        this.props.addCart({
-          order_id: response.data.id,
-          dishId: selectedDish.id,
-          dishName: selectedDish.name,
-          quantity: quantity,
-          restaurantId: this.state.restaurantDetails.id,
-          restaurantName: this.state.restaurantDetails.name,
-        });
-
-        this.setState({ openModel: false });
+        if (response.status === 200) {
+        }
+        this.addToCart(this.state.newCartDish, this.state.newCartQty);
+        this.setState({ openCartCheckModal: false, openModel: false });
+        // console.log("cart deleted");
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  onCancel = () => {
+    this.setState({ openCartCheckModal: false, openModel: false });
   };
 
   renderModel = (selectedDish) => {
@@ -391,7 +507,9 @@ class RestaurantView extends React.Component {
   render() {
     return (
       <>
+        {this.renderCartCheckModel()}
         {this.renderModel(this.state.selectedDish)}
+
         <div>
           <figure className="figureClass">
             <div className="figureDiv">
@@ -416,6 +534,7 @@ class RestaurantView extends React.Component {
                         this.state.restaurantDetails.location.split(",")[0] +
                         ")"}
                     </h2>
+
                     <div
                       style={{
                         fontSize: "16px",
@@ -495,6 +614,7 @@ class RestaurantView extends React.Component {
 function mapDispatchToprops(dispatch) {
   return {
     addCart: (cart) => dispatch(addCart(cart)),
+    emptyCart: (emp) => dispatch(emptyCart(emp)),
   };
 }
 

@@ -49,7 +49,7 @@ class CustomerLogin extends React.Component {
       return;
     } else {
       str = this.state.countryCode + this.state.signupMobile;
-      console.log(str);
+      // console.log(str);
       this.setState({
         signupMobile: str,
       });
@@ -62,8 +62,6 @@ class CustomerLogin extends React.Component {
           str
       )
       .then((response) => {
-        // console.log(response.data);
-
         if (!response.data) {
           this.setState({
             mobileNumberError: "Oops, we don’t recognize this email address",
@@ -120,6 +118,8 @@ class CustomerLogin extends React.Component {
         id: this.state.customerDetails.id,
         name: this.state.customerDetails.name,
         image_url: this.state.customerDetails.image_url,
+        latitude: this.state.customerDetails.latitude,
+        longitude: this.state.customerDetails.longitude,
       };
       sessionStorage.setItem(
         "customerDetails",

@@ -50,8 +50,7 @@ exports.findOrder = `
 
 exports.insertOrderItem = `insert into Order_items (order_id,customer_id,restaurent_id,dish_id,quantity) values (?,?,?,?,?) `;
 
-exports.calculatePrice = `update Orders set price=( select sum(Dishes.price*quantity) from Order_items 
-inner join Dishes on Order_items.dish_id=Dishes.id ) where Orders.id=?`;
+exports.calculatePrice = `update Orders set price=(select sum(Dishes.price*quantity) from Order_items inner join Dishes on Order_items.dish_id=Dishes.id where Order_items.order_id=?) where Orders.id=?`;
 
 exports.getCheckoutCart = `select Orders.id as order_Id,Order_items.quantity as quantity,Dishes.name as dishName,Order_items.restaurent_id as restaurantId,Dishes.id as dishId,Dishes.price as dishPrice,Orders.price as orderPrice,Restaurents.name as restaurantName from Orders inner join Order_items on Orders.id=Order_items.order_id inner join Dishes on Dishes.id=Order_items.dish_id inner join Restaurents on Restaurents.id=Dishes.restaurent_id where Orders.order_status="In cart" and Orders.customer_id=?`;
 
@@ -66,3 +65,7 @@ select address,latitude,longitude from Customer where id=?
 
 exports.addAddress = `insert into Address (customer_id,location,latitude,longitude) values (?,?,?,?) 
 `;
+
+exports.deleteOrderItems = `Delete from Order_items where order_id=?`;
+
+exports.deleteOrders = "Delete from Orders where id=?";

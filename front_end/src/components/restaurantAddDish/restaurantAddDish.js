@@ -21,7 +21,7 @@ class RestaurantAddDish extends React.Component {
   state = {
     name: "",
     main_ingredients: "",
-    dish_price: 0,
+    dish_price: 0.0,
     description: "",
     dish_category: "-1",
     cuisine: "",
@@ -38,6 +38,35 @@ class RestaurantAddDish extends React.Component {
     image_url: "",
     redirectToHome: false,
   };
+
+  componentDidMount() {
+    if (this.props.location.state !== undefined) {
+      axios
+        .get(
+          process.env.REACT_APP_UBEREATS_BACKEND_URL +
+            "/restaurant/dishdetails?id=" +
+            this.props.location.state.id
+        )
+        .then((response) => {
+          if (response.status === 200) {
+          }
+          this.setState({
+            name: response.data[0].name,
+            main_ingredients: response.data[0].main_ingredients,
+            dish_price: response.data[0].price,
+            description: response.data[0].description,
+            dish_category: response.data[0].category,
+            cuisine: response.data[0].cuisine,
+
+            dish_type: response.data[0].type,
+            image_url: response.data[0].image_url,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
 
   submit = () => {
     if (this.state.name === "") {
@@ -74,46 +103,76 @@ class RestaurantAddDish extends React.Component {
     }
 
     const ReactS3Client = new S3(config);
-
-    ReactS3Client.uploadFile(this.state.selectedFile, uuidv4())
-      .then((data) => {
-        this.setState({ image_url: data.location });
-        if (data.status === 204) {
-          console.log(" upload to S3 success");
-        } else {
-          console.log(" upload to S3 fail");
-        }
-        // console.log(this.state.selectedFile);
-        let details = {
-          restaurant_id: JSON.parse(sessionStorage.getItem("restaurantDetails"))
-            .id,
-          name: this.state.name,
-          main_ingredients: this.state.main_ingredients,
-          price: this.state.dish_price,
-          description: this.state.description,
-          category: this.state.dish_category,
-          cuisine: this.state.dish_category,
-          url: data.location,
-          type: this.state.dish_type,
-        };
-        axios
-          .post(
-            process.env.REACT_APP_UBEREATS_BACKEND_URL + "/restaurant/dishes",
-            details
-          )
-          .then((response) => {
-            if (response.status === 200) {
-              console.log("Dish is inserted");
-            }
-            this.setState({ redirectToHome: true });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (this.state.image_url === "") {
+      ReactS3Client.uploadFile(this.state.selectedFile, uuidv4())
+        .then((data) => {
+          this.setState({ image_url: data.location });
+          if (data.status === 204) {
+            console.log(" upload to S3 success");
+          } else {
+            console.log(" upload to S3 fail");
+          }
+          // console.log(this.state.selectedFile);
+          let details = {
+            restaurant_id: JSON.parse(
+              sessionStorage.getItem("restaurantDetails")
+            ).id,
+            name: this.state.name,
+            main_ingredients: this.state.main_ingredients,
+            price: parseFloat(this.state.dish_price),
+            description: this.state.description,
+            category: this.state.dish_category,
+            cuisine: this.state.dish_category,
+            url: data.location,
+            type: this.state.dish_type,
+          };
+          axios
+            .post(
+              process.env.REACT_APP_UBEREATS_BACKEND_URL + "/restaurant/dishes",
+              details
+            )
+            .then((response) => {
+              if (response.status === 200) {
+                console.log("Dish is inserted");
+              }
+              this.setState({ redirectToHome: true });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      let details = {
+        restaurant_id: JSON.parse(sessionStorage.getItem("restaurantDetails"))
+          .id,
+        name: this.state.name,
+        category: this.state.dish_category,
+        cuisine: this.state.dish_category,
+        price: parseFloat(this.state.dish_price),
+        main_ingredients: this.state.main_ingredients,
+        description: this.state.description,
+        type: this.state.dish_type,
+        image_url: this.state.image_url,
+        id: this.props.location.state.id,
+      };
+      axios
+        .put(
+          process.env.REACT_APP_UBEREATS_BACKEND_URL +
+            "/restaurant/dishdetails",
+          details
+        )
+        .then((response) => {
+          if (response.status === 200) {
+          }
+          this.setState({ redirectToHome: true });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   fileSelected = (e) => {
@@ -143,6 +202,7 @@ class RestaurantAddDish extends React.Component {
               <div className="col-md-6">
                 <input
                   className="txtbox marginTop25"
+                  value={this.state.name}
                   placeholder="Dish name"
                   onChange={(e) =>
                     this.setState({ name: e.target.value, nameError: "" })
@@ -155,6 +215,7 @@ class RestaurantAddDish extends React.Component {
                 )}
                 <select
                   className="txtbox marginTop25"
+                  value={this.state.dish_category}
                   onChange={(e) =>
                     this.setState({
                       dish_category: e.target.value,
@@ -179,6 +240,7 @@ class RestaurantAddDish extends React.Component {
                 <input
                   className="txtbox marginTop25"
                   placeholder="Cuisine"
+                  value={this.state.cuisine}
                   onChange={(e) =>
                     this.setState({ cuisine: e.target.value, cuisineError: "" })
                   }
@@ -191,6 +253,7 @@ class RestaurantAddDish extends React.Component {
 
                 <textarea
                   className="txtareas marginTop20"
+                  value={this.state.main_ingredients}
                   placeholder="Main Ingredients"
                   rows="4"
                   onChange={(e) =>
@@ -211,6 +274,8 @@ class RestaurantAddDish extends React.Component {
               <div className="col-md-6">
                 <input
                   className="txtbox marginTop25"
+                  value={this.state.dish_price}
+                  type="text"
                   placeholder="Price"
                   min="1"
                   onChange={(e) =>
@@ -240,6 +305,7 @@ class RestaurantAddDish extends React.Component {
                 ></input> */}
                 <select
                   className="txtbox marginTop25"
+                  value={this.state.dish_type}
                   onChange={(e) =>
                     this.setState({
                       dish_type: e.target.value,
@@ -280,6 +346,7 @@ class RestaurantAddDish extends React.Component {
                 )}
                 <textarea
                   className="txtareas marginTop20"
+                  value={this.state.description}
                   placeholder="Description"
                   onChange={(e) =>
                     this.setState({

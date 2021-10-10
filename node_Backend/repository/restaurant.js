@@ -106,6 +106,7 @@ exports.getRestaurantByID = async (params) => {
 
 exports.insertDish = async (dish) => {
   try {
+    // console.log(dish);
     let response = await pool.query(queries.insertDish, [
       dish.restaurant_id,
       dish.name,
@@ -168,6 +169,45 @@ exports.getRestaurantsByLocation = async (latlng) => {
       latlng.type,
       latlng.dType,
       latlng.dType,
+    ]);
+
+    return { status: 200, body: response };
+  } catch (error) {
+    console.log(error);
+    const message = error.message ? error.message : "Internal Server Error";
+    const code = error.statusCode ? error.statusCode : 500;
+    return { status: code, body: { message } };
+  }
+};
+
+//**********************GET_DISH_DETAILS**************/
+exports.getDishDetails = async (data) => {
+  try {
+    let response = await pool.query(queries.getDishDetails, [data.id]);
+
+    return { status: 200, body: response };
+  } catch (error) {
+    console.log(error);
+    const message = error.message ? error.message : "Internal Server Error";
+    const code = error.statusCode ? error.statusCode : 500;
+    return { status: code, body: { message } };
+  }
+};
+
+//**********************Update_DISH**************/
+exports.updateDish = async (data) => {
+  try {
+    let response = await pool.query(queries.updateDish, [
+      data.restaurant_id,
+      data.name,
+      data.category,
+      data.cuisine,
+      data.price,
+      data.main_ingredients,
+      data.description,
+      data.type,
+      data.image_url,
+      data.id,
     ]);
 
     return { status: 200, body: response };

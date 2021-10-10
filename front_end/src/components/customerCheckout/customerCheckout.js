@@ -9,6 +9,8 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from "react-places-autocomplete";
+import { connect } from "react-redux";
+import { emptyCart } from "../../redux/actions/index";
 class CustomerCheckout extends Component {
   constructor(props) {
     super(props);
@@ -76,6 +78,7 @@ class CustomerCheckout extends Component {
               <button
                 className="checkoutButton"
                 onClick={() => {
+                  this.props.emptyCart({});
                   this.setState({
                     openModel: false,
                     redirectToHome: true,
@@ -199,7 +202,13 @@ class CustomerCheckout extends Component {
           Add New Address
         </div>
 
-        <div style={{ marginLeft: "30px", marginTop: "15px" }}>
+        <div
+          style={{
+            marginLeft: "30px",
+            marginTop: "15px",
+            width: "400px",
+          }}
+        >
           {" "}
           <LocationSearchInput
             handleChange={this.handleChange}
@@ -260,7 +269,7 @@ class CustomerCheckout extends Component {
   renderItems = () => {
     return (
       <>
-        <div style={{ marginLeft: "2%", marginRight: "2%" }}>
+        <div>
           <div
             style={{ fontSize: "28px", fontWeight: "500", marginLeft: "30px" }}
           >
@@ -339,7 +348,7 @@ class CustomerCheckout extends Component {
           className="container"
           style={{
             display: "flex",
-            background: "#dcdcdc",
+            background: "#ededed",
             boxShadow: "10px 5px 5px #d3d3d3 ",
             zIndex: 100,
             padding: "50px",
@@ -353,4 +362,10 @@ class CustomerCheckout extends Component {
   }
 }
 
-export default CustomerCheckout;
+function mapDispatchToprops(dispatch) {
+  return {
+    emptyCart: (emp) => dispatch(emptyCart(emp)),
+  };
+}
+
+export default connect(null, mapDispatchToprops)(CustomerCheckout);

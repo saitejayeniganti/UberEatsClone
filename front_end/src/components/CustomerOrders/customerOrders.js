@@ -13,6 +13,8 @@ class CustomerOrders extends Component {
       orders: [],
       openModel: false,
       selectedOrderId: "",
+
+      selectedStatus: "",
     };
   }
 
@@ -56,9 +58,10 @@ class CustomerOrders extends Component {
   }
 
   renderOrders = () => {
-    let orders = this.state.orders;
+    let orders = this.state.orders.filter((o) =>
+      o.order_status.includes(this.state.selectedStatus)
+    );
     let orderItems = this.state.orderItems;
-
     return (
       <>
         {orders == []
@@ -227,12 +230,18 @@ class CustomerOrders extends Component {
               <h3>Past orders</h3>
             </div>
             <div className="col-md-2">
-              <select aria-hidden="true" className="orderStatusselect">
+              <select
+                aria-hidden="true"
+                className="orderStatusselect"
+                onChange={(e) =>
+                  this.setState({ selectedStatus: e.target.value })
+                }
+              >
                 <option value="">All</option>
-                <option value="In cart">Received</option>
-                <option value="">Preparing</option>
-                <option value="">On the way</option>
-                <option value="">Delivered</option>
+                <option value="In cart">In cart</option>
+                <option value="Preparing">Preparing</option>
+                <option value="On the way">On the way</option>
+                <option value="Delivered">Delivered</option>
               </select>
             </div>
           </div>

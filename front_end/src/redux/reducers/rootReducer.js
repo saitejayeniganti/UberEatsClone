@@ -1,4 +1,8 @@
-import { ADD_CART, ADD_CART_FROMDB } from "../constants/action-types";
+import {
+  ADD_CART,
+  ADD_CART_FROMDB,
+  EMPTY_CART,
+} from "../constants/action-types";
 
 const initState = {
   cart: [],
@@ -19,7 +23,6 @@ const rootReducer = (state = initState, action) => {
     let fin = [];
     if (state.cart.length === 0) fin = [action.payload];
     else fin = [...storeCart];
-    // console.log(state.cart);
     return Object.assign({}, state, {
       cart: fin,
     });
@@ -27,6 +30,11 @@ const rootReducer = (state = initState, action) => {
   if (action.type == ADD_CART_FROMDB) {
     return Object.assign({}, state, {
       cart: action.payload,
+    });
+  }
+  if (action.type == EMPTY_CART) {
+    return Object.assign({}, state, {
+      cart: [],
     });
   }
   return state;

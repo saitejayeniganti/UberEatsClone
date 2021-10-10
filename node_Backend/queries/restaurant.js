@@ -30,3 +30,8 @@ where (  Favorites.customer_id=? ||  Favorites.customer_id is null )
 and Restaurents.id in (select restaurent_id from Dishes where ""=? or Dishes.type=?   ) 
 and ( ""=? or Restaurents.delivery_type =?)
 order by distance asc`;
+
+exports.getDishDetails = "select * from Dishes where id=?";
+
+exports.updateDish =
+  "update Dishes set restaurent_id=?,name=?,category=?,cuisine=?,price=?,main_ingredients=?,description=?,type=?,image_url=? where id=?";

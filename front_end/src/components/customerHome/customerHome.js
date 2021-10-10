@@ -30,6 +30,11 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteFillIcon from "@mui/icons-material/Favorite";
 import tagIcon from "../../Images/tag.png";
 import { Redirect } from "react-router";
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from "react-places-autocomplete";
+import LocationSearchInput from "../locationAutoComplete/locationAuto";
 
 class CustomerHome extends React.Component {
   state = {
@@ -46,19 +51,46 @@ class CustomerHome extends React.Component {
     selectedRestaurant: "",
     deliveryType: "",
     dietary: "",
+    address: "",
+  };
+
+  handleChange = (address) => {
+    this.setState({ address });
+  };
+
+  handleSelect = (address) => {
+    geocodeByAddress(address).then((results) => {
+      this.setState({ address: address });
+      getLatLng(results[0])
+        .then((latLng) => {
+          console.log("Success", latLng);
+          this.setState({ latitude: latLng.lat, longitude: latLng.lng });
+          this.search(
+            this.state.deliveryType,
+            this.state.dietary,
+            latLng.lat,
+            latLng.lng
+          );
+        })
+        .catch((error) => console.error("Error", error));
+    });
   };
 
   componentDidMount() {
     let details = {
-      // latitude: this.state.latitude,
-      // longitude: this.state.longitude,
-      latitude: "37.3352",
-      longitude: "-121.8811",
+      latitude:
+        this.state.latitude == ""
+          ? JSON.parse(sessionStorage.getItem("customerDetails")).latitude
+          : this.state.latitude,
+      longitude:
+        this.state.longitude == ""
+          ? JSON.parse(sessionStorage.getItem("customerDetails")).longitude
+          : this.state.longitude,
       id: JSON.parse(sessionStorage.getItem("customerDetails")).id,
       type: "",
       dType: "",
     };
-
+    console.log(details);
     axios
       .post(
         process.env.REACT_APP_UBEREATS_BACKEND_URL + "/restaurant/location",
@@ -76,10 +108,16 @@ class CustomerHome extends React.Component {
       });
   }
 
-  search = (deliveryType, dietary, location) => {
+  search = (deliveryType, dietary, latitude, longitude) => {
     let details = {
-      latitude: "37.3352",
-      longitude: "-121.8811",
+      latitude:
+        latitude == ""
+          ? JSON.parse(sessionStorage.getItem("customerDetails")).latitude
+          : latitude,
+      longitude:
+        longitude == ""
+          ? JSON.parse(sessionStorage.getItem("customerDetails")).longitude
+          : longitude,
       id: JSON.parse(sessionStorage.getItem("customerDetails")).id,
       type: dietary,
       dType: deliveryType,
@@ -193,54 +231,73 @@ class CustomerHome extends React.Component {
 
   filters = () => {
     return (
-      <div
-        className="col-md-12"
-        style={{ top: 0, position: "-webkit-sticky", position: "sticky" }}
-      >
-        <h1 className="allstores">All Stores</h1>
+      <>
+        <div style={{ width: "260px", marginBottom: "25px" }}>
+          <LocationSearchInput
+            handleChange={this.handleChange}
+            handleSelect={this.handleSelect}
+            address={this.state.address}
+          />
+        </div>
         <div
-          className="row  "
-          onClick={(e) => {
-            if (this.state.showSort == true) this.setState({ showSort: false });
-            else this.setState({ showSort: true });
+          className="col-md-12"
+          style={{
+            top: 0,
+            marginTop: "20px",
+            position: "-webkit-sticky",
+            position: "sticky",
           }}
         >
-          <div className="col-md-9 filterHeading ">Delivery Type</div>
-          <div className="col-md-3">
-            <svg height="24px" width="24px" id="arrow">
-              {this.state.showSort ? (
-                <path
-                  d="M17 11.7494V14.916L12 11.0827L7 14.916V11.7494L12 7.91602L17 11.7494Z"
-                  transform="rotate(180, 12, 12)"
-                />
-              ) : (
-                <path d="M17 11.7494V14.916L12 11.0827L7 14.916V11.7494L12 7.91602L17 11.7494Z" />
-              )}
-            </svg>
-          </div>
-        </div>
-        {this.state.showSort ? (
-          <Radio.Group
-            onChange={(e) => {
-              this.setState({ deliveryType: e.target.value });
-              this.search(e.target.value, this.state.dietary, "");
+          <h1 className="allstores">All Stores</h1>
+          <div
+            className="row  "
+            onClick={(e) => {
+              if (this.state.showSort == true)
+                this.setState({ showSort: false });
+              else this.setState({ showSort: true });
             }}
-            defaultValue=""
           >
-            <Space direction="vertical">
-              {/* <Radio value="default">Picked for you (default)</Radio>
+            <div className="col-md-9 filterHeading ">Delivery Type</div>
+            <div className="col-md-3">
+              <svg height="24px" width="24px" id="arrow">
+                {this.state.showSort ? (
+                  <path
+                    d="M17 11.7494V14.916L12 11.0827L7 14.916V11.7494L12 7.91602L17 11.7494Z"
+                    transform="rotate(180, 12, 12)"
+                  />
+                ) : (
+                  <path d="M17 11.7494V14.916L12 11.0827L7 14.916V11.7494L12 7.91602L17 11.7494Z" />
+                )}
+              </svg>
+            </div>
+          </div>
+          {this.state.showSort ? (
+            <Radio.Group
+              onChange={(e) => {
+                this.setState({ deliveryType: e.target.value });
+                this.search(
+                  e.target.value,
+                  this.state.dietary,
+                  this.state.latitude,
+                  this.state.longitude
+                );
+              }}
+              defaultValue=""
+            >
+              <Space direction="vertical">
+                {/* <Radio value="default">Picked for you (default)</Radio>
               <Radio value="count of orders">Most Popular</Radio> */}
-              <Radio value="">All</Radio>
-              <Radio value="Delivery">Delivery</Radio>
-              <Radio value="Pickup">Pickup</Radio>
-            </Space>
-          </Radio.Group>
-        ) : (
-          ""
-        )}
-        <div style={{ height: "25px" }}></div>
-        {/* Price Range Filter */}
-        {/* <div
+                <Radio value="">All</Radio>
+                <Radio value="Delivery">Delivery</Radio>
+                <Radio value="Pickup">Pickup</Radio>
+              </Space>
+            </Radio.Group>
+          ) : (
+            ""
+          )}
+          <div style={{ height: "25px" }}></div>
+          {/* Price Range Filter */}
+          {/* <div
           className="row"
           onClick={(e) => {
             if (this.state.showPrice == true)
@@ -300,8 +357,8 @@ class CustomerHome extends React.Component {
           ""
         )}
         <div style={{ height: "25px" }}></div> */}
-        {/* Max Delivery Fee */}
-        {/* <div
+          {/* Max Delivery Fee */}
+          {/* <div
           className="row"
           onClick={(e) => {
             if (this.state.showDeliveryFee == true)
@@ -342,54 +399,59 @@ class CustomerHome extends React.Component {
           ""
         )}
         <div style={{ height: "25px" }}></div> */}
-        {/* Dietary */}
-        <div
-          className="row"
-          onClick={(e) => {
-            if (this.state.showDietary == true)
-              this.setState({ showDietary: false });
-            else this.setState({ showDietary: true });
-          }}
-        >
-          <div className="col-md-9 filterHeading">Dietary</div>
-          <div className="col-md-3">
-            <svg height="24px" width="24px">
-              {this.state.showDietary ? (
-                <path
-                  d="M17 11.7494V14.916L12 11.0827L7 14.916V11.7494L12 7.91602L17 11.7494Z"
-                  transform="rotate(180, 12, 12)"
-                />
-              ) : (
-                <path d="M17 11.7494V14.916L12 11.0827L7 14.916V11.7494L12 7.91602L17 11.7494Z" />
-              )}
-            </svg>
-          </div>
-        </div>
-        {this.state.showDietary ? (
-          <Radio.Group
-            onChange={(e) => {
-              console.log(e.target.value);
-              this.setState({ dietary: e.target.value });
-              this.search(this.state.deliveryType, e.target.value, "");
+          {/* Dietary */}
+          <div
+            className="row"
+            onClick={(e) => {
+              if (this.state.showDietary == true)
+                this.setState({ showDietary: false });
+              else this.setState({ showDietary: true });
             }}
-            defaultValue=""
           >
-            <Space direction="vertical">
-              {/* <Radio value="default">Picked for you (default)</Radio>
+            <div className="col-md-9 filterHeading">Dietary</div>
+            <div className="col-md-3">
+              <svg height="24px" width="24px">
+                {this.state.showDietary ? (
+                  <path
+                    d="M17 11.7494V14.916L12 11.0827L7 14.916V11.7494L12 7.91602L17 11.7494Z"
+                    transform="rotate(180, 12, 12)"
+                  />
+                ) : (
+                  <path d="M17 11.7494V14.916L12 11.0827L7 14.916V11.7494L12 7.91602L17 11.7494Z" />
+                )}
+              </svg>
+            </div>
+          </div>
+          {this.state.showDietary ? (
+            <Radio.Group
+              onChange={(e) => {
+                console.log(e.target.value);
+                this.setState({ dietary: e.target.value });
+                this.search(
+                  this.state.deliveryType,
+                  e.target.value,
+                  this.state.latitude,
+                  this.state.longitude
+                );
+              }}
+              defaultValue=""
+            >
+              <Space direction="vertical">
+                {/* <Radio value="default">Picked for you (default)</Radio>
               <Radio value="count of orders">Most Popular</Radio> */}
-              <Radio value="">All</Radio>
-              <Radio value="Vegetarian">Vegetarian</Radio>
-              <Radio value="Vegan">Vegan</Radio>
-              <Radio value="Gluten-fre">Gluten-free</Radio>
-              <Radio value="Halal">Halal</Radio>
-              <Radio value="AllergyFriendly">Allergy Friendly</Radio>
-              <Radio value="Nonveg">Non-Vegetarian</Radio>
-            </Space>
-          </Radio.Group>
-        ) : (
-          ""
-        )}
-        {/* {this.state.showDietary ? (
+                <Radio value="">All</Radio>
+                <Radio value="Vegetarian">Vegetarian</Radio>
+                <Radio value="Vegan">Vegan</Radio>
+                <Radio value="Gluten-fre">Gluten-free</Radio>
+                <Radio value="Halal">Halal</Radio>
+                <Radio value="AllergyFriendly">Allergy Friendly</Radio>
+                <Radio value="Nonveg">Non-Vegetarian</Radio>
+              </Space>
+            </Radio.Group>
+          ) : (
+            ""
+          )}
+          {/* {this.state.showDietary ? (
           <>
             <div className="margin10">
               <button
@@ -531,7 +593,8 @@ class CustomerHome extends React.Component {
         ) : (
           ""
         )} */}
-      </div>
+        </div>
+      </>
     );
   };
 
@@ -552,10 +615,11 @@ class CustomerHome extends React.Component {
       console.log(restaurant_id);
       if (rts[r].id == restaurant_id) {
         console.log("making favo");
-        rts[r].favourite = 1;
+        rts[r].favorite = 1;
         break;
       }
     }
+    console.log(rts);
     this.setState({ restaurants: rts });
     let details = {
       customer_id: JSON.parse(sessionStorage.getItem("customerDetails")).id,
@@ -619,7 +683,7 @@ class CustomerHome extends React.Component {
                     padding: "0px",
                     marginRight: "60px",
                     marginLeft: "20px",
-                    marginBottom: "20px",
+                    marginBottom: "30px",
                   }}
                 >
                   <Container>
@@ -633,7 +697,7 @@ class CustomerHome extends React.Component {
                         alt="Restaurant Image"
                       ></img>
                       <figcaption>
-                        {!restaurant.favorite ? (
+                        {restaurant.favorite === null ? (
                           <FavoriteBorderIcon
                             className="fav_icon"
                             onClick={() => this.makeFavorite(restaurant)}

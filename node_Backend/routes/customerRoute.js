@@ -115,4 +115,10 @@ app.post("/addaddress", async (request, response) => {
   response.status(data.status).json(data.body);
 });
 
+//*********************ADD ADDRESS******************** */
+app.put("/deleteCart", async (request, response) => {
+  const data = await customerService.deleteCart(request);
+  response.status(data.status).json(data.body);
+});
+
 module.exports = app;

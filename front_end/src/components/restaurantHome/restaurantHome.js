@@ -14,6 +14,8 @@ class RestaurantHome extends React.Component {
     restaurantDetails: JSON.parse(sessionStorage.getItem("restaurantDetails")),
     redirectToAddDish: false,
     dishes: {},
+    redirectToModifyDish: false,
+    selectedDish: "",
   };
 
   componentDidMount() {
@@ -99,6 +101,10 @@ class RestaurantHome extends React.Component {
                         <div
                           class="col-md-4"
                           style={{ padding: "10px", paddingBottom: "20px" }}
+                          onClick={() => {
+                            this.setState({ selectedDish: dish.id });
+                            this.setState({ redirectToModifyDish: true });
+                          }}
                         >
                           <Card
                             sx={{
@@ -173,9 +179,21 @@ class RestaurantHome extends React.Component {
     let redirectToAddDish = null;
     if (this.state.redirectToAddDish)
       redirectToAddDish = <Redirect to="/restaurant/adddish" />;
+
+    let redirectToModifyDish = null;
+    if (this.state.redirectToModifyDish)
+      redirectToModifyDish = (
+        <Redirect
+          to={{
+            pathname: "/restaurant/adddish",
+            state: { id: this.state.selectedDish },
+          }}
+        />
+      );
     return (
       <>
         {redirectToAddDish}
+        {redirectToModifyDish}
         <div>
           <figure className="figureClass">
             <div className="figureDiv">

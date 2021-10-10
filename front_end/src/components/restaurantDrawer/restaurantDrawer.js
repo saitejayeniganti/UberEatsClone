@@ -11,11 +11,12 @@ import ubereatslogo from "../../Images/ubereatsLo.svg";
 import dishIcon from "../../Images/fastfoodsvg.svg";
 import icon from "../../Images/icon.jpeg";
 import "./restaurantDrawer.css";
+import { Link } from "react-router-dom";
 
 class RestaurantSideBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { visible: false, name: "" };
+    this.state = { visible: false, name: "", redirectToLogin: false };
   }
 
   showDrawer = () => {
@@ -39,6 +40,11 @@ class RestaurantSideBar extends Component {
         </div>
       </>
     );
+  };
+
+  removeSession = () => {
+    sessionStorage.removeItem("restaurantDetails");
+    this.setState({ redirectToLogin: true });
   };
 
   sidebar = () => {
@@ -89,7 +95,13 @@ class RestaurantSideBar extends Component {
                 </div>
                 <div className="col-sm-8" style={{ marginTop: "5px" }}>
                   <div className="row txtSmall">Sai teja</div>
-                  <div className="row greentxt">View account</div>
+                  <div className="row greentxt">
+                    {" "}
+                    <Link className="greentxt" to="/restaurant/details">
+                      {" "}
+                      View account
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -100,15 +112,44 @@ class RestaurantSideBar extends Component {
           visible={this.state.visible}
           key="left"
         >
+          <div className="row" style={{ marginBottom: "20px" }}>
+            <div className="col-md-2" style={{ marginLeft: "4px" }}>
+              <svg
+                fill="#000000"
+                viewBox="0 0 24 24"
+                width="17px"
+                height="17px"
+              >
+                {" "}
+                <path d="M 15 2 A 1 1 0 0 0 14.300781 2.2851562 L 3.3925781 11.207031 A 1 1 0 0 0 3.3554688 11.236328 L 3.3183594 11.267578 L 3.3183594 11.269531 A 1 1 0 0 0 3 12 A 1 1 0 0 0 4 13 L 5 13 L 5 24 C 5 25.105 5.895 26 7 26 L 23 26 C 24.105 26 25 25.105 25 24 L 25 13 L 26 13 A 1 1 0 0 0 27 12 A 1 1 0 0 0 26.681641 11.267578 L 26.666016 11.255859 A 1 1 0 0 0 26.597656 11.199219 L 25 9.8925781 L 25 6 C 25 5.448 24.552 5 24 5 L 23 5 C 22.448 5 22 5.448 22 6 L 22 7.4394531 L 15.677734 2.2675781 A 1 1 0 0 0 15 2 z M 18 15 L 22 15 L 22 23 L 18 23 L 18 15 z" />
+              </svg>
+            </div>
+
+            <div className="col-md-5" style={{ marginTop: "3px" }}>
+              <h6>
+                <Link className="redirectLink" to="/restaurant/Home">
+                  {" "}
+                  Home
+                </Link>
+              </h6>
+            </div>
+          </div>
+
           <div className="row">
             <div className="col-md-2" style={{ marginLeft: "4px" }}>
               <img style={{ width: "15px", height: "15px" }} src={dishIcon} />
             </div>
 
             <div className="col-md-5" style={{ marginTop: "3px" }}>
-              <h6>Add Dish</h6>
+              <h6>
+                <Link className="redirectLink" to="/restaurant/adddish">
+                  {" "}
+                  Add Dish
+                </Link>
+              </h6>
             </div>
           </div>
+
           <div className="row" style={{ marginTop: "20px" }}>
             <div className="col-md-2">
               <svg
@@ -125,12 +166,17 @@ class RestaurantSideBar extends Component {
               className="col-md-5"
               style={{ marginTop: "3px", marginLeft: "3px" }}
             >
-              <h6>Orders</h6>
+              <h6>
+                <Link className="redirectLink" to="/restaurant/orders">
+                  Orders
+                </Link>
+              </h6>
             </div>
           </div>
           <div
             className="iconDiv"
             style={{ marginTop: "20px", fontSize: "16px", color: "#757575" }}
+            onClick={this.removeSession}
           >
             Sign out
           </div>
@@ -142,11 +188,16 @@ class RestaurantSideBar extends Component {
   };
 
   render() {
+    let redirectToLogin = null;
+    if (this.state.redirectToLogin) {
+      redirectToLogin = <Redirect to="/customer/login" />;
+    }
     return (
       <>
         {JSON.parse(sessionStorage.getItem("restaurantDetails")) === null
           ? ""
           : this.sidebar()}
+        {redirectToLogin}
       </>
     );
   }

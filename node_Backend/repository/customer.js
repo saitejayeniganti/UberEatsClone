@@ -113,6 +113,7 @@ exports.insertOrder = async (order) => {
 
       let priceResponse = await pool.query(queries.calculatePrice, [
         Orderresponse.insertId,
+        Orderresponse.insertId,
       ]);
     } else {
       let checkOrderPresent = await pool.query(queries.checkOrderPresent, [
@@ -139,6 +140,7 @@ exports.insertOrder = async (order) => {
 
       // OrderItemsId = OrderItemresponse.insertId;
       let priceResponse = await pool.query(queries.calculatePrice, [
+        order_idResponse[0].id,
         order_idResponse[0].id,
       ]);
     }
@@ -344,6 +346,21 @@ exports.addAddress = async (body) => {
     ]);
 
     return { status: 200, body: response };
+  } catch (error) {
+    console.log(error);
+    const message = error.message ? error.message : "Internal Server Error";
+    const code = error.statusCode ? error.statusCode : 500;
+    return { status: code, body: { message } };
+  }
+};
+
+//*********************DELETE_CART******************** */
+exports.deleteCart = async (body) => {
+  try {
+    let r1 = await pool.query(queries.deleteOrderItems, [body.id]);
+    let r2 = await pool.query(queries.deleteOrders, [body.id]);
+
+    return { status: 200, body: r2 };
   } catch (error) {
     console.log(error);
     const message = error.message ? error.message : "Internal Server Error";

@@ -268,15 +268,15 @@ class RestaurantOrders extends React.Component {
                   <div
                     className="col-md-5"
                     onClick={() =>
-                      this.changeOrderStatus("Confirmed", currentOrder[0])
+                      this.changeOrderStatus("Preparing", currentOrder[0])
                     }
                   >
-                    <button className="changeStatusBtn">Confirm</button>
+                    <button className="changeStatusBtn">Prepare</button>
                   </div>
                 ) : (
                   ""
                 )}
-                {currentOrder[0].order_status == "Confirmed" ? (
+                {currentOrder[0].order_status == "Preparing" ? (
                   <div
                     className="col-md-5"
                     onClick={() =>
@@ -303,7 +303,7 @@ class RestaurantOrders extends React.Component {
 
                 {/* <div className="col-md-2"></div> */}
                 {currentOrder[0].order_status == "Placed" ? (
-                  <div className="col-md-5">
+                  <div className="col-md-5" style={{ marginLeft: "50px" }}>
                     <button className="changeStatusBtn">Cancel</button>
                   </div>
                 ) : (

@@ -448,7 +448,14 @@
 
 .greentxt {
   font-size: 14px;
+  text-decoration: none;
   color: #05944f;
+  padding-left: 0px !important;
+}
+
+.greentxt:hover {
+  color: #05944f;
+  text-decoration: none;
 }
 
 .greenTag {

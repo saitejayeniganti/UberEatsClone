@@ -11,6 +11,7 @@ import icon from "../../Images/icon.jpeg";
 import { connect } from "react-redux";
 import { addCartFromDB } from "../../redux/actions/index";
 import Modal from "@mui/material/Modal";
+import { Link } from "react-router-dom";
 
 class CustomerSideBar extends Component {
   constructor(props) {
@@ -20,9 +21,6 @@ class CustomerSideBar extends Component {
       name: "",
       openModel: false,
       redirectToCheckout: false,
-      redirectToFavorites: false,
-      redirectToOrders: false,
-      redirectToProfile: false,
       redirectToLogin: false,
     };
   }
@@ -168,6 +166,7 @@ class CustomerSideBar extends Component {
 
   removeSession = () => {
     sessionStorage.removeItem("customerDetails");
+    this.setState({ redirectToLogin: true });
   };
 
   iconInDrawer = () => {
@@ -187,7 +186,10 @@ class CustomerSideBar extends Component {
         <Box sx={{ flexGrow: 1 }}>
           <AppBar
             position="static"
-            sx={{ minHeight: "88px", background: "white" }}
+            sx={{
+              minHeight: "88px",
+              background: "white",
+            }}
           >
             <div style={{ display: "flex" }}>
               <div className="col-md-5">
@@ -265,7 +267,10 @@ class CustomerSideBar extends Component {
                 <div className="col-sm-8" style={{ marginTop: "5px" }}>
                   <div className="row txtSmall">Sai teja</div>
                   <div className="row greentxt" style={{ cursor: "pointer" }}>
-                    View account
+                    <Link className="greentxt" to="/customer/details">
+                      {" "}
+                      View account
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -277,6 +282,29 @@ class CustomerSideBar extends Component {
           visible={this.state.visible}
           key="left"
         >
+          <div className="row" style={{ marginBottom: "20px" }}>
+            <div className="col-md-2" style={{ marginLeft: "3px" }}>
+              <svg
+                fill="#000000"
+                viewBox="0 0 24 24"
+                width="17px"
+                height="17px"
+              >
+                {" "}
+                <path d="M 15 2 A 1 1 0 0 0 14.300781 2.2851562 L 3.3925781 11.207031 A 1 1 0 0 0 3.3554688 11.236328 L 3.3183594 11.267578 L 3.3183594 11.269531 A 1 1 0 0 0 3 12 A 1 1 0 0 0 4 13 L 5 13 L 5 24 C 5 25.105 5.895 26 7 26 L 23 26 C 24.105 26 25 25.105 25 24 L 25 13 L 26 13 A 1 1 0 0 0 27 12 A 1 1 0 0 0 26.681641 11.267578 L 26.666016 11.255859 A 1 1 0 0 0 26.597656 11.199219 L 25 9.8925781 L 25 6 C 25 5.448 24.552 5 24 5 L 23 5 C 22.448 5 22 5.448 22 6 L 22 7.4394531 L 15.677734 2.2675781 A 1 1 0 0 0 15 2 z M 18 15 L 22 15 L 22 23 L 18 23 L 18 15 z" />
+              </svg>
+            </div>
+
+            <div className="col-md-5" style={{ marginTop: "3px" }}>
+              <h6>
+                <Link className="redirectLink" to="/customer/Home">
+                  {" "}
+                  Home
+                </Link>
+              </h6>
+            </div>
+          </div>
+
           <div className="row">
             <div className="col-md-2">
               <svg
@@ -293,7 +321,13 @@ class CustomerSideBar extends Component {
               className="col-md-5"
               style={{ marginTop: "3px", marginLeft: "3px", cursor: "pointer" }}
             >
-              <h6>Orders</h6>
+              <h6>
+                {" "}
+                <Link className="redirectLink" to="/customer/orders">
+                  {" "}
+                  Orders
+                </Link>
+              </h6>
             </div>
           </div>
           {/* ******end of orders******* */}
@@ -313,7 +347,12 @@ class CustomerSideBar extends Component {
               className="col-md-5"
               style={{ marginTop: "3px", marginLeft: "3px", cursor: "pointer" }}
             >
-              <h6>Favorites</h6>
+              <h6>
+                <Link className="redirectLink" to="/customer/favorites">
+                  {" "}
+                  Favorites
+                </Link>
+              </h6>
             </div>
           </div>
 
@@ -446,19 +485,10 @@ class CustomerSideBar extends Component {
     if (this.state.redirectToCheckout) {
       redir = <Redirect to="/customer/checkout" />;
     }
+    let redirectToLogin = null;
     if (this.state.redirectToLogin) {
-      redir = <Redirect to="/customer/login" />;
+      redirectToLogin = <Redirect to="/customer/login" />;
     }
-    if (this.state.redirectToFavorites) {
-      redir = <Redirect to="/customer/favorites" />;
-    }
-    if (this.state.redirectToOrders) {
-      redir = <Redirect to="/customer/orders" />;
-    }
-    if (this.state.redirectToProfile) {
-      redir = <Redirect to="/customer/details" />;
-    }
-
     return (
       <>
         {this.renderModel()}
@@ -466,6 +496,7 @@ class CustomerSideBar extends Component {
           ? ""
           : this.sidebar()}
         {redir}
+        {redirectToLogin}
       </>
     );
   }

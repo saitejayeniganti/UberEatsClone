@@ -76,4 +76,15 @@ app.post("/location", async (request, response) => {
   response.status(data.status).json(data.body);
 });
 
+//**********************GET_DISH_DETAILS***********/
+app.get("/dishdetails", async (request, response) => {
+  const data = await restaurantService.getDishDetails(request);
+  response.status(data.status).json(data.body);
+});
+
+//**********************UPDATE DISH***********/
+app.put("/dishdetails", async (request, response) => {
+  const data = await restaurantService.updateDish(request);
+  response.status(data.status).json(data.body);
+});
 module.exports = app;
