@@ -188,10 +188,10 @@ class RestaurantSignup extends React.Component {
               position: "absolute",
             }}
           >
-            {/* <img
+            <img
               style={{ height: "800px", width: "1180px" }}
               src={signupBackground}
-            /> */}
+            />
           </div>
           <div
             className="container"

@@ -20,6 +20,10 @@ class CustomerSideBar extends Component {
       name: "",
       openModel: false,
       redirectToCheckout: false,
+      redirectToFavorites: false,
+      redirectToOrders: false,
+      redirectToProfile: false,
+      redirectToLogin: false,
     };
   }
 
@@ -260,7 +264,9 @@ class CustomerSideBar extends Component {
                 </div>
                 <div className="col-sm-8" style={{ marginTop: "5px" }}>
                   <div className="row txtSmall">Sai teja</div>
-                  <div className="row greentxt">View account</div>
+                  <div className="row greentxt" style={{ cursor: "pointer" }}>
+                    View account
+                  </div>
                 </div>
               </div>
             </div>
@@ -285,7 +291,7 @@ class CustomerSideBar extends Component {
 
             <div
               className="col-md-5"
-              style={{ marginTop: "3px", marginLeft: "3px" }}
+              style={{ marginTop: "3px", marginLeft: "3px", cursor: "pointer" }}
             >
               <h6>Orders</h6>
             </div>
@@ -305,7 +311,7 @@ class CustomerSideBar extends Component {
 
             <div
               className="col-md-5"
-              style={{ marginTop: "3px", marginLeft: "3px" }}
+              style={{ marginTop: "3px", marginLeft: "3px", cursor: "pointer" }}
             >
               <h6>Favorites</h6>
             </div>
@@ -436,23 +442,30 @@ class CustomerSideBar extends Component {
   };
 
   render() {
-    let redirectToCheckout = null;
+    let redir = null;
     if (this.state.redirectToCheckout) {
-      redirectToCheckout = (
-        <Redirect
-          to={{
-            pathname: "/customer/checkout",
-          }}
-        />
-      );
+      redir = <Redirect to="/customer/checkout" />;
     }
+    if (this.state.redirectToLogin) {
+      redir = <Redirect to="/customer/login" />;
+    }
+    if (this.state.redirectToFavorites) {
+      redir = <Redirect to="/customer/favorites" />;
+    }
+    if (this.state.redirectToOrders) {
+      redir = <Redirect to="/customer/orders" />;
+    }
+    if (this.state.redirectToProfile) {
+      redir = <Redirect to="/customer/details" />;
+    }
+
     return (
       <>
-        {redirectToCheckout}
         {this.renderModel()}
         {JSON.parse(sessionStorage.getItem("customerDetails")) === null
           ? ""
           : this.sidebar()}
+        {redir}
       </>
     );
   }

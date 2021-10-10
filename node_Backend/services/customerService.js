@@ -104,3 +104,9 @@ exports.getCheckoutCart = async (request) => {
   let response = await customerRepo.getCheckoutCart(request.query);
   return response;
 };
+
+//*********************ADD ADDRESS******************** */
+exports.addAddress = async (request) => {
+  let response = await customerRepo.addAddress(request.body);
+  return response;
+};

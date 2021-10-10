@@ -109,4 +109,10 @@ app.get("/checkoutcart", async (request, response) => {
   response.status(data.status).json(data.body);
 });
 
+//*********************ADD ADDRESS******************** */
+app.post("/addaddress", async (request, response) => {
+  const data = await customerService.addAddress(request);
+  response.status(data.status).json(data.body);
+});
+
 module.exports = app;

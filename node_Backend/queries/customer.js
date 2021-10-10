@@ -58,3 +58,11 @@ exports.getCheckoutCart = `select Orders.id as order_Id,Order_items.quantity as 
 exports.checkOrderPresent = `select id from Order_items where order_id=? and dish_id=? `;
 
 exports.updateOrderItem = `update Order_items set quantity=? where order_id=? and dish_id=?`;
+
+exports.getAddress = `select location,latitude,longitude from Address where customer_id=? 
+Union 
+select address,latitude,longitude from Customer where id=?
+`;
+
+exports.addAddress = `insert into Address (customer_id,location,latitude,longitude) values (?,?,?,?) 
+`;

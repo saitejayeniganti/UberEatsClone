@@ -40,7 +40,7 @@ class Routes extends Component {
         <Route path="/customer/signup" component={CustomerSignup} />
         <Route path="/customer/details" component={CustomerDetails} />
         <Route path="/customer/home" component={CustomerHome} />
-        <Route path="/cc" component={CustomerOrders} />
+        <Route path="/customer/orders" component={CustomerOrders} />
         <Route path="/customer/restaurant" component={RestaurantView} />
         <Route path="/customer/favorites" component={CustomerFavorites} />
         <Route path="/customer/checkout" component={CustomerCheckout} />

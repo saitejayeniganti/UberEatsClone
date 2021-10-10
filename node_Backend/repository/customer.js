@@ -322,6 +322,26 @@ exports.getCart = async (query) => {
 exports.getCheckoutCart = async (query) => {
   try {
     let response = await pool.query(queries.getCheckoutCart, [query.id]);
+    let address = await pool.query(queries.getAddress, [query.id, query.id]);
+
+    return { status: 200, body: { items: response, address: address } };
+  } catch (error) {
+    console.log(error);
+    const message = error.message ? error.message : "Internal Server Error";
+    const code = error.statusCode ? error.statusCode : 500;
+    return { status: code, body: { message } };
+  }
+};
+
+//*********************ADD ADDRESS******************** */
+exports.addAddress = async (body) => {
+  try {
+    let response = await pool.query(queries.addAddress, [
+      body.id,
+      body.address,
+      body.latitude,
+      body.longitude,
+    ]);
 
     return { status: 200, body: response };
   } catch (error) {

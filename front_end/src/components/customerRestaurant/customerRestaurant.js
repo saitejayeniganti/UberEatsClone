@@ -81,7 +81,6 @@ class RestaurantView extends React.Component {
       dishId: selectedDish.id,
       quantity: quantity,
     };
-    console.log(orderDetails);
 
     axios
       .post(
@@ -89,7 +88,7 @@ class RestaurantView extends React.Component {
         orderDetails
       )
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         this.props.addCart({
           order_id: response.data.id,
           dishId: selectedDish.id,
