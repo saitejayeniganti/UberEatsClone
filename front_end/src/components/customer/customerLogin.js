@@ -62,6 +62,7 @@ class CustomerLogin extends React.Component {
           str
       )
       .then((response) => {
+        console.log(response.data);
         if (!response.data) {
           this.setState({
             mobileNumberError: "Oops, we don’t recognize this email address",

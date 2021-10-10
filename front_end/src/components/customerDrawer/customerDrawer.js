@@ -487,7 +487,7 @@ class CustomerSideBar extends Component {
     }
     let redirectToLogin = null;
     if (this.state.redirectToLogin) {
-      redirectToLogin = <Redirect to="/landing" />;
+      redirectToLogin = <Redirect to="/" />;
     }
     return (
       <>

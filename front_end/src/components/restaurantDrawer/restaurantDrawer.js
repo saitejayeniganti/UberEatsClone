@@ -190,7 +190,7 @@ class RestaurantSideBar extends Component {
   render() {
     let redirectToLogin = null;
     if (this.state.redirectToLogin) {
-      redirectToLogin = <Redirect to="/landing" />;
+      redirectToLogin = <Redirect to="/" />;
     }
     return (
       <>

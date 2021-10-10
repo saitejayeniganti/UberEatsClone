@@ -34,6 +34,7 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from "react-places-autocomplete";
+
 import LocationSearchInput from "../locationAutoComplete/locationAuto";
 
 class CustomerHome extends React.Component {
@@ -781,7 +782,7 @@ class CustomerHome extends React.Component {
     }
     return (
       <div>
-        {/* {this.dishes()} */}
+        {this.dishes()}
         {redirectToRestaurant}
         <div
           className="container-fluid"

@@ -4,6 +4,7 @@ import img2 from "../../Images/img2.svg";
 import "./landingpage.css";
 import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
+import uberLogo from "../../Images/UberEatsLogo.png";
 class LandingPage extends React.Component {
   state = {
     redireToRestaurants: false,
@@ -41,9 +42,20 @@ class LandingPage extends React.Component {
         </div>
         <div className="c4">
           <div className="c5">
-            {/* <h1 className="c6">Order food to your door</h1> */}
+            <div>
+              <img
+                style={{
+                  height: "300px",
+                  width: "500px",
+                  marginBottom: "30px",
+                }}
+                src={uberLogo}
+              />
+            </div>
+            <h1 className="c6">Order food to your door</h1>
           </div>
         </div>
+
         <div
           style={{
             backgroundColor: "#eeeeee",
