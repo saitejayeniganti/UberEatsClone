@@ -46,7 +46,7 @@ Dishes.name as dishName,Order_items.restaurent_id as restaurantId,Dishes.id as d
   `;
 
 exports.findOrder = `
-  select id from Orders where customer_id=44 and order_status="In cart"`;
+  select id from Orders where customer_id=? and order_status="In cart"`;
 
 exports.insertOrderItem = `insert into Order_items (order_id,customer_id,restaurent_id,dish_id,quantity) values (?,?,?,?,?) `;
 

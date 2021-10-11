@@ -77,8 +77,9 @@ exports.insertOrder = async (order) => {
     let OrderItemresponse = [];
     let OrderId;
     let OrderItemsId;
+    console.log(order_idResponse);
 
-    if (order_idResponse.length == 0) {
+    if (order_idResponse.length === 0) {
       let Orderresponse = await pool.query(queries.insertOrder, [
         order.customer_id,
         order.restaurant_id,
