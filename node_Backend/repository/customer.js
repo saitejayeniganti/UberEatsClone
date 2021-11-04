@@ -1,13 +1,19 @@
 const pool = require("../database/dbConnection");
+const customerSchema = require("../database/schema/customer").createModel();
+const addressSchema = require("../database/schema/address").createModel();
+const dishSchema = require("../database/schema/dish").createModel();
+const favoriteSchema = require("../database/schema/favorite").createModel();
+const orderSchema = require("../database/schema/order").createModel();
+const orderItemSchema = require("../database/schema/orderItem").createModel();
+const restaurantSchema = require("../database/schema/restaurant").createModel();
 const queries = require("../queries/customer");
 exports.signup = async (customer) => {
   try {
-    let response = await pool.query(queries.insertCustomer, [
-      customer.name,
-      customer.email_id,
-      customer.password,
-    ]);
-    return { status: 200, body: response.values };
+    let response = await queries.insertCustomer(customerSchema, customer, {
+      runValidators: false,
+    });
+
+    return { status: 200, body: response };
   } catch (error) {
     const message = error.message ? error.message : "Internal Server Error";
     const code = error.statusCode ? error.statusCode : 500;
@@ -15,37 +21,23 @@ exports.signup = async (customer) => {
   }
 };
 
-exports.signupCallback = (customer, callback) => {
-  try {
-    pool.query(
-      queries.insertCustomer,
-      [customer.email_id, customer.mobile, customer.password],
-      (error, result) => {
-        callback(error, result);
-      }
-    );
-  } catch (err) {
-    callback(err);
-  }
-};
+// exports.signupCallback = (customer, callback) => {
+//   try {
+//     pool.query(
+//       queries.insertCustomer,
+//       [customer.email_id, customer.mobile, customer.password],
+//       (error, result) => {
+//         callback(error, result);
+//       }
+//     );
+//   } catch (err) {
+//     callback(err);
+//   }
+// };
 
 exports.updateCustomer = async (customer) => {
   try {
-    let response = await pool.query(queries.updateCustomer, [
-      customer.name,
-      customer.email_id,
-      customer.mobile,
-      customer.city,
-      customer.state,
-      customer.country,
-      customer.nick_name,
-      customer.about,
-      customer.image_url,
-      customer.address,
-      customer.latitude,
-      customer.longitude,
-      customer.id,
-    ]);
+    let response = await queries.updateCustomer(customerSchema, customer);
     return { status: 200, body: response.values };
   } catch (error) {
     console.log(error);
@@ -55,118 +47,25 @@ exports.updateCustomer = async (customer) => {
   }
 };
 
-exports.logincallback = (customer, callback) => {
+exports.logincallback = async (customer) => {
   try {
-    pool.query(
-      queries.loginCustomer,
-      [customer.email_id, customer.password],
-      (error, result) => {
-        callback(error, result[0]);
-      }
-    );
-  } catch (err) {
-    callback(err);
-  }
-};
+    let response = await queries.loginCustomer(customerSchema, customer, {
+      runValidators: false,
+    });
 
-exports.insertOrder = async (order) => {
-  try {
-    let order_idResponse = await pool.query(queries.findOrder, [
-      order.customer_id,
-    ]);
-    let OrderItemresponse = [];
-    let OrderId;
-    let OrderItemsId;
-    console.log(order_idResponse);
-
-    if (order_idResponse.length === 0) {
-      let Orderresponse = await pool.query(queries.insertOrder, [
-        order.customer_id,
-        order.restaurant_id,
-        order.price,
-        order.delivery_type,
-        order.order_status,
-      ]);
-      OrderId = Orderresponse.insertId;
-
-      let checkOrderPresent = await pool.query(queries.checkOrderPresent, [
-        order.orderItemsId,
-
-        order.dishId,
-      ]);
-
-      if (checkOrderPresent.length === 0) {
-        OrderItemresponse = await pool.query(queries.insertOrderItem, [
-          Orderresponse.insertId,
-          order.customer_id,
-          order.restaurant_id,
-          order.dishId,
-          order.quantity,
-        ]);
-      } else {
-        OrderItemresponse = await pool.query(queries.updateOrderItem, [
-          order.quantity,
-          Orderresponse.insertId,
-          order.dishId,
-        ]);
-      }
-      // OrderItemsId = OrderItemresponse.insertId;
-
-      let priceResponse = await pool.query(queries.calculatePrice, [
-        Orderresponse.insertId,
-        Orderresponse.insertId,
-      ]);
-    } else {
-      let checkOrderPresent = await pool.query(queries.checkOrderPresent, [
-        order_idResponse[0].id,
-        order.dishId,
-      ]);
-
-      if (checkOrderPresent.length === 0) {
-        OrderItemresponse = await pool.query(queries.insertOrderItem, [
-          order_idResponse[0].id,
-          order.customer_id,
-          order.restaurant_id,
-          order.dishId,
-          order.quantity,
-        ]);
-      } else {
-        OrderItemresponse = await pool.query(queries.updateOrderItem, [
-          order.quantity,
-          order_idResponse[0].id,
-          order.dishId,
-        ]);
-      }
-      OrderId = order_idResponse[0].id;
-
-      // OrderItemsId = OrderItemresponse.insertId;
-      let priceResponse = await pool.query(queries.calculatePrice, [
-        order_idResponse[0].id,
-        order_idResponse[0].id,
-      ]);
-    }
-
-    return { status: 200, body: { id: OrderId } };
+    return { status: 200, body: response };
   } catch (error) {
-    console.log(error);
     const message = error.message ? error.message : "Internal Server Error";
     const code = error.statusCode ? error.statusCode : 500;
     return { status: code, body: { message } };
   }
 };
+//***************//***************//***************//***************//***************//***************//***************//***************//***************
+exports.insertOrder = async (order) => {};
 
 exports.updateOrder = async (order) => {
   try {
-    let response = await pool.query(queries.updateOrder, [
-      order.customer_id,
-      order.restaurant_id,
-      order.price,
-      order.order_date,
-      order.delivery_type,
-      order.order_status,
-      order.id,
-    ]);
-
+    let response = await queries.updateOrder(orderSchema, order);
     return { status: 200, body: response };
   } catch (error) {
     console.log(error);
@@ -178,11 +77,7 @@ exports.updateOrder = async (order) => {
 
 exports.updateOrderStatus = async (order) => {
   try {
-    let response = await pool.query(queries.updateOrderStatus, [
-      order.order_status,
-      order.id,
-    ]);
-
+    let response = await queries.updateOrderStatus(orderSchema, order);
     return { status: 200, body: response };
   } catch (error) {
     console.log(error);
@@ -195,11 +90,7 @@ exports.updateOrderStatus = async (order) => {
 //*********************GET_CUSTOMER_BY_USERNAME******************** */
 exports.getCustomerByUsername = async (params) => {
   try {
-    let response = await pool.query(queries.getCustomerByUsername, [
-      params.email_id,
-      params.email_id,
-    ]);
-
+    let response = await queries.getCustomerByUsername(customerSchema, params);
     return { status: 200, body: response[0] };
   } catch (error) {
     console.log(error);
@@ -212,7 +103,7 @@ exports.getCustomerByUsername = async (params) => {
 //*********************GET_CUSTOMER_BY_ID******************** */
 exports.getCustomerByID = async (params) => {
   try {
-    let response = await pool.query(queries.getCustomerByID, [params.id]);
+    let response = await queries.getCustomerByID(customerSchema, params.id);
 
     return { status: 200, body: response[0] };
   } catch (error) {
@@ -223,10 +114,10 @@ exports.getCustomerByID = async (params) => {
   }
 };
 
-//*********************GET_ORDERS******************** */
+//*********************GET_ORDERS******************** */**********************************************************************************************
 exports.getOrdersForCustomer = async (params) => {
   try {
-    let response = await pool.query(queries.getOrdersForCustomer, [params.id]);
+    let response = await getOrdersForCustomer(params.id);
 
     return { status: 200, body: response };
   } catch (error) {
@@ -237,7 +128,7 @@ exports.getOrdersForCustomer = async (params) => {
   }
 };
 
-//*********************GET_FAVORITES******************** */
+//*********************GET_FAVORITES******************** */****************************************************************************************** */
 exports.getFavoritesForCustomer = async (body) => {
   try {
     let response = await pool.query(queries.getFavoritesForCustomer, [
@@ -259,10 +150,7 @@ exports.getFavoritesForCustomer = async (body) => {
 //*********************MAKE_FAVORITE******************** */
 exports.makeFavoriteCustomer = async (body) => {
   try {
-    let response = await pool.query(queries.makeFavoriteCustomer, [
-      body.customer_id,
-      body.restaurant_id,
-    ]);
+    let response = await makeFavoriteCustomer(favoriteSchema, body);
 
     return { status: 200, body: response };
   } catch (error) {
@@ -276,10 +164,7 @@ exports.makeFavoriteCustomer = async (body) => {
 //*********************MAKE_UN_FAVORITE******************** */
 exports.makeUnFavoriteCustomer = async (body) => {
   try {
-    let response = await pool.query(queries.makeUnFavoriteCustomer, [
-      body.customer_id,
-      body.restaurant_id,
-    ]);
+    let response = await makeUnFavoriteCustomer(favoriteSchema, body);
 
     return { status: 200, body: response };
   } catch (error) {
@@ -290,24 +175,24 @@ exports.makeUnFavoriteCustomer = async (body) => {
   }
 };
 
-//*********************MAKE_UN_FAVORITE******************** */
-exports.makeUnFavoriteCustomer = async (body) => {
-  try {
-    let response = await pool.query(queries.makeUnFavoriteCustomer, [
-      body.customer_id,
-      body.restaurant_id,
-    ]);
+// //*********************MAKE_UN_FAVORITE******************** */
+// exports.makeUnFavoriteCustomer = async (body) => {
+//   try {
+//     let response = await pool.query(queries.makeUnFavoriteCustomer, [
+//       body.customer_id,
+//       body.restaurant_id,
+//     ]);
 
-    return { status: 200, body: response };
-  } catch (error) {
-    console.log(error);
-    const message = error.message ? error.message : "Internal Server Error";
-    const code = error.statusCode ? error.statusCode : 500;
-    return { status: code, body: { message } };
-  }
-};
+//     return { status: 200, body: response };
+//   } catch (error) {
+//     console.log(error);
+//     const message = error.message ? error.message : "Internal Server Error";
+//     const code = error.statusCode ? error.statusCode : 500;
+//     return { status: code, body: { message } };
+//   }
+// };
 
-//*********************GetCart******************** */
+//*********************GetCart******************** */************************************************************************************************************ */
 exports.getCart = async (query) => {
   try {
     let response = await pool.query(queries.getCart, [query.id]);
@@ -321,7 +206,7 @@ exports.getCart = async (query) => {
   }
 };
 
-//*********************GetCheckoutCart******************** */
+//*********************GetCheckoutCart******************** */************************************************************************************************ */
 exports.getCheckoutCart = async (query) => {
   try {
     let response = await pool.query(queries.getCheckoutCart, [query.id]);
@@ -339,12 +224,7 @@ exports.getCheckoutCart = async (query) => {
 //*********************ADD ADDRESS******************** */
 exports.addAddress = async (body) => {
   try {
-    let response = await pool.query(queries.addAddress, [
-      body.id,
-      body.address,
-      body.latitude,
-      body.longitude,
-    ]);
+    let response = await addAddress(addressSchema, body);
 
     return { status: 200, body: response };
   } catch (error) {
@@ -358,8 +238,9 @@ exports.addAddress = async (body) => {
 //*********************DELETE_CART******************** */
 exports.deleteCart = async (body) => {
   try {
-    let r1 = await pool.query(queries.deleteOrderItems, [body.id]);
-    let r2 = await pool.query(queries.deleteOrders, [body.id]);
+    let r1 = await queries.deleteOrderItems(orderItemSchema, body);
+
+    let r2 = await queries.deleteOrderItems(orderSchema, body);
 
     return { status: 200, body: r2 };
   } catch (error) {

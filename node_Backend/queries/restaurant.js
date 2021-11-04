@@ -1,37 +1,111 @@
-exports.insertRestaurant =
-  "insert into Restaurents (name,email_id,password,location,suite,latitude,longitude) values (?,?,?,?,?,?,?)";
+const mongoose = require("mongoose");
+const customerSchema = require("../database/schema/customer").createModel();
+const addressSchema = require("../database/schema/address").createModel();
+const dishSchema = require("../database/schema/dish").createModel();
+const favoriteSchema = require("../database/schema/favorite").createModel();
+const orderSchema = require("../database/schema/order").createModel();
+const orderItemSchema = require("../database/schema/orderItem").createModel();
+const restaurantSchema = require("../database/schema/restaurant").createModel();
 
-exports.insertDish =
-  "insert into Dishes (restaurent_id,name,category,cuisine,price,main_ingredients,description,type,image_url) values (?,?,?,?,?,?,?,?,?)";
+exports.insertRestaurant = async (modelObject, data) => {
+  try {
+    let model = new modelObject(data);
+    return await model.save();
+  } catch (error) {
+    console.log("Error while saving data:" + error);
+    throw new Error(error);
+  }
+};
 
-exports.updateRestaurant =
-  "update Restaurents set name=?,location=?,delivery_type=?,contact=?,star_time=?,end_time=?,suite=?,image_url=? where id=?";
+exports.loginRestaurant = async (modelObject, data) => {
+  try {
+    return await modelObject.find({
+      $and: [{ email_id: data.email_id }, { password: data.email_id }],
+    });
+  } catch (error) {
+    console.log("Error while saving data:" + error);
+    throw new Error(error);
+  }
+};
 
-exports.loginRestaurant =
-  "select Restaurents.id,Restaurents.name,location,suite,email_id,password,image_url,star_time,end_time from Restaurents where email_id=? and password=?";
+exports.getRestaurantByUsername = async (modelObject, data) => {
+  try {
+    return await modelObject.find({ email_id: data.email_id });
+  } catch (error) {
+    console.log("Error while saving data:" + error);
+    throw new Error(error);
+  }
+};
 
-exports.getDishes =
-  "select Dishes.restaurent_id,Dishes.name,Dishes.category,Dishes.cuisine,Dishes.price,Dishes.main_ingredients,Dishes.description,Dishes.type,Dishes.id,Dishes.image_url from Dishes where restaurent_id=?";
+exports.getRestaurantByID = async (modelObject, data) => {
+  try {
+    return await modelObject.find({ _id: data.id });
+  } catch (error) {
+    console.log("Error while saving data:" + error);
+    throw new Error(error);
+  }
+};
 
-exports.getOrdersForRestaurant =
-  "select Orders.id,Orders.customer_id,Orders.restaurent_id,Orders.price,Dishes.price as dish_price,Dishes.name as dish_name, Orders.order_date,Orders.delivery_type,Orders.order_status,Customer.name,Customer.email_id,Customer.address,Order_items.dish_id,Order_items.quantity from Orders inner join Customer on Customer.id=Orders.Customer_id inner join Order_items on Orders.id=Order_items.order_id inner join Dishes on Order_items.dish_id=Dishes.id where Orders.restaurent_id=? order by FIELD(Orders.order_status,'Placed','Confirmed','ReadyToBePicked','Delivered' ), Orders.order_date desc";
+exports.updateRestaurant = async (modelObject, data) => {
+  try {
+    return await modelObject.findOneAndUpdate(
+      mongoose.Types.ObjectId(data.id),
+      data
+    );
+  } catch (error) {
+    console.log("Error while saving data:" + error);
+    throw new Error(error);
+  }
+};
 
-exports.getRestaurantByUsername =
-  "select Restaurents.id,Restaurents.name,location,suite,email_id,password,image_url,star_time,end_time,password from Restaurents where email_id=?";
+exports.insertDish = async (modelObject, data) => {
+  try {
+    let model = new modelObject(data);
+    return await model.save();
+  } catch (error) {
+    console.log("Error while saving data:" + error);
+    throw new Error(error);
+  }
+};
 
-exports.getRestaurantByID =
-  "select Restaurents.id,Restaurents.name,location,suite,email_id,password,image_url,star_time,end_time,password from Restaurents where id=?";
+exports.getDishes = async (modelObject, data) => {
+  try {
+    return await modelObject.find({ restaurant_id: data.id });
+  } catch (error) {
+    console.log("Error while saving data:" + error);
+    throw new Error(error);
+  }
+};
 
-exports.getRestaurantsByLocation = `SELECT Restaurents.id,Restaurents.name,email_id,password,location,suite,delivery_type,contact, 
-star_time,end_time,Restaurents.image_url,latitude,longitude,Favorites.id as favorite, (6371 * acos( cos( radians(?) ) * 
-cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) * sin( radians( latitude ) )) ) 
-as distance from Restaurents left join Favorites on Restaurents.id=Favorites.restaurent_id 
-where (  Favorites.customer_id=? ||  Favorites.customer_id is null ) 
-and Restaurents.id in (select restaurent_id from Dishes where ""=? or Dishes.type=?   ) 
-and ( ""=? or Restaurents.delivery_type =? )
-order by distance asc`;
+exports.getDishDetails = async (modelObject, data) => {
+  try {
+    return await modelObject.find({ _id: data.id });
+  } catch (error) {
+    console.log("Error while saving data:" + error);
+    throw new Error(error);
+  }
+};
 
-exports.getDishDetails = "select * from Dishes where id=?";
+exports.updateDish = async (modelObject, data) => {
+  try {
+    return await modelObject.findOneAndUpdate(
+      mongoose.Types.ObjectId(data.id),
+      data
+    );
+  } catch (error) {
+    console.log("Error while saving data:" + error);
+    throw new Error(error);
+  }
+};
 
-exports.updateDish =
-  "update Dishes set restaurent_id=?,name=?,category=?,cuisine=?,price=?,main_ingredients=?,description=?,type=?,image_url=? where id=?";
+exports.getOrdersForRestaurant = async (id) => {
+  try {
+    return await orderItemSchema
+      .find({ order_id: id })
+      .populate("restaurent_id")
+      .populate("dish_id");
+  } catch (error) {
+    console.log("Error while saving data:" + error);
+    throw new Error(error);
+  }
+};

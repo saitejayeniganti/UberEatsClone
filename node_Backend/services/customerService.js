@@ -7,7 +7,7 @@ exports.signup = async (request) => {
 
 exports.signupcallback = (request, callback) => {
   try {
-    customerRepo.signupCallback(request.body, (error, result) => {
+    customerRepo.signup(request.body, (error, result) => {
       if (error) {
         callback(error);
       } else {
@@ -19,18 +19,9 @@ exports.signupcallback = (request, callback) => {
   }
 };
 
-exports.logincallback = (request, callback) => {
-  try {
-    customerRepo.logincallback(request.body, (error, result) => {
-      if (error) {
-        callback(error);
-      } else {
-        callback(error, result);
-      }
-    });
-  } catch (err) {
-    callback(err);
-  }
+exports.logincallback = async (request) => {
+  let response = await customerRepo.logincallback(request.body);
+  return response;
 };
 
 //*********************GET_CUSTOMER_DETAILS_BY_USERNAME******************** */

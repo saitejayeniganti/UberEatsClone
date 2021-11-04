@@ -1,52 +1,34 @@
-const mysql = require("mysql");
-const util = require("util");
+const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config();
-const pool = mysql.createPool({
-  connectionLimit: 10,
-  host: "ubereatsdb273.ctmje2cow18t.us-east-2.rds.amazonaws.com",
-  user: "admin",
-  password: "password",
-  database: "UberEats",
-});
 
-// let dbConfig = {
-//   host: "ubereatsdb273.ctmje2cow18t.us-east-2.rds.amazonaws.com",
-//   user: "admin",
-//   password: "password",
-//   database: "UberEats",
-// };
-// exports.sqlConnection = function () {
-//   var mySqlConnection;
-//   if (mySqlConnection == null) {
-//     mySqlConnection = mysql.createConnection(dbConfig);
-//   }
-//   mySqlConnection.connect(function (err) {
-//     if (err) {
-//       console.log("Error connecting to database." + err.stack);
-//       return null;
-//     }
-//   });
-//   console.log("Successfully connected to database.");
-//   return mySqlConnection;
-// };
-// index.connection.query = util.promisify(index.connection.query);
+const createConnection = async function () {
+  const options = {
+    autoIndex: false,
+    // maxPoolSize: 50,
+    connectTimeoutMS: 10000,
+    // family: 4,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  };
 
-pool.getConnection((error, connection) => {
-  if (error) {
-    if (error.code === "ECONNREFUSED") {
-      console.error("Connection refused by Database");
-    }
-    if (error.code === "ER_CON_COUNT_ERROR") {
-      console.error("Connection limit reached for Database");
-    }
-    if (error.code === "PROTOCOL_CONNECTION_LOST") {
-      console.error("Connection was closed.");
-    }
+  if (!process.env.MONGO_CONN_URL) {
+    console.log("Environment variables not set");
+    throw "Error While connecting to DB";
   }
-  if (connection) connection.release();
-});
+  const mongo_url = process.env.MONGO_CONN_URL;
+  await mongoose
+    .connect(mongo_url, options)
+    .then(() => console.log("Connected to DB"))
+    .catch((err) => {
+      console.log("Failed to connect to DB");
+      console.log(err);
+    });
+};
 
-pool.query = util.promisify(pool.query);
+const closeConnection = async function () {
+  mongoose.connection.close();
+};
 
-module.exports = pool;
+module.exports.createConnection = createConnection;
+module.exports.closeConnection = closeConnection;

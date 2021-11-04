@@ -5,38 +5,15 @@ exports.signup = async (request) => {
   return response;
 };
 
-exports.signupcallback = (request, callback) => {
-  try {
-    restaurantRepo.signupCallback(request.body, (error, result) => {
-      if (error) {
-        callback(error);
-      } else {
-        callback(error, result.insertId);
-      }
-    });
-  } catch (err) {
-    callback(err);
-  }
+exports.login = async (request) => {
+  let response = await restaurantRepo.login(request.body);
+  return response;
 };
 
 //*********************GET_RESTAURANT_DETAILS_BY_USERNAME******************** */
 exports.getRestaurantByUsername = async (request) => {
   let response = await restaurantRepo.getRestaurantByUsername(request.query);
   return response;
-};
-
-exports.logincallback = (request, callback) => {
-  try {
-    restaurantRepo.logincallback(request.body, (error, result) => {
-      if (error) {
-        callback(error);
-      } else {
-        callback(error, result);
-      }
-    });
-  } catch (err) {
-    callback(err);
-  }
 };
 
 //*********************GET_RESTAURANT_DETAILS_BY_ID******************** */

@@ -1,15 +1,24 @@
 //const index = require("../index");
 const pool = require("../database/dbConnection");
+const customerSchema = require("../database/schema/customer").createModel();
+const addressSchema = require("../database/schema/address").createModel();
+const dishSchema = require("../database/schema/dish").createModel();
+const favoriteSchema = require("../database/schema/favorite").createModel();
+const orderSchema = require("../database/schema/order").createModel();
+const orderItemSchema = require("../database/schema/orderItem").createModel();
+const restaurantSchema = require("../database/schema/restaurant").createModel();
 const queries = require("../queries/restaurant");
 
 exports.signup = async (restaurant) => {
   try {
-    let response = await pool.query(queries.insertRestaurant, [
-      restaurant.name,
-      restaurant.email_id,
-      restaurant.password,
-      restaurant.location,
-    ]);
+    let response = await queries.insertRestaurant(restaurantSchema, restaurant);
+
+    // pool.query(queries.insertRestaurant, [
+    //   restaurant.name,
+    //   restaurant.email_id,
+    //   restaurant.password,
+    //   restaurant.location,
+    // ]);
     return { status: 200, body: response.values };
   } catch (error) {
     const message = error.message ? error.message : "Internal Server Error";
@@ -18,55 +27,21 @@ exports.signup = async (restaurant) => {
   }
 };
 
-exports.signupCallback = (restaurant, callback) => {
+exports.login = async (restaurant) => {
   try {
-    pool.query(
-      queries.insertRestaurant,
-      [
-        restaurant.name,
-        restaurant.email,
-        restaurant.password,
-        restaurant.address,
-        restaurant.suite,
-        restaurant.latitude,
-        restaurant.longitude,
-      ],
-      (error, result) => {
-        callback(error, result);
-      }
-    );
-  } catch (err) {
-    console.log(err);
-  }
-};
+    let response = await queries.loginRestaurant(restaurantSchema, restaurant);
 
-exports.logincallback = (restaurant, callback) => {
-  try {
-    pool.query(
-      queries.loginRestaurant,
-      [restaurant.email_id, restaurant.password],
-      (error, result) => {
-        callback(error, result[0]);
-      }
-    );
-  } catch (err) {
-    callback(err);
+    return { status: 200, body: response.values };
+  } catch (error) {
+    const message = error.message ? error.message : "Internal Server Error";
+    const code = error.statusCode ? error.statusCode : 500;
+    return { status: code, body: { message } };
   }
 };
 
 exports.updateRestaurant = async (restaurant) => {
   try {
-    let response = await pool.query(queries.updateRestaurant, [
-      restaurant.name,
-      restaurant.location,
-      restaurant.delivery_type,
-      restaurant.contact,
-      restaurant.star_time,
-      restaurant.end_time,
-      restaurant.suite,
-      restaurant.image_url,
-      restaurant.id,
-    ]);
+    let response = await queries.updateRestaurant(restaurantSchema, restaurant);
     return { status: 200, body: response.values };
   } catch (error) {
     console.log(error);
@@ -79,9 +54,10 @@ exports.updateRestaurant = async (restaurant) => {
 //*********************GET_RESTAURANT_BY_USERNAME******************** */
 exports.getRestaurantByUsername = async (params) => {
   try {
-    let response = await pool.query(queries.getRestaurantByUsername, [
-      params.email_id,
-    ]);
+    let response = await queries.getRestaurantByUsername(
+      restaurantSchema,
+      params
+    );
     return { status: 200, body: response[0] };
   } catch (error) {
     // console.log(error);
@@ -94,8 +70,7 @@ exports.getRestaurantByUsername = async (params) => {
 //*********************GET_RESTAURANT_BY_ID******************** */
 exports.getRestaurantByID = async (params) => {
   try {
-    let response = await pool.query(queries.getRestaurantByID, [params.id]);
-    return { status: 200, body: response[0] };
+    let response = await queries.getRestaurantByID(restaurantSchema, params);
   } catch (error) {
     // console.log(error);
     const message = error.message ? error.message : "Internal Server Error";
@@ -107,17 +82,19 @@ exports.getRestaurantByID = async (params) => {
 exports.insertDish = async (dish) => {
   try {
     // console.log(dish);
-    let response = await pool.query(queries.insertDish, [
-      dish.restaurant_id,
-      dish.name,
-      dish.category,
-      dish.cuisine,
-      dish.price,
-      dish.main_ingredients,
-      dish.description,
-      dish.type,
-      dish.url,
-    ]);
+    let response = await queries.insertDish(dishSchema, dish);
+
+    // pool.query(queries.insertDish, [
+    //   dish.restaurant_id,
+    //   dish.name,
+    //   dish.category,
+    //   dish.cuisine,
+    //   dish.price,
+    //   dish.main_ingredients,
+    //   dish.description,
+    //   dish.type,
+    //   dish.url,
+    // ]);
     return { status: 200, body: response.values };
   } catch (error) {
     console.log(error);
@@ -130,8 +107,7 @@ exports.insertDish = async (dish) => {
 //*********************GET_DISHES******************** */
 exports.getDishes = async (params) => {
   try {
-    let response = await pool.query(queries.getDishes, [params.id]);
-
+    let response = await queries.getDishes(dishSchema, params.id);
     return { status: 200, body: response };
   } catch (error) {
     console.log(error);
@@ -144,9 +120,11 @@ exports.getDishes = async (params) => {
 //*********************GET_ORDERS******************** */
 exports.getOrdersForRestaurant = async (params) => {
   try {
-    let response = await pool.query(queries.getOrdersForRestaurant, [
-      params.id,
-    ]);
+    let response = await queries.getOrdersForRestaurant(params.id);
+
+    // pool.query(queries.getOrdersForRestaurant, [
+    //   params.id,
+    // ]);
 
     return { status: 200, body: response };
   } catch (error) {
@@ -183,7 +161,7 @@ exports.getRestaurantsByLocation = async (latlng) => {
 //**********************GET_DISH_DETAILS**************/
 exports.getDishDetails = async (data) => {
   try {
-    let response = await pool.query(queries.getDishDetails, [data.id]);
+    let response = await queries.getDishDetails(dishSchema, data);
 
     return { status: 200, body: response };
   } catch (error) {
@@ -197,19 +175,7 @@ exports.getDishDetails = async (data) => {
 //**********************Update_DISH**************/
 exports.updateDish = async (data) => {
   try {
-    let response = await pool.query(queries.updateDish, [
-      data.restaurant_id,
-      data.name,
-      data.category,
-      data.cuisine,
-      data.price,
-      data.main_ingredients,
-      data.description,
-      data.type,
-      data.image_url,
-      data.id,
-    ]);
-
+    let response = await queries.updateDish(dishSchema, data);
     return { status: 200, body: response };
   } catch (error) {
     console.log(error);
