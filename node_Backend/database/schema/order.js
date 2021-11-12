@@ -21,7 +21,7 @@ const orderSchema = new Schema(
     price: { type: Number, required: false },
     order_date: { type: Date, required: false },
     delivery_type: { type: String, required: false },
-    order_status: { type: Number, required: false },
+    order_status: { type: String, required: false },
   },
   { _id: false },
   { collection: "order" }

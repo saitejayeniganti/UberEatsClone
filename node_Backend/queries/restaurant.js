@@ -20,7 +20,7 @@ exports.insertRestaurant = async (modelObject, data) => {
 exports.loginRestaurant = async (modelObject, data) => {
   try {
     return await modelObject.find({
-      $and: [{ email_id: data.email_id }, { password: data.email_id }],
+      $and: [{ email_id: data.email_id }, { password: data.password }],
     });
   } catch (error) {
     console.log("Error while saving data:" + error);
@@ -70,7 +70,9 @@ exports.insertDish = async (modelObject, data) => {
 
 exports.getDishes = async (modelObject, data) => {
   try {
-    return await modelObject.find({ restaurant_id: data.id });
+    return await modelObject
+      .find({ restaurant_id: data })
+      .populate("restaurent_id");
   } catch (error) {
     console.log("Error while saving data:" + error);
     throw new Error(error);

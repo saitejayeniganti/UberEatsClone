@@ -5,19 +5,19 @@ exports.signup = async (request) => {
   return response;
 };
 
-exports.signupcallback = (request, callback) => {
-  try {
-    customerRepo.signup(request.body, (error, result) => {
-      if (error) {
-        callback(error);
-      } else {
-        callback(error, result.insertId);
-      }
-    });
-  } catch (err) {
-    callback(err);
-  }
-};
+// exports.signupcallback = (request, callback) => {
+//   try {
+//     customerRepo.signup(request.body, (error, result) => {
+//       if (error) {
+//         callback(error);
+//       } else {
+//         callback(error, result.insertId);
+//       }
+//     });
+//   } catch (err) {
+//     callback(err);
+//   }
+// };
 
 exports.logincallback = async (request) => {
   let response = await customerRepo.logincallback(request.body);

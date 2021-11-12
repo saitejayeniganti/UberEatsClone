@@ -19,7 +19,10 @@ exports.signup = async (restaurant) => {
     //   restaurant.password,
     //   restaurant.location,
     // ]);
-    return { status: 200, body: response.values };
+
+    let res = {};
+    res.result = response._id;
+    return { status: 200, body: res };
   } catch (error) {
     const message = error.message ? error.message : "Internal Server Error";
     const code = error.statusCode ? error.statusCode : 500;
@@ -30,8 +33,18 @@ exports.signup = async (restaurant) => {
 exports.login = async (restaurant) => {
   try {
     let response = await queries.loginRestaurant(restaurantSchema, restaurant);
+    let result = {};
+    result.id = response[0]._id;
+    result.name = response[0].name;
+    result.location = response[0].location;
+    result.suite = response[0].suite;
+    result.email_id = response[0].email_id;
+    result.password = response[0].password;
+    result.image_url = response[0].image_url;
+    result.star_time = response[0].start_time;
+    result.end_time = response[0].end_time;
 
-    return { status: 200, body: response.values };
+    return { status: 200, body: { result } };
   } catch (error) {
     const message = error.message ? error.message : "Internal Server Error";
     const code = error.statusCode ? error.statusCode : 500;
@@ -42,7 +55,21 @@ exports.login = async (restaurant) => {
 exports.updateRestaurant = async (restaurant) => {
   try {
     let response = await queries.updateRestaurant(restaurantSchema, restaurant);
-    return { status: 200, body: response.values };
+
+    let result = {};
+    result.id = response._id;
+    result.name = response.name;
+    result.location = response.location;
+    result.suite = response.suite;
+    result.email_id = response.email_id;
+    result.password = response.password;
+    result.image_url = response.image_url;
+    result.star_time = response.start_time;
+    result.end_time = response.end_time;
+    result.contact = response.contact;
+    result.delivery_type = response.delivery_type;
+
+    return { status: 200, body: { result } };
   } catch (error) {
     console.log(error);
     const message = error.message ? error.message : "Internal Server Error";
@@ -58,7 +85,18 @@ exports.getRestaurantByUsername = async (params) => {
       restaurantSchema,
       params
     );
-    return { status: 200, body: response[0] };
+    let result = {};
+    result.id = response[0]._id;
+    result.name = response[0].name;
+    result.location = response[0].location;
+    result.suite = response[0].suite;
+    result.email_id = response[0].email_id;
+    result.password = response[0].password;
+    result.image_url = response[0].image_url;
+    result.star_time = response[0].start_time;
+    result.end_time = response[0].end_time;
+
+    return { status: 200, body: result };
   } catch (error) {
     // console.log(error);
     const message = error.message ? error.message : "Internal Server Error";
@@ -71,8 +109,19 @@ exports.getRestaurantByUsername = async (params) => {
 exports.getRestaurantByID = async (params) => {
   try {
     let response = await queries.getRestaurantByID(restaurantSchema, params);
+    let result = {};
+    result.id = response[0]._id;
+    result.name = response[0].name;
+    result.location = response[0].location;
+    result.suite = response[0].suite;
+    result.email_id = response[0].email_id;
+    result.password = response[0].password;
+    result.image_url = response[0].image_url;
+    result.star_time = response[0].start_time;
+    result.end_time = response[0].end_time;
+
+    return { status: 200, body: result };
   } catch (error) {
-    // console.log(error);
     const message = error.message ? error.message : "Internal Server Error";
     const code = error.statusCode ? error.statusCode : 500;
     return { status: code, body: { message } };
@@ -81,7 +130,6 @@ exports.getRestaurantByID = async (params) => {
 
 exports.insertDish = async (dish) => {
   try {
-    // console.log(dish);
     let response = await queries.insertDish(dishSchema, dish);
 
     // pool.query(queries.insertDish, [
@@ -108,7 +156,25 @@ exports.insertDish = async (dish) => {
 exports.getDishes = async (params) => {
   try {
     let response = await queries.getDishes(dishSchema, params.id);
-    return { status: 200, body: response };
+
+    let result = [];
+
+    for (let dish of response) {
+      let res = {};
+      res.restaurent_id = dish.restaurent_id._id;
+      res.name = dish.name;
+      res.category = dish.category;
+      res.cuisine = dish.cuisine;
+      res.price = dish.price;
+      res.main_ingredients = dish.main_ingredients;
+      res.description = dish.description;
+      res.type = dish.type;
+      res.id = dish._id;
+      res.image_url = dish.image_url;
+      result.push(res);
+    }
+
+    return { status: 200, body: result };
   } catch (error) {
     console.log(error);
     const message = error.message ? error.message : "Internal Server Error";
@@ -121,11 +187,6 @@ exports.getDishes = async (params) => {
 exports.getOrdersForRestaurant = async (params) => {
   try {
     let response = await queries.getOrdersForRestaurant(params.id);
-
-    // pool.query(queries.getOrdersForRestaurant, [
-    //   params.id,
-    // ]);
-
     return { status: 200, body: response };
   } catch (error) {
     console.log(error);
@@ -161,9 +222,20 @@ exports.getRestaurantsByLocation = async (latlng) => {
 //**********************GET_DISH_DETAILS**************/
 exports.getDishDetails = async (data) => {
   try {
+    console.log(data);
     let response = await queries.getDishDetails(dishSchema, data);
-
-    return { status: 200, body: response };
+    let result = {};
+    result.id = response[0]._id;
+    (result.resutaurent_id = response[0].restaurent_id),
+      (result.name = response[0].name),
+      (result.category = response[0].category),
+      (result.cuisine = response[0].cuisine),
+      (result.price = response[0].price),
+      (result.main_ingredients = response[0].main_ingredients),
+      (result.description = response[0].description),
+      (result.type = response[0].type),
+      (result.image_url = response[0].image_url);
+    return { status: 200, body: [result] };
   } catch (error) {
     console.log(error);
     const message = error.message ? error.message : "Internal Server Error";
@@ -176,6 +248,7 @@ exports.getDishDetails = async (data) => {
 exports.updateDish = async (data) => {
   try {
     let response = await queries.updateDish(dishSchema, data);
+    console.log(response);
     return { status: 200, body: response };
   } catch (error) {
     console.log(error);

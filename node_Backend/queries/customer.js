@@ -147,7 +147,13 @@ exports.deleteOrderItems = async (modelObject, data) => {
 
 exports.findOrder = async (modelObject, data) => {
   try {
-    return await modelObject.find({ _id: mongoose.Types.ObjectId(data) });
+    console.log(data.customer_id);
+    return await modelObject.find({
+      $and: [
+        { customer_id: mongoose.Types.ObjectId(data.customer_id) },
+        { order_status: "In cart" },
+      ],
+    });
   } catch (error) {
     console.log("Error while saving data:" + error);
     throw new Error(error);

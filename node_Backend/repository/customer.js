@@ -12,28 +12,15 @@ exports.signup = async (customer) => {
     let response = await queries.insertCustomer(customerSchema, customer, {
       runValidators: false,
     });
-
-    return { status: 200, body: response };
+    let result = {};
+    result.result = response._id;
+    return { status: 200, body: result };
   } catch (error) {
     const message = error.message ? error.message : "Internal Server Error";
     const code = error.statusCode ? error.statusCode : 500;
     return { status: code, body: { message } };
   }
 };
-
-// exports.signupCallback = (customer, callback) => {
-//   try {
-//     pool.query(
-//       queries.insertCustomer,
-//       [customer.email_id, customer.mobile, customer.password],
-//       (error, result) => {
-//         callback(error, result);
-//       }
-//     );
-//   } catch (err) {
-//     callback(err);
-//   }
-// };
 
 exports.updateCustomer = async (customer) => {
   try {
@@ -52,8 +39,13 @@ exports.logincallback = async (customer) => {
     let response = await queries.loginCustomer(customerSchema, customer, {
       runValidators: false,
     });
-
-    return { status: 200, body: response };
+    console.log(response[0]);
+    let res = {};
+    let result = {};
+    result.id = response[0].id;
+    result.name = response[0].name;
+    res.result = result;
+    return { status: 200, body: res };
   } catch (error) {
     const message = error.message ? error.message : "Internal Server Error";
     const code = error.statusCode ? error.statusCode : 500;
@@ -61,7 +53,18 @@ exports.logincallback = async (customer) => {
   }
 };
 //***************//***************//***************//***************//***************//***************//***************//***************//***************
-exports.insertOrder = async (order) => {};
+exports.insertOrder = async (order) => {
+  try {
+    let orderFound = await queries.findOrder(orderSchema, order);
+
+    return { status: 200, body: response };
+  } catch (error) {
+    console.log(error);
+    const message = error.message ? error.message : "Internal Server Error";
+    const code = error.statusCode ? error.statusCode : 500;
+    return { status: code, body: { message } };
+  }
+};
 
 exports.updateOrder = async (order) => {
   try {
@@ -91,7 +94,24 @@ exports.updateOrderStatus = async (order) => {
 exports.getCustomerByUsername = async (params) => {
   try {
     let response = await queries.getCustomerByUsername(customerSchema, params);
-    return { status: 200, body: response[0] };
+
+    let res = {};
+    res.id = response[0]._id;
+    res.name = response[0].name;
+    res.mobile = response[0].mobile;
+    res.email_id = response[0].email_id;
+    res.password = response[0].password;
+    res.city = response[0].city;
+    res.state = response[0].state;
+    res.country = response[0].country;
+    res.address = response[0].address;
+    res.nick_name = response[0].nick_name;
+    res.about = response[0].about;
+    res.latitude = response[0].latitude;
+    res.longitude = response[0].longitude;
+    res.image_url = response[0].image_url;
+
+    return { status: 200, body: res };
   } catch (error) {
     console.log(error);
     const message = error.message ? error.message : "Internal Server Error";
@@ -104,8 +124,22 @@ exports.getCustomerByUsername = async (params) => {
 exports.getCustomerByID = async (params) => {
   try {
     let response = await queries.getCustomerByID(customerSchema, params.id);
-
-    return { status: 200, body: response[0] };
+    let res = {};
+    res.id = response[0]._id;
+    res.name = response[0].name;
+    res.mobile = response[0].mobile;
+    res.email_id = response[0].email_id;
+    res.password = response[0].password;
+    res.city = response[0].city;
+    res.state = response[0].state;
+    res.country = response[0].country;
+    res.address = response[0].address;
+    res.nick_name = response[0].nick_name;
+    res.about = response[0].about;
+    res.latitude = response[0].latitude;
+    res.longitude = response[0].longitude;
+    res.image_url = response[0].image_url;
+    return { status: 200, body: res };
   } catch (error) {
     console.log(error);
     const message = error.message ? error.message : "Internal Server Error";
