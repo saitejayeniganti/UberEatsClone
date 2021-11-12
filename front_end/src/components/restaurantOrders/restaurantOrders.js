@@ -303,7 +303,13 @@ class RestaurantOrders extends React.Component {
 
                 {/* <div className="col-md-2"></div> */}
                 {currentOrder[0].order_status == "Placed" ? (
-                  <div className="col-md-5" style={{ marginLeft: "50px" }}>
+                  <div
+                    className="col-md-5"
+                    style={{ marginLeft: "50px" }}
+                    onClick={() =>
+                      this.changeOrderStatus("Cancelled", currentOrder[0])
+                    }
+                  >
                     <button className="changeStatusBtn">Cancel</button>
                   </div>
                 ) : (
