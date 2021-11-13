@@ -25,6 +25,7 @@ class CustomerCheckout extends Component {
       selectedAddressError: "",
       openModel: false,
       redirectToHome: "",
+      instructions: "",
     };
   }
 
@@ -245,7 +246,7 @@ class CustomerCheckout extends Component {
     );
   };
 
-  placeOrder = () => {
+  placeOrder = (instructions) => {
     if (this.state.selectedAddress == "") {
       this.setState({ selectedAddressError: "Select an address" });
       return;
@@ -253,6 +254,7 @@ class CustomerCheckout extends Component {
     let details = {
       order_status: "Placed",
       id: this.state.items[0].order_Id,
+      instructions: instructions,
     };
     axios
       .put(
@@ -274,6 +276,14 @@ class CustomerCheckout extends Component {
             style={{ fontSize: "28px", fontWeight: "500", marginLeft: "30px" }}
           >
             Your Items
+          </div>
+          <div>
+            <input
+              className="txtbox"
+              style={{ marginLeft: "30px" }}
+              placeholder="Enter Order Instructions"
+              value={this.state.instructions}
+            ></input>
           </div>
 
           <div style={{ margin: "30px" }}>
@@ -320,7 +330,10 @@ class CustomerCheckout extends Component {
             </div>
           </div>
           <div style={{ marginLeft: "30px" }}>
-            <button className="placeOrderBtn" onClick={this.placeOrder}>
+            <button
+              className="placeOrderBtn"
+              onClick={() => this.placeOrder(this.state.instructions)}
+            >
               Place Order
             </button>
           </div>

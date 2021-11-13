@@ -9,9 +9,10 @@ import ubereatslogo from "../../Images/ubereatsLo.svg";
 import "./customerDrawer.css";
 import icon from "../../Images/icon.jpeg";
 import { connect } from "react-redux";
-import { addCartFromDB } from "../../redux/actions/index";
+import { addCart, addCartFromDB } from "../../redux/actions/index";
 import Modal from "@mui/material/Modal";
 import { Link } from "react-router-dom";
+import { ItemGroup } from "rc-menu";
 
 class CustomerSideBar extends Component {
   constructor(props) {
@@ -44,6 +45,82 @@ class CustomerSideBar extends Component {
     }
   }
 
+  addToCart = (item) => {
+    let orderDetails = {
+      customer_id: JSON.parse(sessionStorage.getItem("customerDetails")).id,
+      restaurant_id: item.restaurantId,
+      price: 0,
+      order_date: "",
+      delivery_type: "Order",
+      order_status: "In cart",
+      dishId: item.dishId,
+      quantity: item.quantity + 1,
+    };
+    axios
+      .post(
+        process.env.REACT_APP_UBEREATS_BACKEND_URL + "/customer/order",
+        orderDetails
+      )
+      .then((response) => {
+        // console.log(response.data);
+        this.props.addCart({
+          order_id: response.data.id,
+          dishId: item.id,
+          dishName: item.dishName,
+          quantity: item.quantity + 1,
+          restaurantId: item.restaurantId,
+          restaurantName: item.restaurantName,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  subToCart = (item) => {
+    let orderDetails = {
+      customer_id: JSON.parse(sessionStorage.getItem("customerDetails")).id,
+      restaurant_id: item.restaurantId,
+      price: 0,
+      order_date: "",
+      delivery_type: "Order",
+      order_status: "In cart",
+      dishId: item.dishId,
+      quantity: item.quantity - 1,
+    };
+
+    if (item.quantity == 1) {
+      axios
+        .put(process.env.REACT_APP_UBEREATS_BACKEND_URL + "/customer/dc", {
+          id: item.dishId,
+        })
+        .then((response) => {})
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axios
+        .post(
+          process.env.REACT_APP_UBEREATS_BACKEND_URL + "/customer/order",
+          orderDetails
+        )
+        .then((response) => {
+          // console.log(response.data);
+          this.props.addCart({
+            order_id: response.data.id,
+            dishId: item.id,
+            dishName: item.dishName,
+            quantity: item.quantity - 1,
+            restaurantId: item.restaurantId,
+            restaurantName: item.restaurantName,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
   handleOpen = () => {
     this.setState({ openModel: true });
   };
@@ -56,11 +133,11 @@ class CustomerSideBar extends Component {
           <Box
             sx={{
               position: "absolute",
-              top: "30%",
+              top: "20%",
               left: "85%",
               transform: "translate(-50%, -50%)",
               bgcolor: "white",
-              width: "400px",
+              width: "450px",
               boxShadow: "24",
               borderRadius: "10px",
             }}
@@ -109,6 +186,7 @@ class CustomerSideBar extends Component {
                     {this.props.cart.map((item) => {
                       return (
                         <>
+                          {console.log(item)}
                           <div
                             style={{
                               display: "flex",
@@ -119,8 +197,33 @@ class CustomerSideBar extends Component {
                               marginLeft: "10px",
                             }}
                           >
-                            <div className="col-md-8">{item.dishName}</div>
-                            <div className="col-md-4">{item.quantity}</div>
+                            <div className="col-md-6">{item.dishName}</div>
+                            <div ClassName="col-md-4">
+                              <lable
+                                style={{
+                                  padding: "15px",
+                                  cursor: "pointer",
+                                }}
+                                onClick={() => this.addToCart(item)}
+                              >
+                                +
+                              </lable>
+                              {item.quantity < 1 ? (
+                                ""
+                              ) : (
+                                <lable
+                                  style={{
+                                    padding: "15px",
+                                    cursor: "pointer",
+                                    marginRight: "15px",
+                                  }}
+                                  onClick={() => this.subToCart(item)}
+                                >
+                                  -
+                                </lable>
+                              )}
+                            </div>
+                            <div className="col-md-2">{item.quantity}</div>
                           </div>
                         </>
                       );
@@ -510,6 +613,7 @@ const mapStateToProps = (state) => {
 
 function mapDispatchToprops(dispatch) {
   return {
+    addCart: (cart) => dispatch(addCart(cart)),
     addCartFromDB: (cart) => dispatch(addCartFromDB(cart)),
   };
 }

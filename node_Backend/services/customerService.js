@@ -116,3 +116,9 @@ exports.deleteCart = async (request) => {
   let response = await customerRepo.deleteCart(request.query);
   return response;
 };
+
+//*********************Delete Cart item******************** */
+exports.deleteCartItem = async (request) => {
+  let response = await customerRepo.deleteCartItem(request.body);
+  return response;
+};

@@ -121,4 +121,10 @@ app.put("/deleteCart", async (request, response) => {
   response.status(data.status).json(data.body);
 });
 
+//*********************Delete cart item******************** */
+app.put("/dc", async (request, response) => {
+  const data = await customerService.deleteCartItem(request);
+  response.status(data.status).json(data.body);
+});
+
 module.exports = app;

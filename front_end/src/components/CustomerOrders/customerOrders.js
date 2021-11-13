@@ -3,6 +3,8 @@ import axios from "axios";
 import "./customerOrders.css";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import Pagination from "../pagination/pagination";
+import _ from "lodash";
 
 class CustomerOrders extends Component {
   constructor(props) {
@@ -13,8 +15,10 @@ class CustomerOrders extends Component {
       orders: [],
       openModel: false,
       selectedOrderId: "",
-
+      selectedPages: 5,
       selectedStatus: "",
+      itemCount: 0,
+      currentPage: 1,
     };
   }
 
@@ -47,8 +51,10 @@ class CustomerOrders extends Component {
           }
           orderItems[order.id].push(order);
         }
-        this.setState({ orderItems: orderItems });
+
+        this.setState({ orderItems: orderItems, itemCount: orders.length });
         this.setState({ orders: orders });
+
         // console.log(orderItems);
         // console.log(orders);
       })
@@ -56,11 +62,47 @@ class CustomerOrders extends Component {
         console.log(err);
       });
   }
+  paginate(items, pageNumber, pageSize) {
+    const startIndex = (pageNumber - 1) * pageSize;
+    return _(items).slice(startIndex).take(pageSize).value();
+  }
+
+  placeOrder = (order) => {
+    let details = {
+      order_status: "Cancelled",
+      id: order.id,
+    };
+
+    axios
+      .put(
+        process.env.REACT_APP_UBEREATS_BACKEND_URL + "/customer/updateorder",
+        details
+      )
+      .then((response) => {
+        console.log("Order status updated");
+        let o = [];
+        for (let or of this.state.orders) {
+          if (or.id == order.id) {
+            or.order_status = "Cancelled";
+          }
+          o.push(or);
+        }
+        this.setState({ orders: o });
+      })
+      .catch((err) => console.log(err));
+  };
 
   renderOrders = () => {
     let orders = this.state.orders.filter((o) =>
       o.order_status.includes(this.state.selectedStatus)
     );
+
+    orders = this.paginate(
+      orders,
+      this.state.currentPage,
+      this.state.selectedPages
+    );
+
     let orderItems = this.state.orderItems;
     return (
       <>
@@ -69,28 +111,42 @@ class CustomerOrders extends Component {
           : orders.map((order) => {
               return (
                 <>
-                  <div
-                    className="row"
-                    onClick={() => this.handleOpen(order.id)}
-                  >
-                    <label className="coRestaurantName">
-                      {order.restaurant_name +
-                        " (" +
-                        order.location.split(",")[0] +
-                        ")"}
-                    </label>
-                    <br />
-                    <label className="coAddress">
-                      {orderItems[order.id].length} items for ${order.price}
-                      &nbsp;&nbsp;•&nbsp;&nbsp;
-                      {order.order_status == "Delivered" ? (
-                        <>
-                          {order.order_status} on {order.order_date}
-                        </>
+                  <div className="row">
+                    <div
+                      className="col-md-3"
+                      onClick={() => this.handleOpen(order.id)}
+                    >
+                      <label className="coRestaurantName">
+                        {order.restaurant_name +
+                          " (" +
+                          order.location.split(",")[0] +
+                          ")"}
+                      </label>
+                      <br />
+                      <label className="coAddress">
+                        {orderItems[order.id].length} items for ${order.price}
+                        &nbsp;&nbsp;•&nbsp;&nbsp;
+                        {order.order_status == "Delivered" ? (
+                          <>
+                            {order.order_status} on {order.order_date}
+                          </>
+                        ) : (
+                          <>{order.order_status}</>
+                        )}
+                      </label>
+                    </div>
+                    <div className="col-md-3">
+                      {order.order_status == "Placed" ? (
+                        <button
+                          className="cancelButton"
+                          onClick={() => this.placeOrder(order)}
+                        >
+                          Cancel
+                        </button>
                       ) : (
-                        <>{order.order_status}</>
+                        ""
                       )}
-                    </label>
+                    </div>
                   </div>
                   <hr
                     style={{ backgroundColor: "#9a9999", height: "1px" }}
@@ -107,6 +163,7 @@ class CustomerOrders extends Component {
     // console.log(id);
     let currentOrder = this.state.orderItems[id];
     // console.log(currentOrder);
+    console.log(currentOrder);
     return (
       <>
         {currentOrder == undefined ? (
@@ -162,6 +219,10 @@ class CustomerOrders extends Component {
                     Price
                   </div>
                 </div> */}
+                {currentOrder[0].instructions == null ||
+                currentOrder[0].instructions == ""
+                  ? ""
+                  : "Note :" + currentOrder[0].instructions}
                 <div className="row">
                   {" "}
                   {currentOrder.map((dish) => {
@@ -220,6 +281,11 @@ class CustomerOrders extends Component {
     );
   };
 
+  handlePageChange = (page) => {
+    console.log(page);
+    this.setState({ currentPage: page });
+  };
+
   render() {
     return (
       <>
@@ -242,7 +308,31 @@ class CustomerOrders extends Component {
                 <option value="Preparing">Preparing</option>
                 <option value="On the way">On the way</option>
                 <option value="Delivered">Delivered</option>
+                <option value="Cancelled">Cancelled</option>
               </select>
+            </div>
+            <div className="col-md-2">
+              <select
+                aria-hidden="true"
+                className="orderPagesselect"
+                defaultValue={this.state.selectedPages}
+                onChange={(e) =>
+                  this.setState({ selectedPages: e.target.value })
+                }
+              >
+                <option value="2">2</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+            <div className="col-md-4" style={{ marginLeft: "0px" }}>
+              {" "}
+              <Pagination
+                itemsCount={this.state.itemCount}
+                pageSize={this.state.selectedPages}
+                currentPage={this.state.currentPage}
+                onPageChange={this.handlePageChange}
+              />
             </div>
           </div>
 

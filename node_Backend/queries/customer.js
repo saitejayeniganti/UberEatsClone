@@ -13,10 +13,11 @@ exports.insertOrder =
 exports.updateOrder =
   "update Orders set customer_id=?,restaurent_id=?,price=?,order_date=?,delivery_type=?,order_status=? where id=?";
 
-exports.updateOrderStatus = "update Orders set order_status=? where id=?";
+exports.updateOrderStatus =
+  "update Orders set order_status=?,instructions=? where id=?";
 
 exports.getOrdersForCustomer =
-  "select Orders.id, Orders.customer_id,Orders.restaurent_id,Orders.price,Orders.order_date,Orders.delivery_type,Orders.order_status,Restaurents.name as restaurant_name,Restaurents.location,Order_items.dish_id,Order_items.quantity,Dishes.name,Dishes.price as dish_price from Orders inner join Restaurents on Orders.restaurent_id=Restaurents.id inner join Order_items on Orders.id=Order_items.order_id inner join Dishes on Order_items.dish_id=Dishes.id where Orders.customer_id=?";
+  "select Orders.id, Orders.customer_id,Orders.instructions,Orders.restaurent_id,Orders.price,Orders.order_date,Orders.delivery_type,Orders.order_status,Restaurents.name as restaurant_name,Restaurents.location,Order_items.dish_id,Order_items.quantity,Dishes.name,Dishes.price as dish_price from Orders inner join Restaurents on Orders.restaurent_id=Restaurents.id inner join Order_items on Orders.id=Order_items.order_id inner join Dishes on Order_items.dish_id=Dishes.id where Orders.customer_id=?";
 
 exports.getCustomerByUsername =
   "select * from Customer where email_id=? or mobile=?";
@@ -69,3 +70,5 @@ exports.addAddress = `insert into Address (customer_id,location,latitude,longitu
 exports.deleteOrderItems = `Delete from Order_items where order_id=?`;
 
 exports.deleteOrders = "Delete from Orders where id=?";
+
+exports.deleteItem = `Delete from Order_items where dish_id=?`;

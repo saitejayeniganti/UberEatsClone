@@ -28,3 +28,43 @@
   transition: all 0.4s ease !important;
   user-select: none !important;
 }
+
+.cancelButton {
+  width: 100px !important;
+  background-color: #3e9920;
+  background-color: #3e9920;
+  border-color: #3e9920;
+  border-radius: 15px;
+  font-family: Helvetica, sans-serif;
+  height: 48px;
+  font-size: 16px;
+  line-height: 24px;
+  margin-top: 25px;
+  text-decoration: none;
+  text-transform: none;
+  color: #fff;
+  padding: 11px 20px !important;
+  display: flex;
+  vertical-align: middle;
+  font: inherit;
+  cursor: pointer;
+  overflow: visible;
+  transition: all 0.4s ease !important;
+  justify-content: center;
+  border: 2px solid #11939a;
+  outline: 0;
+}
+
+.orderPagesselect {
+  font-family: UberMoveText-Regular !important;
+  font-size: 16px !important;
+  height: 48px;
+  line-height: 24px !important;
+  border: 1px solid #05944f;
+  font-weight: 500;
+  padding: 8px 18px;
+  width: 80px !important;
+  padding: 8px 18px;
+  transition: all 0.4s ease !important;
+  user-select: none !important;
+}

@@ -178,8 +178,10 @@ exports.updateOrder = async (order) => {
 
 exports.updateOrderStatus = async (order) => {
   try {
+    let ins = order.instructions == null ? "" : order.instructions;
     let response = await pool.query(queries.updateOrderStatus, [
       order.order_status,
+      ins,
       order.id,
     ]);
 
@@ -362,6 +364,20 @@ exports.deleteCart = async (body) => {
     let r2 = await pool.query(queries.deleteOrders, [body.id]);
 
     return { status: 200, body: r2 };
+  } catch (error) {
+    console.log(error);
+    const message = error.message ? error.message : "Internal Server Error";
+    const code = error.statusCode ? error.statusCode : 500;
+    return { status: code, body: { message } };
+  }
+};
+
+//*********************DELETE_CART_ITEM******************** */
+exports.deleteCartItem = async (body) => {
+  try {
+    console.log(body.id);
+    let response = await pool.query(queries.deleteItem, body.id);
+    return { status: 200, body: response };
   } catch (error) {
     console.log(error);
     const message = error.message ? error.message : "Internal Server Error";
