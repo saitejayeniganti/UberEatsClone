@@ -3,17 +3,10 @@ const queries = require("../queries/customer");
 
 function handle_request(body) {
   console.log("Inside Order kafka backend");
+  let ins = body.instructions == null ? "" : body.instructions;
   let response = pool.query(
-    queries.updateOrder,
-    [
-      body.customer_id,
-      body.restaurant_id,
-      body.price,
-      body.order_date,
-      body.delivery_type,
-      body.order_status,
-      body.id,
-    ],
+    queries.updateOrderStatus,
+    [body.order_status, ins, body.id],
     (error, result) => {
       if (error) {
         console.log("************Inside Order kakfa service************");
