@@ -1,7 +1,7 @@
 const pool = require("../database/dbConnection");
 const queries = require("../queries/customer");
 
-function handle_request(body, callback) {
+function handle_request(body) {
   console.log("Inside customer kafka backend");
   let response = pool.query(
     queries.updateCustomer,
@@ -23,12 +23,14 @@ function handle_request(body, callback) {
     (error, result) => {
       if (error) {
         console.log("************Inside kakfa service************");
+        console.log("Error");
         console.log(error);
-        callback(error, "Cannot Update");
+        // callback(error, "Cannot Update");
       } else if (result) {
         console.log("************Inside kakfa service************");
+        console.log("Success");
         console.log(result);
-        callback(null, result);
+        // callback(null, result);
       }
     }
   );
