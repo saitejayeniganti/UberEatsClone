@@ -72,10 +72,21 @@ app.post("/order", async (request, response) => {
   response.status(data.status).json(data.body);
 });
 
-//*********************UPDATE_ORDER******************** */
-app.put("/order", async (request, response) => {
-  const data = await customerService.updateOrder(request);
-  response.status(data.status).json(data.body);
+// //*********************UPDATE_ORDER******************** */
+// app.put("/order", async (request, response) => {
+//   const data = await customerService.updateOrder(request);
+//   response.status(data.status).json(data.body);
+// });
+
+// //*********************UPDATE_ORDER_USING_KAFKA******************** */
+app.put("/order", function (req, res) {
+  kafka.make_request("updateorder", req.body, function (err, data) {
+    if (err) {
+      res.status(500).end("Error Occured");
+    } else {
+      res.status(data.status).json(data.body);
+    }
+  });
 });
 
 //*********************UPDATE_ORDER_STATUS******************** */

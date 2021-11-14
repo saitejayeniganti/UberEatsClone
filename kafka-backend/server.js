@@ -1,6 +1,7 @@
 var connection = new require("./kafka/Connection");
 
 var customer = require("./services/customer");
+var order = require("./services/order");
 
 function handleTopicRequest(topic_name, fname) {
   var consumer = connection.getConsumer(topic_name);
@@ -31,3 +32,4 @@ function handleTopicRequest(topic_name, fname) {
   });
 }
 handleTopicRequest("updatecustomer", customer);
+handleTopicRequest("updateorder", order);
