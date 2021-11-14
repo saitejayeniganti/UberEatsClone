@@ -81,14 +81,14 @@ app.post("/order", async (request, response) => {
   response.status(data.status).json(data.body);
 });
 
-// //*********************UPDATE_ORDER******************** */
-// app.put("/order", async (request, response) => {
-//   const data = await customerService.updateOrder(request);
-//   response.status(data.status).json(data.body);
-// });
+//*********************UPDATE_ORDER******************** */
+app.put("/order", async (request, response) => {
+  const data = await customerService.updateOrder(request);
+  response.status(data.status).json(data.body);
+});
 
 // //*********************UPDATE_ORDER_USING_KAFKA******************** */
-app.put("/order", async (req, res) => {
+app.put("/updateorder", async (req, res) => {
   try {
     await kafka.make_request("updateorder", req.body, function (err, data) {
       if (err) {
@@ -105,12 +105,12 @@ app.put("/order", async (req, res) => {
   }
 });
 
-//*********************UPDATE_ORDER_STATUS******************** */
-app.put("/updateorder", async (request, response) => {
-  console.log(request.body);
-  const data = await customerService.updateOrderStatus(request);
-  response.status(data.status).json(data.body);
-});
+// //*********************UPDATE_ORDER_STATUS******************** */
+// app.put("/updateorder", async (request, response) => {
+//   console.log(request.body);
+//   const data = await customerService.updateOrderStatus(request);
+//   response.status(data.status).json(data.body);
+// });
 
 //*********************GET_ORDERS******************** */
 app.get("/order", async (request, response) => {
