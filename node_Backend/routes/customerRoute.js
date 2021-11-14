@@ -56,14 +56,23 @@ app.get("", async (request, response) => {
 // });
 
 //******************UPDATE CUSTOMER USING KAFKA**********************/
-app.put("", function (req, res) {
-  kafka.make_request("updatecustomer", req.body, function (err, data) {
-    if (err) {
-      res.status(500).end("Error Occured");
-    } else {
-      res.status(data.status).json(data.body);
-    }
-  });
+app.put("", async (req, res) => {
+  try {
+    await kafka.make_request("updatecustomer", req.body, function (err, data) {
+      if (err) {
+        throw new Error(err);
+      } else {
+        res.status(data.status).json(data.body);
+      }
+    });
+  } catch (ex) {
+    console.log(ex);
+    const message = ex.message
+      ? ex.message
+      : "Error while Updating customer details";
+    const code = ex.statusCode ? ex.statusCode : 500;
+    return response.status(code).json({ message });
+  }
 });
 
 //*********************INSERT_ORDER******************** */

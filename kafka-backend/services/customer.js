@@ -21,8 +21,15 @@ function handle_request(body, callback) {
       body.id,
     ],
     (error, result) => {
-      if (error) callback(error, "Cannot Update");
-      else if (result) callback(null, result);
+      if (error) {
+        console.log("************Inside kakfa service************");
+        console.log(error);
+        callback(error, "Cannot Update");
+      } else if (result) {
+        console.log("************Inside kakfa service************");
+        console.log(result);
+        callback(null, result);
+      }
     }
   );
 }
