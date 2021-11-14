@@ -3,8 +3,8 @@ var customerRoute = require("./routes/customerRoute");
 var restaurantRoute = require("./routes/restaurantRoute");
 var app = express();
 var cors = require("cors");
-// app.use(cors({ origin: "*", credentials: true }));
-app.use(cors({ origin: "http://3.101.29.172:3000", credentials: true }));
+app.use(cors({ origin: "*", credentials: true }));
+// app.use(cors({ origin: "http://3.101.29.172:3000", credentials: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
