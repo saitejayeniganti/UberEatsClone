@@ -62,7 +62,7 @@ app.put("", async (req, res) => {
       if (err) {
         throw new Error(err);
       } else {
-        res.status(data.status).json(data.body);
+        res.status(200).json(data.body);
       }
     });
   } catch (ex) {
@@ -88,14 +88,21 @@ app.post("/order", async (request, response) => {
 // });
 
 // //*********************UPDATE_ORDER_USING_KAFKA******************** */
-app.put("/order", function (req, res) {
-  kafka.make_request("updateorder", req.body, function (err, data) {
-    if (err) {
-      res.status(500).end("Error Occured");
-    } else {
-      res.status(data.status).json(data.body);
-    }
-  });
+app.put("/order", async (req, res) => {
+  try {
+    await kafka.make_request("updateorder", req.body, function (err, data) {
+      if (err) {
+        throw new Error(err);
+      } else {
+        res.status(200).json(data.body);
+      }
+    });
+  } catch (ex) {
+    console.log(ex);
+    const message = ex.message ? ex.message : "Error while placing order ";
+    const code = ex.statusCode ? ex.statusCode : 500;
+    return response.status(code).json({ message });
+  }
 });
 
 //*********************UPDATE_ORDER_STATUS******************** */

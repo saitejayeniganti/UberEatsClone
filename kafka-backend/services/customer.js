@@ -22,13 +22,13 @@ function handle_request(body) {
     ],
     (error, result) => {
       if (error) {
-        console.log("************Inside kakfa service************");
+        console.log("************Inside Customer kakfa service************");
         console.log("Error");
         console.log(error);
         // callback(error, "Cannot Update");
       } else if (result) {
-        console.log("************Inside kakfa service************");
-        console.log("Success");
+        console.log("************Inside customer kakfa service************");
+        console.log("Successfully updated");
         console.log(result);
         // callback(null, result);
       }

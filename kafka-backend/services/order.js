@@ -1,22 +1,29 @@
 const pool = require("../database/dbConnection");
 const queries = require("../queries/customer");
 
-function handle_request(body, callback) {
+function handle_request(body) {
   console.log("Inside Order kafka backend");
   let response = pool.query(
     queries.updateOrder,
     [
-      order.customer_id,
-      order.restaurant_id,
-      order.price,
-      order.order_date,
-      order.delivery_type,
-      order.order_status,
-      order.id,
+      body.customer_id,
+      body.restaurant_id,
+      body.price,
+      body.order_date,
+      body.delivery_type,
+      body.order_status,
+      body.id,
     ],
     (error, result) => {
-      if (error) callback(error, "Cannot Update");
-      else if (result) callback(null, result);
+      if (error) {
+        console.log("************Inside Order kakfa service************");
+        console.log("Error");
+        console.log(error);
+      } else if (result) {
+        console.log("************Inside Order kakfa service************");
+        console.log("Success");
+        console.log(result);
+      }
     }
   );
 }
