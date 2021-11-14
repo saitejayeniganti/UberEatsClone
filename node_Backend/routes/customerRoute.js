@@ -1,6 +1,7 @@
 var express = require("express");
 var app = express.Router();
 const customerService = require("../services/customerService");
+var kafka = require("../kafka/client");
 
 //*********************CUSTOMER_SIGNUP_USING_CALLBACK******************** */
 app.post("/signup", (request, response) => {
@@ -48,10 +49,21 @@ app.get("", async (request, response) => {
   response.status(data.status).json(data.body);
 });
 
-//*********************UPDATE_CUSTOMER******************** */
-app.put("", async (request, response) => {
-  const data = await customerService.updateCustomer(request);
-  response.status(data.status).json(data.body);
+// //*********************UPDATE_CUSTOMER******************** */
+// app.put("", async (request, response) => {
+//   const data = await customerService.updateCustomer(request);
+//   response.status(data.status).json(data.body);
+// });
+
+//******************UPDATE CUSTOMER USING KAFKA**********************/
+app.put("", function (req, res) {
+  kafka.make_request("updatecustomer", req.body, function (err, data) {
+    if (err) {
+      res.status(500).end("Error Occured");
+    } else {
+      res.status(data.status).json(data.body);
+    }
+  });
 });
 
 //*********************INSERT_ORDER******************** */
