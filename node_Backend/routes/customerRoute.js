@@ -62,7 +62,7 @@ app.put("", async (req, res) => {
       if (err) {
         throw new Error(err);
       } else {
-        res.status(200).json(data.body);
+        res.status(200).json({});
       }
     });
   } catch (ex) {
@@ -94,7 +94,7 @@ app.put("/order", async (req, res) => {
       if (err) {
         throw new Error(err);
       } else {
-        res.status(200).json(data.body);
+        res.status(200).json({});
       }
     });
   } catch (ex) {
