@@ -281,6 +281,7 @@ class CustomerCheckout extends Component {
             <input
               className="txtbox"
               style={{ marginLeft: "30px" }}
+              value={this.state.instructions}
               placeholder="Enter Order Instructions"
               onChange={(e) => this.setState({ instructions: e.target.value })}
             ></input>
