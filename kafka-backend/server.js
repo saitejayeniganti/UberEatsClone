@@ -7,7 +7,7 @@ async function handleTopicRequest(topic_name, fname) {
   var consumer = connection.getConsumer(topic_name);
   var producer = connection.getProducer();
   console.log("server is running ");
-  await consumer.on("message", function (message) {
+  await consumer.on("message", async function (message) {
     console.log("message received for " + topic_name + " ", fname);
     console.log(JSON.stringify(message.value));
     var data = JSON.parse(message.value);
