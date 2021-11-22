@@ -4,7 +4,7 @@ var restaurantRoute = require("./routes/restaurantRoute");
 var app = express();
 var cors = require("cors");
 app.use(cors({ origin: "*", credentials: true }));
-app.use(cors({ origin: "http://3.101.53.243:3000", credentials: true }));
+app.use(cors({ origin: "http://18.144.67.15:3000", credentials: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
