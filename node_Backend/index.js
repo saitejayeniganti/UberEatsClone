@@ -1,6 +1,8 @@
 const express = require("express");
 var customerRoute = require("./routes/customerRoute");
 var restaurantRoute = require("./routes/restaurantRoute");
+const graphqlHTTP = require("express-graphql");
+const schema = require("./Schemas/GraphqlSchema");
 var app = express();
 var cors = require("cors");
 app.use(cors({ origin: "*", credentials: true }));
@@ -17,4 +19,11 @@ app.listen(8080, () => {
 });
 app.use("/ubereats/customer", customerRoute);
 app.use("/ubereats/restaurant", restaurantRoute);
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    schema,
+    graphiql: true,
+  })
+);
 exports.app = app;
