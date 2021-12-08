@@ -11,7 +11,7 @@ const {
 let customer = require("../repository/customer");
 let restaurant = require("../repository/restaurant");
 
-const CustomerDetails = new GraphQLObjectType({
+const CustomersignupDetails = new GraphQLObjectType({
   name: "CustomerDetails",
   fields: () => ({
     id: { type: GraphQLInt },
@@ -34,18 +34,27 @@ const CustomerDetails = new GraphQLObjectType({
 const Mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
-    customerSignup: {
-      type: customerSignup,
+    CustomerDetails: {
+      type: CustomersignupDetails,
       args: {
-        username: {
-          type: GraphQLString,
-        },
-        password: { type: GraphQLString },
+        id: { type: GraphQLInt },
+        name: { type: GraphQLString },
         mobile: { type: GraphQLString },
+        email_id: { type: GraphQLString },
+        password: { type: GraphQLString },
+        city: { type: GraphQLString },
+        state: { type: GraphQLString },
+        country: { type: GraphQLString },
+        address: { type: GraphQLString },
+        nick_name: { type: GraphQLString },
+        about: { type: GraphQLString },
+        latitude: { type: GraphQLString },
+        longitude: { type: GraphQLString },
+        image_url: { type: GraphQLString },
       },
       async resolve(parent, args) {
         console.log("In resolve");
-        return await customer.signupCallback(args);
+        return await customer.updateCustomer(args);
       },
     },
   },
