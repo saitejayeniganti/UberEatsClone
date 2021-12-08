@@ -4,9 +4,9 @@ const dotenv = require("dotenv");
 dotenv.config();
 const pool = mysql.createPool({
   connectionLimit: 10,
-  host: "ubereatsdb273.ctmje2cow18t.us-east-2.rds.amazonaws.com",
+  host: "cmpe-275-final.ctmje2cow18t.us-east-2.rds.amazonaws.com",
   user: "admin",
-  password: "password",
+  password: "admin123",
   database: "UberEats",
 });
 
