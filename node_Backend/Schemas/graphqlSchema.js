@@ -211,3 +211,136 @@ const OrderInputType = new GraphQLInputObjectType({
     favorites: { type: GraphQLString },
   }),
 });
+
+const CategoryInput = new GraphQLInputObjectType({
+  name: "categoryInput",
+  fields: () => ({
+    id: { type: GraphQLString },
+    name: { type: GraphQLString },
+    value: { type: GraphQLString },
+    label: { type: GraphQLString },
+  }),
+});
+
+const TagInput = new GraphQLInputObjectType({
+  name: "tagInput",
+  fields: () => ({
+    _id: { type: GraphQLString },
+    title: { type: GraphQLString },
+  }),
+});
+
+const DeliveryTypeInput = new GraphQLInputObjectType({
+  name: "deliveryTypeInput",
+  fields: () => ({
+    value: { type: GraphQLString },
+    label: { type: GraphQLString },
+  }),
+});
+
+const DietaryInput = new GraphQLInputObjectType({
+  name: "dietaryInput",
+  fields: () => ({
+    value: { type: GraphQLString },
+    label: { type: GraphQLString },
+  }),
+});
+
+const SectionInput = new GraphQLInputObjectType({
+  name: "sectionInput",
+  fields: () => ({
+    uuid: { type: GraphQLString },
+    title: { type: GraphQLString },
+    itemUuids: { type: new GraphQLList(GraphQLString) },
+  }),
+});
+
+const DishInput = new GraphQLInputObjectType({
+  name: "dishInput",
+  fields: () => ({
+    _id: { type: GraphQLString },
+    uuid: { type: GraphQLString },
+    title: { type: GraphQLString },
+    imageUrl: { type: GraphQLString },
+    ingredients: { type: GraphQLString },
+    description: { type: GraphQLString },
+    itemDescription: { type: GraphQLString },
+    price: { type: GraphQLFloat },
+    category: { type: new GraphQLList(Category) },
+    rules: { type: GraphQLString },
+    customizationIds: { type: GraphQLString },
+    restaurantID: { type: GraphQLString },
+  }),
+});
+
+const RestaurantInput = new GraphQLInputObjectType({
+  name: "restaurantInput",
+  fields: () => ({
+    _id: { type: GraphQLString },
+    id: { type: GraphQLString },
+    uuid: { type: GraphQLString },
+    title: { type: GraphQLString },
+    imageUrl: { type: GraphQLString },
+    largeImageUrl: { type: GraphQLString },
+    location: { type: GraphQLString },
+    categories: { type: new GraphQLList(CategoryInput) },
+    tags: { type: new GraphQLList(TagInput) },
+    sections: { type: new GraphQLList(SectionInput) },
+    etaRange: { type: GraphQLString },
+    rawRatingStats: { type: GraphQLString },
+    publicContact: { type: GraphQLString },
+    priceBucket: { type: GraphQLString },
+    email: { type: GraphQLString },
+    Password: { type: GraphQLString },
+    password: { type: GraphQLString },
+    timings: { type: GraphQLString },
+    deliveryType: { type: new GraphQLList(DeliveryTypeInput) },
+    dietary: { type: new GraphQLList(DietaryInput) },
+    items: { type: GraphQLString },
+    msg: { type: GraphQLString },
+  }),
+});
+
+const RootQueryType = new GraphQLObjectType({
+  name: "query",
+  description: "Root Query",
+  fields: () => ({
+    users: {
+      type: new GraphQLList(User),
+      description: "Get all users",
+      resolve: () => getAllUsers(),
+    },
+    userOrders: {
+      type: new GraphQLList(Order),
+      description: "Get all user orders",
+      args: {
+        userID: { type: GraphQLString },
+      },
+      resolve: (parent, args) => getUserOrders(args.userID),
+    },
+    restaurants: {
+      type: new GraphQLList(Restaurant),
+      description: "Get all restaurants",
+      resolve: async () => {
+        const response = await getAllRestaurants();
+        return response;
+      },
+    },
+    getRestaurant: {
+      type: Restaurant,
+      description: "Get a restaurant",
+      args: {
+        restaurantID: { type: GraphQLString },
+      },
+      resolve: (parent, args) => getRestaurant(args.restaurantID),
+    },
+    restaurantOrders: {
+      type: new GraphQLList(Order),
+      description: "Get all restaurant orders",
+      args: {
+        restaurantId: { type: GraphQLString },
+      },
+      resolve: (parent, args) => getRestaurantOrders(args.restaurantId),
+    },
+  }),
+});
