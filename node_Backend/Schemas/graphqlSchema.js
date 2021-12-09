@@ -344,3 +344,25 @@ const RootQueryType = new GraphQLObjectType({
     },
   }),
 });
+
+const RootMutationType = new GraphQLObjectType({
+  name: "mutation",
+  description: "Root Mutation",
+  fields: () => ({
+    userLogin: {
+      type: UserResponse,
+      description: "User Login",
+      args: {
+        userDetails: { type: UserInputType },
+      },
+      resolve: (parent, args) => userLogin(args.userDetails),
+    },
+  }),
+});
+
+const schema = new GraphQLSchema({
+  query: RootQueryType,
+  mutation: RootMutationType,
+});
+
+module.exports = schema;
