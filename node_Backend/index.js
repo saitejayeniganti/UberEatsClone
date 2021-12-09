@@ -1,8 +1,7 @@
 const express = require("express");
 var customerRoute = require("./routes/customerRoute");
 var restaurantRoute = require("./routes/restaurantRoute");
-const graphqlHTTP = require("express-graphql");
-const schema = require("./Schemas/GraphqlSchema");
+
 var app = express();
 var cors = require("cors");
 app.use(cors({ origin: "*", credentials: true }));
