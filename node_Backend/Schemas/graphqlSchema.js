@@ -118,6 +118,47 @@ const Dish = new GraphQLObjectType({
   }),
 });
 
+const Restaurant = new GraphQLObjectType({
+  name: "restaurant",
+  fields: () => ({
+    _id: { type: GraphQLString },
+    id: { type: GraphQLString },
+    uuid: { type: GraphQLString },
+    title: { type: GraphQLString },
+    imageUrl: { type: GraphQLString },
+    largeImageUrl: { type: GraphQLString },
+    location: { type: GraphQLString },
+    categories: { type: new GraphQLList(Category) },
+    tags: { type: new GraphQLList(Tag) },
+    sections: { type: new GraphQLList(Section) },
+    etaRange: { type: GraphQLString },
+    rawRatingStats: { type: GraphQLString },
+    publicContact: { type: GraphQLString },
+    priceBucket: { type: GraphQLString },
+    email: { type: GraphQLString },
+    Password: { type: GraphQLString },
+    timings: { type: GraphQLString },
+    deliveryType: { type: new GraphQLList(DeliveryType) },
+    dietary: { type: new GraphQLList(Dietary) },
+    items: { type: GraphQLString },
+    msg: { type: GraphQLString },
+  }),
+});
+
+const Body = new GraphQLObjectType({
+  name: "body",
+  fields: () => ({
+    msg: { type: GraphQLString },
+  }),
+});
+
+const Response = new GraphQLObjectType({
+  name: "response",
+  fields: () => ({
+    status: { type: GraphQLString },
+    body: { type: Body },
+  }),
+});
 const Mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
