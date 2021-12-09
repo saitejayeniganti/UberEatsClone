@@ -57,6 +57,67 @@ const Order = new GraphQLObjectType({
   }),
 });
 
+const Category = new GraphQLObjectType({
+  name: "category",
+  fields: () => ({
+    id: { type: GraphQLString },
+    name: { type: GraphQLString },
+    value: { type: GraphQLString },
+    label: { type: GraphQLString },
+  }),
+});
+
+const Tag = new GraphQLObjectType({
+  name: "tag",
+  fields: () => ({
+    _id: { type: GraphQLString },
+    title: { type: GraphQLString },
+  }),
+});
+
+const DeliveryType = new GraphQLObjectType({
+  name: "deliveryType",
+  fields: () => ({
+    value: { type: GraphQLString },
+    label: { type: GraphQLString },
+  }),
+});
+
+const Dietary = new GraphQLObjectType({
+  name: "dietary",
+  fields: () => ({
+    value: { type: GraphQLString },
+    label: { type: GraphQLString },
+  }),
+});
+
+const Section = new GraphQLObjectType({
+  name: "section",
+  fields: () => ({
+    uuid: { type: GraphQLString },
+    title: { type: GraphQLString },
+    itemUuids: { type: new GraphQLList(GraphQLString) },
+  }),
+});
+
+const Dish = new GraphQLObjectType({
+  name: "dish",
+  fields: () => ({
+    _id: { type: GraphQLString },
+    uuid: { type: GraphQLString },
+    title: { type: GraphQLString },
+    imageUrl: { type: GraphQLString },
+    ingredients: { type: GraphQLString },
+    description: { type: GraphQLString },
+    itemDescription: { type: GraphQLString },
+    price: { type: GraphQLFloat },
+    category: { type: new GraphQLList(Category) },
+    rules: { type: GraphQLString },
+    customizationIds: { type: GraphQLString },
+    restaurantID: { type: GraphQLString },
+  }),
+});
+
 const Mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
