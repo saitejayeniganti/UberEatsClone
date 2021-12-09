@@ -19,11 +19,5 @@ app.listen(8080, () => {
 });
 app.use("/ubereats/customer", customerRoute);
 app.use("/ubereats/restaurant", restaurantRoute);
-app.use(
-  "/graphql",
-  graphqlHTTP({
-    schema,
-    graphiql: true,
-  })
-);
+
 exports.app = app;
