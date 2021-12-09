@@ -159,6 +159,7 @@ const Response = new GraphQLObjectType({
     body: { type: Body },
   }),
 });
+
 const Mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
