@@ -357,6 +357,70 @@ const RootMutationType = new GraphQLObjectType({
       },
       resolve: (parent, args) => userLogin(args.userDetails),
     },
+    createUser: {
+      type: Response,
+      description: "User Signup",
+      args: {
+        userDetails: { type: UserInputType },
+      },
+      resolve: (parent, args) => createUser(args.userDetails),
+    },
+    updateUser: {
+      type: Response,
+      description: "User update details",
+      args: {
+        userDetails: { type: UserInputType },
+      },
+      resolve: (parent, args) => updateUser(args.userDetails),
+    },
+    createOrder: {
+      type: Response,
+      description: "User create order",
+      args: {
+        orderDetails: { type: OrderInputType },
+      },
+      resolve: (parent, args) => createOrder(args.orderDetails),
+    },
+    updateFavorites: {
+      type: Response,
+      description: "User create order",
+      args: {
+        favoriteDetails: { type: OrderInputType },
+      },
+      resolve: (parent, args) => updateFavorites(args.favoriteDetails),
+    },
+    createRestaurant: {
+      type: Response,
+      description: "Restaurant Signup",
+      args: {
+        restaurantDetails: { type: RestaurantInput },
+      },
+      resolve: (parent, args) => createRestaurant(args.restaurantDetails),
+    },
+    restaurantLogin: {
+      type: RestaurantResponse,
+      description: "Restaurant Login",
+      args: {
+        restaurantDetails: { type: RestaurantInput },
+      },
+      resolve: (parent, args) => restaurantLogin(args.restaurantDetails),
+    },
+    updateRestaurant: {
+      type: Response,
+      description: "Restaurant update details",
+      args: {
+        restaurantDetails: { type: RestaurantInput },
+      },
+      resolve: (parent, args) => updateRestaurant(args.restaurantDetails),
+    },
+    updateOrder: {
+      type: Response,
+      description: "Update an order",
+      args: {
+        orderDetails: { type: OrderInputType },
+      },
+      resolve: (parent, args) => orderUpdate(args.orderDetails),
+    },
   }),
 });
 
